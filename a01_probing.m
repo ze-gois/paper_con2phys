@@ -42,8 +42,33 @@ function data = load_all_animal_data(animal, number)
     files = animal(number).file;
 
     data = struct();
+    data.source = struct('animal_number',number,'files',files);
     
-    data.trial = xlsread(files.trial_data);
+    [data.trial,~,trial_raw] = xlsread(files.trial_data);
+    % Retain explicit column semantics for questionnaire analyses. Numeric
+    % spreadsheets sometimes contain an extra index column: never guess it.
+    data.trial_columns = struct();
+    required = {'trial_start','stim_start','outcome','trial_end','A','C'};
+    normalized = {'trialstart','stimstart','outcome','trialend','variablea','variablec'};
+    if size(trial_raw,2)==size(data.trial,2)
+        for row = 1:min(5,size(trial_raw,1))
+            names = repmat({''},1,size(trial_raw,2));
+            for col = 1:numel(names)
+                if ischar(trial_raw{row,col})
+                    names{col} = regexprep(lower(trial_raw{row,col}),'[^a-z]','');
+                end
+            end
+            candidate = struct();
+            for key = 1:numel(required)
+                idx = find(strcmp(names,normalized{key}));
+                if numel(idx)==1, candidate.(required{key}) = idx; end
+            end
+            if numel(fieldnames(candidate))==numel(required)
+                data.trial_columns = candidate;
+                break
+            end
+        end
+    end
     
     data.srate = 500;
     data.lfp_1 = load(files.lfp_1);
