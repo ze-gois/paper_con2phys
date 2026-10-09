@@ -1,0 +1,69 @@
+clc
+clear all
+[~,arquivos] = system('find ../data');
+arquivos = split(arquivos);
+arquivos = arquivos(2:end-1);
+
+% %
+
+animal = struct();
+g = 1;
+for a = 1 : 18
+    animal(a).directory = arquivos{g};
+    animal(a).file.trial_data = arquivos{g+1};
+    animal(a).file.brain_area = arquivos{g+2};
+    animal(a).file.clusters = arquivos{g+3};
+    animal(a).file.lfp_1 = arquivos{g+4};
+    animal(a).file.lfp_2 = arquivos{g+5};
+    animal(a).file.lfp_3 = arquivos{g+6};
+    animal(a).file.spikes = arquivos{g+7};
+    animal(a).file.waveforms = arquivos{g+8};
+    g = g + 9;
+end
+
+%%
+data = load_all_animal_data(animal, 1);
+
+%%
+data
+
+%%
+% LFP
+    % Channels within a brain area are contiguous in space, but channels from different brain areas are not.
+    % Channels within a brain area are ordered from the deepest to the most superficial with respect to the brain surface.
+    % The dataset includes every other channel from the Neuropixels probe. The vertical spacing between recording sites is 20 µm.
+    % The signal has been recorded with an external reference and has already undergone a preprocessing pipeline.
+    % Sampling rate: 500 Hz.
+%%
+function data = load_all_animal_data(animal, number)
+    validateattributes(number, {'numeric'}, ...
+        {'scalar', 'integer', '>=', 1, '<=', numel(animal)});
+
+    files = animal(number).file;
+
+    data = struct();
+    
+    data.trial = xlsread(files.trial_data);
+    
+    data.srate = 500;
+    data.lfp_1 = load(files.lfp_1);
+    data.lfp_2 = load(files.lfp_2);
+    data.lfp_3 = load(files.lfp_3);
+    
+    
+    data.spike_cluster   = load(files.clusters);
+    data.spike_timestamp = load(files.spikes);
+    
+    data.waveform = load(files.waveforms);
+    
+    data_area             = load(files.brain_area);
+    data.waveform_cluster = data_area.brain_areas.cluster_id';
+    data.waveform_area    = data_area.brain_areas.brain_area';
+    
+    fields   = {'spike_cluster','lfp_1','lfp_2','lfp_3','spike_timestamp','waveform'};
+    subfield = {'clusters','lfp1','lfp2','lfp3','spikes','wf'};
+
+    for f = 1 : length(fields)
+        data.(fields{f}) = data.(fields{f}).(subfield{f});
+    end
+end
