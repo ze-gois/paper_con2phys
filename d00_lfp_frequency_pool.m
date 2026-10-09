@@ -58,8 +58,9 @@ function [electrodes,pool,manifest,directory] = pool_and_filter(data,o,root)
         pairs = unique(group(:,2:3),'rows');
         if size(pairs,1)>=o.minimum_electrodes
             center = median(group(:,1)); % Cada pico contribui igualmente.
-            lo = center-o.band_half_width_hz;
-            hi = center+o.band_half_width_hz;
+            % Bandas limitadas explicitamente ao intervalo analisado.
+            lo = max(o.frequency_limits(1),center-o.band_half_width_hz);
+            hi = min(o.frequency_limits(2),center+o.band_half_width_hz);
             assert(lo>0 && hi<fs/2, ...
                 'Banda %.3f-%.3f Hz fora de (0,Nyquist); ajuste parametros.',lo,hi);
             rows(end+1,:) = [center lo hi size(pairs,1) ...
