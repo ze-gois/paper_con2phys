@@ -24,7 +24,7 @@ end
 start=(1:6:175)';
 data.trial=[(1:30)' start start+1 start+2 start+4 mod((1:30)',2) zeros(30,1) mod((1:30)',3)+1];
 data.trial_columns=struct('trial_start',2,'stim_start',3,'outcome',4,'trial_end',5,'A',6,'C',8);
-qcfg=struct('bootstrap',20,'matched_units',3);
+parametros=struct('bootstrap',20,'surrogates',19,'numero_neuronios',3);
 q01_firing_rate
 assert(max(abs(q01.unit.rate_hz-(1:9)'))<1e-12);
 assert(q01.excluded_spikes==1);
@@ -33,18 +33,27 @@ assert(all(abs(q02.summary.mean-[.5;2;4.5])<.1));
 q03_ripple_density
 q04_spike_interactions
 q05_undirected_connectivity
+assert(all(q05.summary.mean>=0 & q05.summary.mean<=1));
+assert(size(q05.correlacao_spikes,1)==3);
 q06_directed_connectivity
 q07_fast_spiking
 assert(all(abs(q07.summary.mean-1/3)<1e-12));
 q08_phase_locking
 assert(all(q08.unit.ppc(isfinite(q08.unit.ppc))<=1+1e-12));
+assert(max(abs(q08.unit.ppc-(q08.unit.spikes.*q08.unit.vector_strength.^2-1)./(q08.unit.spikes-1)))<1e-10);
+assert(all(q08.unit.p_surrogate>=1/20 & q08.unit.p_surrogate<=1));
 q09_excitation_inhibition
 assert(all(q09.summary.mean==2));
 q10_intrinsic_timescale
 q11_variable_a_information
+assert(isequal(size(q11.temporal.decoded_bits),[3 3]));
 q12_variable_c_decoding
 q13_dimensionality
 assert(all(q13.summary.mean>=1 & q13.summary.mean<=3+1e-10));
+for area=1:3
+    assert(all(diff(q13.espectro{area}.autovalores)<=1e-12));
+    assert(q13.espectro{area}.dimensao_correlacao>=1);
+end
 q14_modularity
 q15_signal_complexity
 assert(all(q15.summary.mean>=0 & q15.summary.mean<=1));
@@ -52,4 +61,6 @@ for number=1:15
     result=eval(sprintf('q%02d',number));
     assert(height(result.summary)==3);
 end
+assert(isequal(q00.cluster_id,double(data.waveform_cluster)));
+assert(max(abs(q04.correlograma.correlacao_media(:)-reshape(fliplr(q04.correlograma.correlacao_media),[],1)))<1e-10);
 fprintf('All 15 synthetic smoke checks passed.\n');
