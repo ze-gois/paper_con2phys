@@ -1,31 +1,37 @@
 clc
 clear all
-[~,arquivos] = system('find ../data');
-arquivos = split(arquivos);
-arquivos = arquivos(2:end-1);
 
+paper_path = '/home/gois/Insync/jhenriquetdg@gmail.com/Google Drive/matlab/paper_con2phys';
+data_path = fullfile(paper_path ,'..','data');
+[~,arquivos] = system(sprintf('find "%s"',data_path));
+arquivos = splitlines(arquivos);
+arquivos = arquivos(2:end-1);
+arquivos = arquivos(~contains(arquivos,'derived'));
+arquivos = sort(arquivos);
+%%
 % %
 
 animal = struct();
 g = 1;
 for a = 1 : 18
     animal(a).directory = arquivos{g};
-    animal(a).file.trial_data = arquivos{g+1};
-    animal(a).file.brain_area = arquivos{g+2};
-    animal(a).file.clusters = arquivos{g+3};
-    animal(a).file.lfp_1 = arquivos{g+4};
-    animal(a).file.lfp_2 = arquivos{g+5};
-    animal(a).file.lfp_3 = arquivos{g+6};
-    animal(a).file.spikes = arquivos{g+7};
+    
+    animal(a).file.trial_data = arquivos{g+7};
+    animal(a).file.brain_area = arquivos{g+1};
+    animal(a).file.clusters = arquivos{g+2};
+    animal(a).file.lfp_1 = arquivos{g+3};
+    animal(a).file.lfp_2 = arquivos{g+4};
+    animal(a).file.lfp_3 = arquivos{g+5};
+    animal(a).file.spikes = arquivos{g+6};
     animal(a).file.waveforms = arquivos{g+8};
     g = g + 9;
 end
+clear g a
+%%
+%data = load_all_animal_data(animal, 1);
 
 %%
-data = load_all_animal_data(animal, 1);
-
-%%
-data
+%data
 
 %%
 % LFP
