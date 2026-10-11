@@ -39,7 +39,7 @@ van de Ven et al.	2016	Assembly reactivation	assembly_expression	primitiva apena
 Russo & Durstewitz	2017	Lagged assembly detection	-	planejado	10.7554/eLife.19428
 Yu et al.	2009	Gaussian-process factor analysis	gaussian_process_smoothing	primitiva apenas	10.1152/jn.90941.2008
 Churchland et al.	2012	jPCA rotational dynamics	jpca_dynamics; population_pca	parcial	10.1038/nature11129
-Cunningham & Yu	2014	Dimensionality reduction	population_pca; participation_ratio	parcial	10.1038/nn.3776
+Cunningham & Yu	2014	Dimensionality reduction and neural manifold applications	population_pca; participation_ratio; eigenspectrum_powerlaw; jpca_dynamics	tutorial; independent geometric primitives, not one manifold algorithm	10.1038/nn.3776
 Kobak et al.	2016	Demixed PCA	condition_marginalization; population_pca	primitiva apenas	10.7554/eLife.10989
 Pandarinath et al.	2018	LFADS	-	planejado	10.1038/s41592-018-0109-9
 Schneider et al.	2023	CEBRA	-	planejado	10.1038/s41586-023-06031-6
@@ -90,3 +90,9 @@ Racz et al.	2022	Multiple-resampling cross-spectral analysis	irasa_decomposition
 Sassenhagen & Draschkow	2019	Cluster permutation inference caveats	paired_signflip_test	alerta interpretativo; cluster permutation pendente	10.1111/psyp.13335
 Huelsemann et al.	2019	PAC estimator benchmark MI MVL PLV GLM-CFC	pac_mean_vector_length; modulation_index; phase_locking_value	MVL implementado; GLM-CFC nao	10.3389/fnins.2019.00573
 Pellegrino et al.	2024	Slice tensor component analysis	tensor_cp_als	CP-ALS nao implementa sliceTCA	10.1038/s41593-024-01626-2
+Whitten et al.	2011	BOSC oscillation detection	bosc_detect; oscillation_episode	exploratorio; wavelet power plus duration threshold	10.1016/j.neuroimage.2010.08.064
+Linderman et al.	2017	Recurrent switching linear dynamical systems (rSLDS)	-	planejado; slds_inference nao implementada	
+Kajikawa & Schroeder	2011	LFP volume conduction and spatial interpretation	field_potential_forward; bipolar_reference_lfp; current_source_density	referencia; nao fornece correcao automatica de volume conduction	10.1016/j.neuron.2011.09.029
+Nunez & Srinivasan	2006	Electric fields of the brain and reference choices	common_median_reference; bipolar_reference_lfp	livro; fundamentacao de referencia, volume conduction e forward models	
+Berens	2009	CircStat toolbox for circular statistics	circular_mean; rayleigh_test	primitivas de estatistica circular; nao toolbox completa	10.18637/jss.v031.i10
+Pillow et al.	2008	Coupled Poisson GLM and spike-history filters	spike_history_design; coupling_filters; poisson_spike_glm	primitivas; sem decodificador de estimulo completo	10.1038/nature07140
