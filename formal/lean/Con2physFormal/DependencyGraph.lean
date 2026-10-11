@@ -23,7 +23,7 @@ run_cmd do
     for name in info.type.getUsedConstants do
       lines := lines.push s!"{theoremName}\t{name}\ttype"
     let proof? := match info with
-      | .thmInfo theorem => some theorem.value
+      | .thmInfo thm => some thm.value
       | .defnInfo definition => some definition.value
       | .opaqueInfo definition => some definition.value
       | _ => none
