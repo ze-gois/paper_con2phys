@@ -13,25 +13,24 @@ the scientific interpretation of a null hypothesis.
 \textbf{LOGIC-001.} De Morgan's conjunction law:
 for arbitrary propositions $P,Q$,
 $\neg(P\land Q)\iff\neg P\lor\neg Q$.
-If not both selection criteria hold, at least one fails.
+If not both criteria hold, at least one fails. \emph{Proof:} by excluded middle, either $P$ is false, or $P$ holds, in which case $Q$ must be false. Conversely, either negated conjunct contradicts $P\land Q$.
 
 \medskip\textbf{LOGIC-002.} De Morgan's disjunction law:
 $\neg(P\lor Q)\iff\neg P\land\neg Q$.
-To fail either-of-two inclusion rules is to fail both.
+To fail either-of-two inclusion rules is to fail both. \emph{Proof:} $\neg(P\lor Q)$ separately contradicts each disjunct. Conversely, $\neg P\land\neg Q$ refutes every proposed witness for $P\lor Q$.
 
 \medskip\textbf{LOGIC-003.} Contraposition:
 $(P\Rightarrow Q)\iff(\neg Q\Rightarrow\neg P)$.
 The backward direction is classical: assuming
 $\neg Q\Rightarrow\neg P$, if $P$ held but $Q$ did not,
-one would obtain $\neg P$, a contradiction; by excluded
-middle, $Q$ must hold.
+one would obtain $\neg P$, a contradiction; by excluded middle, $Q$ must hold. The forward implication follows constructively: from $P\Rightarrow Q$ and $\neg Q$, assuming $P$ would contradict $\neg Q$.
 
 \medskip\textbf{LOGIC-004.} Quantifier negation:
 $\neg(\forall x\,R(x))\iff\exists x\,\neg R(x)$.
-A counterexample disproves a universal claim.
+A counterexample disproves a universal claim. \emph{Proof:} a failing witness contradicts the universal assertion. Conversely, if no witness failed, classical double-negation elimination would give $R(x)$ for every $x$, contradicting $\neg\forall x\,R(x)$.
 
 \medskip\textbf{LOGIC-005.} Existential negation:
-$\neg(\exists x\,R(x))\iff\forall x\,\neg R(x)$.
+$\neg(\exists x\,R(x))\iff\forall x\,\neg R(x)$. \emph{Proof:} if a witness existed, it would contradict the assumption that none exists. Conversely, if every candidate fails, an assumed witness immediately yields a contradiction.
 
 \medskip\textbf{Proof strategy.} The statements about negating
 conjunction, contraposition and negating a universal
