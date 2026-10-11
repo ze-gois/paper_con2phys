@@ -1,0 +1,51 @@
+\chapter{Bridges from statements to relations and functions}
+\label{ch:bridges-language}
+\begin{readergoal}Turn statements in everyday language into small, verifiable arguments about sets, relations, and functions. You need only the preceding language chapters.\end{readergoal}
+
+\noindent\textbf{How to read a bridge.} Each numbered bridge states exactly what is to be proved, spells out the argument, and connects it to a possible representation of recorded data. A small proof is not disposable: the same reasoning returns inside more advanced methods.
+
+\bridgeentry{extensionality}{Set equality is equality of membership}
+\begin{proposition}For sets $A,B$, we have $A=B$ if and only if $A\subseteq B$ and $B\subseteq A$.\end{proposition}
+\begin{proof}If $A=B$, every element of either set belongs to the other. Conversely, $A\subseteq B$ says that $x\in A$ implies $x\in B$, and $B\subseteq A$ says the reverse. Thus for every object $x$, $x\in A$ exactly when $x\in B$. By extensionality the sets are equal.\end{proof}
+\paragraph{Example.} A detector returning timestamps $D$ and a manually verified set $G$ agree exactly when no event belongs only to $D$ and no event belongs only to $G$. Matching counts alone is insufficient.
+
+\bridgeentry{subset-order}{Inclusion is a partial order}
+\begin{proposition}The relation $\subseteq$ is reflexive, transitive and antisymmetric on the power set $\mathcal P(U)$.\end{proposition}
+\begin{proof}Every element of $A$ belongs to $A$, so $A\subseteq A$. If $A\subseteq B$ and $B\subseteq C$, then any $x\in A$ belongs to $B$ and then $C$, proving transitivity. If $A\subseteq B$ and $B\subseteq A$, Bridge~\ref{bridge:extensionality} gives $A=B$.\end{proof}
+\paragraph{Example.} Increasing a permissive spike detection threshold does not necessarily produce nested candidate sets unless the acceptance rule is itself monotone in that threshold; one should first prove monotonicity of the actual rule.
+
+\bridgeentry{cartesian}{Cartesian products define possible pairs}
+\begin{proposition}For sets $A,B$, the Cartesian product $A\times B$ consists exactly of the ordered pairs $(a,b)$ with $a\in A$ and $b\in B$. If either factor is empty, the product is empty.\end{proposition}
+\begin{proof}By definition a pair is in $A\times B$ only when both coordinate conditions hold. When $A=\varnothing$, no first coordinate can satisfy the requirement, and similarly for $B=\varnothing$.\end{proof}
+\paragraph{Example.} If $U$ is a set of units and $T$ a recording interval, $U\times T$ describes \emph{possible} unit--time pairs; the observed spike relation is only a subset of this product.
+
+\bridgeentry{relation-composition}{Composition of relations is associative}
+\begin{proposition}If $R\subseteq A\times B$, $S\subseteq B\times C$, and $T\subseteq C\times D$, then $(T\circ S)\circ R=T\circ(S\circ R)$.\end{proposition}
+\begin{proof}A pair $(a,d)$ belongs to the left side exactly when there are $b\in B$ and $c\in C$ such that $aRb$, $bSc$, and $cTd$. The same witnesses $b,c$ characterize the right side. Both relations therefore contain exactly the same pairs.\end{proof}
+\paragraph{Example.} A relation between units and channels followed by one between channels and brain regions can be composed. Composition alone does not make either assignment biologically correct.
+
+\bridgeentry{equivalence-partition}{Equivalence classes form a partition}
+\begin{proposition}If $\sim$ is reflexive, symmetric and transitive on $A$, the classes $[a]=\{b\in A:b\sim a\}$ cover $A$ and any two classes are identical or disjoint.\end{proposition}
+\begin{proof}Reflexivity places each $a$ in $[a]$, so the classes cover $A$. If $x\in[a]\cap[b]$, symmetry and transitivity give $a\sim b$. For any $y\sim a$, transitivity gives $y\sim b$, and conversely, hence $[a]=[b]$.\end{proof}
+\paragraph{Example.} Grouping timestamps by identical half-open time-bin index defines equivalence classes. Grouping by ``is within 2 ms'' generally fails transitivity and is not an equivalence relation.
+
+\bridgeentry{image-preimage}{Images preserve unions; preimages preserve unions and intersections}
+\begin{proposition}For $f:A\to B$ and subsets $E,F\subseteq A$, $f(E\cup F)=f(E)\cup f(F)$. For $C,D\subseteq B$, $f^{-1}(C\cap D)=f^{-1}(C)\cap f^{-1}(D)$ and $f^{-1}(C\cup D)=f^{-1}(C)\cup f^{-1}(D)$.\end{proposition}
+\begin{proof}A value $y$ belongs to $f(E\cup F)$ exactly when some input in $E$ or $F$ maps to $y$. This is the union of the images. An input $x$ belongs to $f^{-1}(C\cap D)$ exactly when $f(x)$ belongs to both $C$ and $D$. The union case follows by replacing ``both'' with ``at least one''.\end{proof}
+\paragraph{Example.} A trial-to-condition mapping permits selecting all trials whose condition lies in a specified set via a preimage. Unlike an inverse function, the preimage is defined even for many-to-one mappings.
+
+\bridgeentry{inverse-functions}{A two-sided inverse is equivalent to bijectivity}
+\begin{proposition}A function $f:A\to B$ has a function $g:B\to A$ with $g\circ f=\mathrm{id}_A$ and $f\circ g=\mathrm{id}_B$ if and only if $f$ is injective and surjective.\end{proposition}
+\begin{proof}If $f(a_1)=f(a_2)$, applying $g$ gives $a_1=a_2$, so $f$ is injective. For each $b\in B$, $b=f(g(b))$, so it is surjective. Conversely, bijectivity supplies exactly one $a$ for each $b=f(a)$; assigning $g(b)=a$ defines both inverse identities.\end{proof}
+\paragraph{Example.} A many-to-one mapping from a continuous waveform to its power spectrum is not invertible: phase information has been discarded.
+
+\bridgeentry{countable-pairs}{Pairs of natural indices can be enumerated}
+\begin{proposition}The set $\mathbb N_0\times\mathbb N_0$ is countable.\end{proposition}
+\begin{proof}Arrange the pairs along diagonals with fixed sum $s=m+n$: $(0,0)$, then $(0,1),(1,0)$, then $(0,2),(1,1),(2,0)$, and so on. Every pair appears on its finite-sum diagonal. Numbering entries as they are visited gives an enumeration by natural numbers.\end{proof}
+\paragraph{Example.} A countable list of possible channel--time-bin indices need not contain every continuous-time event. There is a difference between indexing samples and describing physical time.
+
+\begin{exercises}
+\item Construct two sets with equal cardinality that are not equal.
+\item Explain why ``within 1 ms'' is not generally transitive.
+\item For a many-to-one $f$, exhibit $E,F$ for which $f(E\cap F)\neq f(E)\cap f(F)$.
+\end{exercises}
