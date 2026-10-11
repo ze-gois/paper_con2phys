@@ -20,6 +20,8 @@ y=bandpass_lfp(x,fs,[5 12]);
 assert(all(isfinite(phase)) && all(amp>=0))
 [w,tw]=morlet_wavelet(x,fs,8,6);
 assert(numel(w)==numel(x) && numel(tw)==numel(x))
+surrogate=phase_randomized_surrogate(x);
+assert(max(abs(abs(fft(x))-abs(fft(surrogate))))<1e-6)
 cycles=cycle_by_cycle(y,fs);
 assert(height(cycles)>60)
 assert(abs(phase_locking_value(phase,phase)-1)<1e-10)
@@ -34,6 +36,8 @@ assert(numel(fc)==numel(coh) && max(coh) <= 1+1e-9)
 assert(numel(f_irasa)==numel(fractal) && all(osc>=0) && all(total>=0))
 [components,remainder]=empirical_mode_decomposition(x(1:500),3);
 assert(max(abs(sum(components,2)+remainder-x(1:500)))<1e-8)
+[em,rem]=ensemble_empirical_mode_decomposition(x(1:300),3,.1,2);
+assert(size(em,1)==300 && max(abs(sum(em,2)+rem-x(1:300)))<1e-8)
 assert(isfinite(permutation_entropy(x,3,2)))
 assert(isfinite(spectral_entropy(p)))
 csd=current_source_density((0:4)'.^2,1,1);
@@ -50,7 +54,7 @@ assert(numel(lag)==numel(ac))
 assert(numel(lag)==numel(cc))
 [centers,rate,by_trial]=peri_event_histogram([.05 1.05],[0 1],0:.1:.5);
 assert(numel(centers)==numel(rate) && size(by_trial,1)==2)
-assert(abs(spike_count_fano([1;2;3])-1)<1e-10)
+assert(abs(spike_count_fano([1;2;3])-.5)<1e-10)
 [ppc,spike_phase]=spike_field_ppc(y,[1.0 2.0 3.0],fs,.2);
 assert(isfinite(ppc) && numel(spike_phase)==3)
 sta=spike_triggered_average(x,[1 2 3],fs,.05,.05);
@@ -71,6 +75,9 @@ nc=noise_correlation(counts,repmat([1;2],100,1));
 assert(all(size(nc)==[4 4]))
 pc=spike_waveform_pca(randn(20,50),3);
 assert(size(pc.scores,2)==3)
+broadband=.01*randn(30000,1); broadband(5000)=-5;
+[~,loc]=spike_threshold_detection(broadband,30000,4,.001);
+assert(any(loc==5000))
 [id,sim]=template_match_waveforms(randn(4,20),randn(3,20));
 assert(numel(id)==4 && numel(sim)==4)
 assert(mutual_information([0;0;1;1],[0;0;1;1])>.9)
