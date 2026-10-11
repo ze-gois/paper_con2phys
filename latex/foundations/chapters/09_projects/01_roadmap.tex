@@ -1,0 +1,25 @@
+\chapter{A complete path from first definitions to real datasets}\label{ch:roadmap}
+\begin{readergoal}Practice the complete mathematical chain from a statement in English to a reproducible conclusion, with simulations preceding claims about physiology.\end{readergoal}
+\section{Project I: two signals that look coupled but are not}
+Start from the English claim: ``two channels have high coherence because the associated neurons communicate.'' Translate the measurable component to a statistic $\mathcal C_{xy}(f)$ and identify the unsupported causal clause. Construct independent Gaussian noises $n_x,n_y$ and a common oscillatory source $s$, then define $x=s+n_x$ and $y=s+n_y$. Calculate coherence, add measurement noise, and vary reference contamination. Compare estimates with and without the common source. Show that coherence may be high without direct communication. This project is motivated by \cite{Bastos2016,CohenTsuchiya2018}.
+
+\section{Project II: what a theta peak actually means}
+Simulate a process with a $1/f$-like background and a genuine narrowband theta oscillator. Next simulate only the aperiodic background, vary its exponent, and compute band power in both cases. Apply periodogram, Welch, and multitaper estimators; then compare parametric aperiodic fitting and an IRASA-type separation. Quantify false positives and biases across simulated repetitions before trying the methods on LFP. Here the hypotheses must distinguish a local peak \emph{over background} from integrated power over a fixed canonical band \cite{Donoghue2020,Gerster2022}.
+
+\section{Project III: a manufactured phase-amplitude relationship}
+Simulate a nonsinusoidal slow oscillator with harmonic content, and separately simulate a high-frequency oscillator whose amplitude truly depends on slow phase. Filter both into low and high bands, compute analytic signals, and compare PAC measures. Repeat with sharp transient waveforms and phase surrogates that preserve the important nuisance structure. Identify which simulated condition actually contains two distinct interacting generators. The validation target is the generation mechanism, not merely a significant PAC statistic \cite{Aru2015,ColeVoytek2018}.
+
+\section{Project IV: spikes, jitter, and conditional inference}
+Simulate independent Poisson spike trains sharing a slow time-dependent firing-rate modulation. A naive cross-correlogram may show coincidence peaks from rate cofluctuations. Define a conditional interval-jitter hypothesis holding coarse counts fixed and re-evaluate fine-time synchrony. Add precisely coordinated spikes and measure power across timescales and window widths. The lesson is to connect every resampling decision to an explicit null hypothesis \cite{Amarasingham2012}.
+
+\section{Project V: latent neuronal dynamics}
+Simulate $z_{t+1}=Az_t+w_t$ for a two-dimensional rotating latent state, then observe $N$ neurons through $r_t=Cz_t+\varepsilon_t$. Compare PCA, factor analysis, and a fitted linear state-space model. Vary the number of observed neurons, number of trials, observation noise, and dimensionality. Track held-out prediction and recovery of the latent subspace up to rotational ambiguity; avoid claiming exact recovery of nonidentifiable coordinate axes \cite{Churchland2012,CunninghamYu2014,Gallego2017}.
+
+\section{A research conclusion requires four layers}
+For each study, the final report should distinguish (1) the original English claim; (2) the formal mathematical target and its assumptions; (3) the numerical algorithm and validation outcomes; and (4) the physiological interpretation and its remaining alternatives. A clean implementation establishes only the third layer. A statistically significant result speaks to the second within its null model. A mechanistic conclusion requires evidence beyond either one in isolation.
+
+\begin{exercises}
+\item Draft a preregistered null hypothesis for one project, including the sampling unit, statistic, and exclusion rule.
+\item Create a matrix matching five methods to their scientific estimands, key assumptions, and primary failure modes.
+\item Design one negative control and one positive control for your chosen method.
+\end{exercises}

@@ -1,0 +1,26 @@
+\chapter{Hypothesis testing, resampling, and uncertainty}\label{ch:inference}
+\begin{readergoal}Understand what a test proves, how uncertainty is quantified, and why a null model must preserve the right structure.\end{readergoal}
+\section{What is a hypothesis test?}
+A test begins by specifying a null family $H_0$ of possible data-generating mechanisms and a test statistic $T(D)$. The \emph{null distribution} describes the variation of $T$ under that family. A $p$-value is the probability, under the stipulated null model, of observing a statistic at least as extreme as the realized one according to the prespecified rule. It is not the posterior probability that the null is true, nor is it the probability the result occurred ``by chance'' without further qualification.
+
+\section{Type I error, power, and effect size}
+A level-$\alpha$ test controls the chance of rejecting a true null, provided its assumptions hold. Power is the rejection probability under a specified alternative. Statistical significance alone says little about effect magnitude. A coherence difference that is tiny but precisely estimated may be statistically significant, while a large effect in a small dataset may remain uncertain. Report the statistic, units, effect size, sampling unit, interval estimate, and model assumptions.
+
+\section{Resampling methods}
+A bootstrap approximates an estimator's sampling variability by resampling observational units from the data under specified conditions. The units might be animals or independent trials; sampling every LFP time point independently typically destroys serial dependence. A permutation test requires an exchangeability justification under the null, often by randomizing treatment labels under a randomized design. Surrogate time shifts can test certain synchrony claims only if their shift mechanism preserves the appropriate slow structure while breaking the tested fine-time association. These methods are not interchangeable.
+
+\section{Hierarchical data and pseudoreplication}
+Samples nested within a trial, trials within sessions, and sessions within animals are rarely independent. Treating every overlapping 100-ms analysis window as a fresh biological replicate inflates nominal sample size. A hierarchical model, cluster bootstrap, or analysis at the appropriate experimental unit can address some dependencies. Repeated statistical tests across channel pairs, frequency bins, or time bins require a multiple-comparison strategy adapted to the intended claim.
+
+\section{Bias, generalization, and validation}
+Preprocessing fitted on all the data before cross-validation can leak information from test folds into training. Selection of frequency bands after inspecting the outcome similarly biases later inference unless validated separately. Hold out whole animals or sessions when the scientific goal is cross-animal generalization. Predictive success on held-out data supports a model's useful regularities, not necessarily the literal truth of its latent biological explanation.
+
+\begin{workedexample}[An exact conditional question]
+To test whether two cells exhibit synchrony below a 5-ms scale beyond fixed 20-ms window spike counts, define windows, fixed spike counts, a synchrony statistic, and a resampling mechanism that randomizes fine timing conditional on the fixed counts. Any rejection should refer to the particular 20-ms coarse information held fixed, as emphasized in \cite{Amarasingham2012}.
+\end{workedexample}
+\begin{exercises}
+\item State the difference between an effect-size estimate and a hypothesis-test decision.
+\item Propose a hierarchical resampling unit for a dataset containing animals, sessions, trials, and time windows.
+\item Explain why using the test set to choose a frequency band biases held-out performance.
+\item Describe a null distribution that would be inappropriate for testing phase-amplitude coupling under strong signal nonstationarity.
+\end{exercises}

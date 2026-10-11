@@ -1,0 +1,17 @@
+\chapter{Provisional mathematical map to \texttt{arsenal/path}}\label{app:arsenal}
+This is a \textbf{conceptual map, not a verified file inventory}. The GitHub repository and the actual \texttt{arsenal/path} tree were not available during compilation. Names below describe analysis families and do not assert that particular MATLAB files are implemented.
+\begin{longtable}{p{0.25\textwidth}p{0.34\textwidth}p{0.31\textwidth}}\toprule
+Method family & Mathematical prerequisites & Checks before interpreting results\\\midrule\endhead
+Binning and firing rates & Natural numbers; functions; point processes & Window edges, exposure, refractory period\\
+FFT and PSD & Complex numbers; sequences; convolution & Sample rate, leakage, normalization, 1/f background\\
+Hilbert envelopes & Complex phase; Fourier; filtering & Narrowband validity, edges, amplitude near zero\\
+Sliding moments & Probability; expectation; central moments & Window overlap, variance conventions, autocorrelation\\
+Coherence and PLV & Cross-spectra; circular statistics & Reference, common input, sample size, null design\\
+PAC & Analytic signals; nonlinear statistics & Harmonics, transients, nonstationarity, surrogates\\
+Granger and VAR & Linear algebra; stochastic processes; likelihood & Lag order, stationarity, latent common input\\
+Spike synchrony & Point processes; conditional probability & Coarse counts, jitter window, precise null\\
+PCA and SVD & Linear maps; covariance; spectral theorem & Scaling, noise, held-out stability\\
+State-space models & EDOs; conditional inference; linear algebra & Observability, latent-coordinate ambiguity\\
+CSD and inverse models & Multivariable derivatives; forward physics & Geometry, conductivity, regularization\\
+\bottomrule\end{longtable}
+For a future verified edition, each row should link to the exact MATLAB function, an explicit function signature, the corresponding mathematical equation, a reference, a tested example, and at least one synthetic negative control. An automatically generated index from the real repository would be preferable to copying guessed filenames.
