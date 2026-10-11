@@ -22,7 +22,8 @@ When $\theta>\sqrt\gamma$, the sample leading eigenvalue
 converges to $(1+\theta)(1+\gamma/\theta)$, strictly above
 the edge, and asymptotic alignment is nonzero.
 \end{theorem}
-The result depends on the iid isotropic sampling model.
+The result belongs to the spiked-covariance phase-transition family
+\cite{baik2005}. It depends on the iid isotropic sampling model.
 Temporal dependence, heterogeneous neuron variances, preprocessing,
 and correlated noise modify its calibration.
 A detectable statistical spike is not automatically an
@@ -34,7 +35,8 @@ $T_0$ (often proportional to the identity), a linear shrinkage
 estimator is $\widehat\Sigma=(1-\alpha)S+\alpha T_0$.
 The optimal $\alpha$ depends on the loss, assumptions,
 and estimation method. Ledoit--Wolf-type procedures estimate
-shrinkage to reduce high-dimensional covariance risk;
+shrinkage to reduce high-dimensional covariance risk
+\cite{ledoitwolf2004};
 James--Stein concerns shrinkage of normal means in its classical
 form. Neither is a license to tune hyperparameters on held-out
 test trials.
