@@ -15,15 +15,15 @@ Aru et al.	2015	Cross-frequency coupling confounds	modulation_index; phase_rando
 Bastos & Schoffelen	2016	Connectivity caveats	coherence_spectrum; granger_causality	referencia	10.3389/fnsys.2015.00175
 Siegel et al.	2012	Spectral neuronal interactions	coherence_spectrum	referencia	10.1038/nrn3137
 Quiroga et al.	2004	Wavelet spike detection and clustering	spike_threshold_detection; spike_waveform_pca	parcial	10.1162/089976604774201631
-Hill et al.	2011	Spike sorting quality metrics	-	planejado	10.1523/JNEUROSCI.0971-11.2011
+Hill et al.	2011	Spike sorting quality metrics	spike_refractory_violations; spike_waveform_snr	parcial	10.1523/JNEUROSCI.0971-11.2011
 Rossant et al.	2016	Dense-array spike sorting	template_match_waveforms	parcial	10.1038/nn.4268
-Magland et al.	2020	SpikeForest benchmark	-	planejado	10.7554/eLife.55167
-Buccino et al.	2020	SpikeInterface workflow	-	integracao futura	10.7554/eLife.61834
+Magland et al.	2020	SpikeForest benchmark	spike_sorting_agreement	primitiva por unidade	10.7554/eLife.55167
+Buccino et al.	2020	SpikeInterface workflow	spike_waveform_extraction; spike_waveform_average; spike_presence_ratio	primitivas; integracao futura	10.7554/eLife.61834
 Pachitariu et al.	2024	Kilosort4	template_match_waveforms	primitiva apenas	10.1038/s41592-024-02232-7
 Windolf et al.	2025	DREDge drift correction	-	planejado	10.1038/s41592-025-02614-5
 Watters et al.	2025	MEDiCINe motion inference	-	planejado	10.1523/ENEURO.0529-24.2025
 UnitMatch	2025	Longitudinal unit matching	template_match_waveforms	primitiva apenas	
-Efficient and reproducible pipelines for spike sorting	2026	Sorting pipeline benchmarking	-	planejado	
+Buccino et al.	2026	Reproducible sorting workflows and comparison	spike_sorting_agreement; spike_presence_ratio; spike_refractory_violations	primitivas QC; workflow externo	10.7554/eLife.110170.3
 Nawrot et al.	1999	Spike rate estimation	peri_event_histogram; firing_rate	parcial	10.1016/S0165-0270(99)00127-2
 Grun et al. I	2002	Unitary events stationary test	crosscorrelogram	primitiva apenas	10.1162/089976602753284455
 Grun et al. II	2002	Unitary events nonstationary test	-	planejado	10.1162/089976602753284464
@@ -75,3 +75,8 @@ Heller & David	2021	dDR preprint (versao anterior a Heller 2022)	targeted_dimens
 Gallego et al.	2017	Neural manifolds review	population_pca; jpca_dynamics	referencia	10.1016/j.neuron.2017.05.025
 Greenidge et al.	2024	Gaussian-process multiclass regression decoder	-	planejado; GP smoothing nao equivale a GP multiclass	10.1162/neco_a_01630
 Williams et al.	2018	Tensor component analysis	tensor_cp_als	primitiva CP-ALS; TCA completo pendente	10.1016/j.neuron.2018.05.015
+Stringer & Pachitariu	2024	Large-scale neuronal analysis methods review	population_pca; participation_ratio; crossvalidated_ridge_decoder	revisao; operacoes selecionadas	10.1126/science.adp7429
+Siegle & Steinmetz	2026	Single-spike electrophysiology quality and recording practice	spike_refractory_violations; spike_presence_ratio; spike_waveform_snr	revisao; qualidade basica	10.1038/s41583-026-01042-4
+Meyer et al.	2024	Deep-learning spike sorting survey	spike_threshold_detection; spike_waveform_pca	revisao; modelos deep learning nao implementados	10.1088/1741-2552/ad8b6c
+Pesaran et al.	2018	Field potentials activation communication correlation coding	multitaper_coherence; wavelet_coherence; spike_field_coherence; field_potential_forward; field_potential_inverse_tikhonov; bipolar_reference_lfp	primitivas; inversao indeterminada	10.1038/s41593-018-0171-8
+Martinez-Canada et al.	2021	LFP EEG circuit interaction and neuromodulation inverse models	field_potential_forward; field_potential_inverse_tikhonov; multitaper_coherence	revisao; sem inferencia de E I ou neuromodulacao	10.1186/s40708-021-00148-y
