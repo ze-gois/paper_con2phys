@@ -5,7 +5,7 @@ Two books, two different kinds of mathematical evidence:
 | Book | Entry point | Intended role | Current state |
 |---|---|---|---|
 | [Computational Electrophysiology](electrophysiology/main.tex) | `books/electrophysiology/main.tex` | MATLAB-linked methods, simulations, and scientific interpretation | Existing theorem/method manuscript migrated intact; MATLAB executable examples still need expansion |
-| [Formal Foundations](formal_foundations/main.tex) | `books/formal_foundations/main.tex` | Mathematics from ordinary language, eventually checked in Lean 4 / Mathlib | Existing 112-page introductory manuscript migrated intact; Lean formalizations are **not** yet present |
+| [Formal Foundations](formal_foundations/main.tex) | `books/formal_foundations/main.tex` | Mathematics from ordinary language, eventually checked in Lean 4 / Mathlib | Foundational manuscript with five verified Lean 4 logic proofs side by side with English; remaining formalizations pending |
 
 No theorem is called formally proved by software unless it builds with Lean. Neither a MATLAB numerical test nor a TeX proof constitutes a machine-checked theorem.
 
@@ -28,7 +28,7 @@ The legacy commands `make -C latex all`, `make -C latex theorems`, and `make -C 
 
 - [mathematics/theorems.yml](../mathematics/theorems.yml) is a seed registry for stable theorem identifiers; it does not claim all catalogue entries are formally proved.
 - [arsenal/path](../arsenal/path) and [path](../path) retain the MATLAB method libraries.
-- [formal/lean](../formal/lean) is reserved for a future Lake/Mathlib project and is deliberately not presented as implemented.
+- [formal/lean](../formal/lean) contains the pinned Lean/Mathlib project and verified logic pilot; [formal_registry.json](../mathematics/formal_registry.json) and [audit_formal.py](../mathematics/audit_formal.py) track the correspondence and pending work.
 - [examples/matlab](../examples/matlab) is the designated place for future reproducible textbook demonstrations.
 - [examples/lean](../examples/lean) is reserved for future verified examples.
 

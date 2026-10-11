@@ -13,8 +13,7 @@ lake env lean Con2physFormal/Logic.lean
 
 The pilot corresponds to the **logic chapter** of `books/formal_foundations`.
 It contains five declarations for De Morgan laws, contraposition and quantifier
-negation. Check the `Formal Lean` GitHub workflow for the actual kernel-check
-result before describing any particular declaration as verified.
+negation. All five passed the Lean kernel check in [this GitHub Actions run](https://github.com/ze-gois/paper_con2phys/actions/runs/38179132288); the [proof registry](../../mathematics/formal_registry.json) records each declaration and its axioms.
 
 `#print axioms` reports underlying axiomatic assumptions; these are
 different from source imports and tactics. The proof scripts contain no
