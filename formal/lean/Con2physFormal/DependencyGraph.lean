@@ -22,7 +22,12 @@ run_cmd do
       | throwError "Missing theorem {theoremName}"
     for name in info.type.getUsedConstants do
       lines := lines.push s!"{theoremName}\t{name}\ttype"
-    if let some value := info.value? then
+    let proof? := match info with
+      | .thmInfo theorem => some theorem.value
+      | .defnInfo definition => some definition.value
+      | .opaqueInfo definition => some definition.value
+      | _ => none
+    if let some value := proof? then
       for name in value.getUsedConstants do
         lines := lines.push s!"{theoremName}\t{name}\tproof"
     else
