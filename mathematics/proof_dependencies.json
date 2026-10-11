@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "direction": "theorem_to_dependency",
+  "note": "Only directly reported axioms and source/tactic dependencies for the verified pilot. Tactics and imports are not kernel logical axioms. Transitive Mathlib internal graph not yet extracted.",
+  "nodes": [
+    {
+      "id": "LOGIC-001",
+      "kind": "verified_theorem",
+      "declaration": "Con2physFormal.Logic.deMorganAnd"
+    },
+    {
+      "id": "LOGIC-002",
+      "kind": "verified_theorem",
+      "declaration": "Con2physFormal.Logic.deMorganOr"
+    },
+    {
+      "id": "LOGIC-003",
+      "kind": "verified_theorem",
+      "declaration": "Con2physFormal.Logic.contrapositive"
+    },
+    {
+      "id": "LOGIC-004",
+      "kind": "verified_theorem",
+      "declaration": "Con2physFormal.Logic.notForall"
+    },
+    {
+      "id": "LOGIC-005",
+      "kind": "verified_theorem",
+      "declaration": "Con2physFormal.Logic.notExists"
+    },
+    {
+      "id": "mathlib-import",
+      "kind": "source_import",
+      "revision": "5ed2965256430c3649e86755f9576b54eca72435"
+    },
+    {
+      "id": "tactic:tauto",
+      "kind": "elaboration_tactic"
+    },
+    {
+      "id": "tactic:push Not",
+      "kind": "elaboration_tactic"
+    },
+    {
+      "id": "axiom:propext",
+      "kind": "kernel_axiomatic_dependency"
+    },
+    {
+      "id": "axiom:Classical.choice",
+      "kind": "kernel_axiomatic_dependency"
+    },
+    {
+      "id": "axiom:Quot.sound",
+      "kind": "kernel_axiomatic_dependency"
+    }
+  ],
+  "edges": [
+    {
+      "from": "LOGIC-001",
+      "to": "mathlib-import",
+      "kind": "source_import"
+    },
+    {
+      "from": "LOGIC-001",
+      "to": "tactic:tauto",
+      "kind": "tactic_reference"
+    },
+    {
+      "from": "LOGIC-001",
+      "to": "axiom:propext",
+      "kind": "kernel_axiomatic_dependency"
+    },
+    {
+      "from": "LOGIC-001",
+      "to": "axiom:Classical.choice",
+      "kind": "kernel_axiomatic_dependency"
+    },
+    {
+      "from": "LOGIC-001",
+      "to": "axiom:Quot.sound",
+      "kind": "kernel_axiomatic_dependency"
+    },
+    {
+      "from": "LOGIC-002",
+      "to": "mathlib-import",
+      "kind": "source_import"
+    },
+    {
+      "from": "LOGIC-002",
+      "to": "tactic:tauto",
+      "kind": "tactic_reference"
+    },
+    {
+      "from": "LOGIC-003",
+      "to": "mathlib-import",
+      "kind": "source_import"
+    },
+    {
+      "from": "LOGIC-003",
+      "to": "tactic:tauto",
+      "kind": "tactic_reference"
+    },
+    {
+      "from": "LOGIC-003",
+      "to": "axiom:propext",
+      "kind": "kernel_axiomatic_dependency"
+    },
+    {
+      "from": "LOGIC-003",
+      "to": "axiom:Classical.choice",
+      "kind": "kernel_axiomatic_dependency"
+    },
+    {
+      "from": "LOGIC-003",
+      "to": "axiom:Quot.sound",
+      "kind": "kernel_axiomatic_dependency"
+    },
+    {
+      "from": "LOGIC-004",
+      "to": "mathlib-import",
+      "kind": "source_import"
+    },
+    {
+      "from": "LOGIC-004",
+      "to": "tactic:push Not",
+      "kind": "tactic_reference"
+    },
+    {
+      "from": "LOGIC-004",
+      "to": "axiom:propext",
+      "kind": "kernel_axiomatic_dependency"
+    },
+    {
+      "from": "LOGIC-004",
+      "to": "axiom:Classical.choice",
+      "kind": "kernel_axiomatic_dependency"
+    },
+    {
+      "from": "LOGIC-004",
+      "to": "axiom:Quot.sound",
+      "kind": "kernel_axiomatic_dependency"
+    },
+    {
+      "from": "LOGIC-005",
+      "to": "mathlib-import",
+      "kind": "source_import"
+    },
+    {
+      "from": "LOGIC-005",
+      "to": "tactic:push Not",
+      "kind": "tactic_reference"
+    },
+    {
+      "from": "LOGIC-005",
+      "to": "axiom:propext",
+      "kind": "kernel_axiomatic_dependency"
+    }
+  ]
+}
