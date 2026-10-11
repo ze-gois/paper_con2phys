@@ -1,0 +1,64 @@
+\chapter{Bridges from number systems to calculus}\label{ch:bridges-analysis}
+\begin{readergoal}Learn to justify limits, continuity, differentiation, and integration rather than treating calculus rules as unexplained computational recipes.\end{readergoal}
+
+\bridgeentry{limit-unique}{A convergent sequence has only one limit}
+\begin{proposition}If $x_n\to a$ and $x_n\to b$ in $\mathbb R$, then $a=b$.\end{proposition}
+\begin{proof}Suppose $a\neq b$. Set $\varepsilon=|a-b|/3$. For all sufficiently large $n$, both $|x_n-a|<\varepsilon$ and $|x_n-b|<\varepsilon$. The triangle inequality yields $|a-b|\leq |a-x_n|+|x_n-b|<2|a-b|/3$, a contradiction.\end{proof}
+\paragraph{Example.} Two numerical routines approximating the same well-defined limit may have different finite-sample outputs; a proven convergent sequence cannot have two distinct limiting values.
+
+\bridgeentry{limit-arithmetic}{Limits respect addition and multiplication}
+\begin{proposition}If real sequences $x_n\to a$ and $y_n\to b$, then $x_n+y_n\to a+b$ and $x_ny_n\to ab$.\end{proposition}
+\begin{proof}For sums, $|(x_n+y_n)-(a+b)|\leq |x_n-a|+|y_n-b|\to0$. For products, write $x_ny_n-ab=(x_n-a)y_n+a(y_n-b)$. A convergent sequence is bounded, so the first term tends to zero and the second does too.\end{proof}
+\paragraph{Example.} If a mean and a calibration gain both converge in a controlled limit, their product converges. It does not follow that multiplying two biased finite-sample estimators produces an unbiased estimate.
+
+\bridgeentry{monotone-convergence}{Bounded monotone real sequences converge}
+\begin{proposition}Every nondecreasing real sequence bounded above converges to the supremum of its values.\end{proposition}
+\begin{proof}Let $s=\sup\{x_n:n\geq0\}$. For any $\varepsilon>0$, the supremum approximation property provides $N$ with $s-\varepsilon<x_N\leq s$. Monotonicity then gives $s-\varepsilon<x_n\leq s$ for all $n\geq N$, which is convergence to $s$.\end{proof}
+\paragraph{Example.} A running maximum of a bounded score converges mathematically, but the limit may depend on the candidate set and need not estimate true predictive accuracy.
+
+\bridgeentry{continuity-composition}{Composition preserves continuity}
+\begin{proposition}If $f$ is continuous at $a$ and $g$ is continuous at $f(a)$, then $g\circ f$ is continuous at $a$.\end{proposition}
+\begin{proof}Given an output tolerance $\varepsilon$, continuity of $g$ supplies a tolerance $\eta$ on its input. Continuity of $f$ supplies $\delta$ such that $|x-a|<\delta$ implies $|f(x)-f(a)|<\eta$. The latter implies $|g(f(x))-g(f(a))|<\varepsilon$.\end{proof}
+\paragraph{Example.} A continuously varying model amplitude followed by a continuous nonlinear transfer function remains continuous. Thresholding is discontinuous and can violate this conclusion.
+
+\bridgeentry{intermediate-value}{A continuous curve cannot jump over an intermediate value}
+\begin{theorem}[Intermediate value theorem]If $f$ is continuous on $[a,b]$ and $f(a)<c<f(b)$, then some $t\in(a,b)$ satisfies $f(t)=c$.\end{theorem}
+\begin{proof}Let $S=\{x\in[a,b]:f(x)\leq c\}$ and $s=\sup S$. Continuity at $s$ rules out $f(s)<c$ (then a nearby point to the right would still lie in $S$), and rules out $f(s)>c$ (then nearby points to the left could not approach $s$ from $S$). Hence $f(s)=c$.\end{proof}
+\paragraph{Example.} If a truly continuous filtered trace changes sign, it must cross zero. A pair of digital samples with opposite signs only implies a crossing if a continuous interpolation model is justified.
+
+\bridgeentry{extreme-value}{A continuous function has extrema on a compact interval}
+\begin{theorem}[Extreme value theorem]If $f:[a,b]\to\mathbb R$ is continuous, it attains both a minimum and a maximum.\end{theorem}
+\begin{proof}Continuity on the compact interval makes $f([a,b])$ compact: for any convergent sequence of images, extract a convergent subsequence of preimages and use continuity to identify its limit. The image is thus bounded and closed, so its supremum and infimum belong to it.\end{proof}
+\paragraph{Example.} A continuous fit score on a closed, bounded parameter interval has an optimum. Open intervals, discontinuities, or unconstrained coefficients require separate existence arguments.
+
+\bridgeentry{derivative-rules}{Sum and product differentiation rules}
+\begin{proposition}For functions differentiable at $t$, $(f+g)'(t)=f'(t)+g'(t)$ and $(fg)'(t)=f'(t)g(t)+f(t)g'(t)$.\end{proposition}
+\begin{proof}Linearity follows by splitting the difference quotient. For the product, add and subtract $f(t+h)g(t)$ in the numerator:
+\[
+\frac{f(t+h)g(t+h)-f(t)g(t)}h=
+ f(t+h)\frac{g(t+h)-g(t)}h+
+ g(t)\frac{f(t+h)-f(t)}h.
+\]
+Differentiability implies continuity of $f$, so the limit yields the formula.\end{proof}
+\paragraph{Example.} Differentiating an ideal amplitude-modulated oscillation contains both envelope change and carrier change, explaining why temporal derivatives mix these mechanisms.
+
+\bridgeentry{chain-rule}{The chain rule follows from local linear approximation}
+\begin{theorem}[Chain rule]If $f$ is differentiable at $t$ and $g$ at $f(t)$, then $(g\circ f)'(t)=g'(f(t))f'(t)$.\end{theorem}
+\begin{proof}Write $g(y+u)=g(y)+g'(y)u+r(u)u$ where $r(u)\to0$ as $u\to0$, with $r(0)=0$. Substitute $y=f(t)$ and $u=f(t+h)-f(t)$; divide by $h$. The first term converges to $g'(f(t))f'(t)$ and the remainder to zero because $u/h$ stays bounded.\end{proof}
+\paragraph{Example.} For a fitted intensity $\lambda(t)=\exp(\eta(t))$, we have $\lambda'(t)=\lambda(t)\eta'(t)$, provided $\eta$ is differentiable.
+
+\bridgeentry{taylor-first}{Differentiability provides a first-order remainder}
+\begin{proposition}A function $f$ differentiable at $a$ satisfies $f(a+h)=f(a)+f'(a)h+o(h)$ as $h\to0$.\end{proposition}
+\begin{proof}Set $r(h)=[f(a+h)-f(a)]/h-f'(a)$ for nonzero $h$ and $r(0)=0$. Differentiability says $r(h)\to0$. Rearranging gives $f(a+h)=f(a)+f'(a)h+h r(h)$, and $h r(h)=o(h)$.\end{proof}
+\paragraph{Example.} A local linear approximation of a nonlinear observation model is accurate only near its expansion point; the remainder is not globally negligible.
+
+\bridgeentry{fundamental-calculus}{Integrating a rate recovers accumulated change}
+\begin{theorem}[Fundamental theorem of calculus]If $f$ is continuous on $[a,b]$ and $F(t)=\int_a^t f(s)\,ds$, then $F'(t)=f(t)$ at interior points.\end{theorem}
+\begin{proof}For $h\neq0$ with $t+h\in[a,b]$, $[F(t+h)-F(t)]/h$ is the average of $f$ over the short interval from $t$ to $t+h$. By continuity, this average differs from $f(t)$ by at most $\sup_{s\text{ between }t,t+h}|f(s)-f(t)|$, which tends to zero.\end{proof}
+\paragraph{Example.} Integrating a conditional spike intensity gives an expected count only under an appropriate point-process model; the calculus theorem alone does not establish that the fitted intensity is correct.
+
+\begin{exercises}
+\item Prove continuity of $x\mapsto x^2$ using limit arithmetic.
+\item Explain which hypothesis fails for the Heaviside step function in the intermediate value theorem.
+\item Simulate first-difference derivatives of a noisy sine wave at increasing sample rates.
+\end{exercises}

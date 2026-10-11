@@ -1,0 +1,73 @@
+\chapter[Statements and mathematical structures]{From ordinary statements to mathematical structures}
+A mathematical proof is a sequence of statements whose conclusion follows
+from explicitly declared assumptions. Start with the sentence
+\emph{If a spike occurred in an interval, the interval contains a spike}.
+The implication is meaningful only after the interval and the membership
+relation have been defined.
+
+\begin{definition}
+A \emph{relation} from $A$ to $B$ is a subset $R\subseteq A\times B$.
+It is a \emph{function} $f:A\to B$ when every $a\in A$ occurs as
+the first coordinate of exactly one pair $(a,b)\in R$.
+\end{definition}
+For example, a spike train of a unit is a subset of its observation
+time interval. A classification of spike waveforms by cluster labels is
+a function only when every input waveform receives exactly one label.
+This does not imply that the label identifies a physiological neuron.
+
+\entry{1}{De Morgan's laws}
+{For propositions $P,Q$, $\neg(P\land Q)\Leftrightarrow
+(\neg P)\lor(\neg Q)$; for sets,
+$(A\cup B)^c=A^c\cap B^c$, relative to an ambient set.}
+{Transform selection criteria and complements of detected event sets.}
+\entry{2}{Quantifier duality}
+{For any predicate $P$, $\neg(\forall x\,P(x))\Leftrightarrow
+\exists x\,\neg P(x)$; likewise
+$\neg(\exists x\,P(x))\Leftrightarrow\forall x\,\neg P(x)$.}
+{Express universal reliability claims and their counterexamples.}
+\entry{3}{Mathematical induction (principle)}
+{If $P(0)$ holds and $P(n)\Rightarrow P(n+1)$ for $n\in\N$,
+then $P(n)$ holds for all $n\in\N$.}
+{Prove recurrences, finite sums, binning bounds, and iterative invariants.}
+\entry{4}{Recursion theorem on the natural numbers}
+{With a starting value and a step map, there is a unique
+sequence satisfying the corresponding recursive definition
+in the standard set-theoretic setting.}
+{Construct discrete filters, numerical solvers, and event counters.}
+\entry{5}{Equivalence relations and partitions}
+{Reflexive, symmetric, transitive relations correspond to partitions
+into disjoint nonempty equivalence classes.}
+{Distinguish clustering as a partition from physiological identification.}
+\entry{6}{Well-ordering principle}
+{Every nonempty subset of $\N$ has a least element.}
+{Prove termination of monotone integer-index algorithms.}
+\entry{7}{Cantor--Schroeder--Bernstein theorem}
+{If injections $A\to B$ and $B\to A$ exist, then a bijection
+$A\to B$ exists.}
+{Understand cardinality and information-preserving relabelings.}
+\entry{8}{Cantor's diagonal argument}
+{There is no surjection $\N\to(0,1)$; the real interval
+is uncountable.}
+{Understand the distinction between finite sampled arrays and continuum models.}
+\entry{9}{Least-upper-bound property (completeness axiom for $\R$)}
+{Every nonempty subset of $\R$ bounded above has a real supremum.}
+{Build limits, continuity, completeness, and convergence of numerical approximations.}
+\entry{10}{Archimedean property and density of $\Q$}
+{For real $x$ there is an integer $n>x$; between any
+$a<b$ in $\R$ lies some $q\in\Q$.}
+{Approximate continuous times and amplitudes by rational values, without confusing
+approximation with exact sampling.}
+
+\begin{example}[Equivalence classes of spike timestamps]
+For a fixed bin width $\Delta>0$, let $s\sim t$ when
+$\lfloor s/\Delta\rfloor=\lfloor t/\Delta\rfloor$.
+This relation is reflexive, symmetric, and transitive.
+Each equivalence class represents one temporal bin, not one spike.
+A spike-count sequence counts members of each class.
+\end{example}
+
+\begin{caution}
+Membership ($x\in A$), inclusion ($A\subseteq B$), and association
+under a binary relation ($xRy$) are distinct concepts. An observed
+cross-correlation is not evidence that a causal or anatomical edge exists.
+\end{caution}

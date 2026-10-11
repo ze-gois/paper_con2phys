@@ -1,0 +1,24 @@
+\chapter{Inference, likelihood, and stochastic processes}\label{ch:stochastic}
+\begin{readergoal}Separate population parameters from estimators, and connect time-dependent random variables to autocorrelation and stationarity.\end{readergoal}
+\section{Data, models, estimators}
+An unknown parameter $\theta$ describes a proposed data-generating distribution $p(x\mid\theta)$. An \emph{estimator} $\hat\theta(X_1,\ldots,X_n)$ is a function of random data; its realized value is an estimate. An estimator can be biased, have high variance, or be inconsistent. Mean squared error decomposes as $\mathrm{MSE}(\hat\theta)=\Var(\hat\theta)+[E\hat\theta-\theta]^2$ when these quantities exist. Estimation is therefore not reduced to maximizing an observed fit score.
+
+The likelihood $L(\theta;x)=p(x\mid\theta)$ views the observed data as fixed and the parameter as variable. For independent Poisson counts $n_i$ with intensities $\lambda_i(\theta)$, the log-likelihood is
+\[\ell(\theta)=\sum_i\{n_i\log\lambda_i(\theta)-\lambda_i(\theta)-\log(n_i!)\}.\]
+The assumption of independent counts must be justified or modified. A large likelihood does not prove the model is correct, and a small $p$-value does not give the probability that the null hypothesis is true.
+
+\section{Time indexed random variables}
+A stochastic process is a family $(X_t)_{t\in T}$ of random variables on a common probability space. For weak stationarity, the mean is constant and the covariance between $X_t$ and $X_s$ depends only on their lag $t-s$ (assuming finite second moments). Define autocovariance $C_X(\tau)=\Cov(X_t,X_{t+\tau})$. Its Fourier transform, under appropriate conditions, gives a power spectral density. Stationarity is a property of the model, not something one can prove from one short recording.
+
+\section{Conditional structure and hidden state}
+A state-dependent process may have time-varying conditional mean or variance despite an apparently stable recording. A latent state $Z_t$ might represent arousal, behavior, or an abstract computational state. The distinction between $p(X_t\mid Z_t)$ and the marginal $p(X_t)$ explains why pooling states can create spurious correlations and overdispersion. This is a key insight in interpreting correlations \cite{CohenKohn2011,Goris2014}.
+
+\begin{workedexample}[A stochastic oscillator is not just a sine wave]
+A pure sinusoid has a well-defined frequency and deterministic phase evolution. A noisy oscillatory process may have a broad spectral peak and time-varying phase. Conversely, a stochastic process with $1/f$-like spectrum can place substantial power within the theta band without containing an independent theta oscillator. The distinction motivates explicit spectral modeling \cite{Donoghue2020,Gerster2022}.
+\end{workedexample}
+\begin{exercises}
+\item Explain what changes when observations are serially correlated but an iid likelihood is used.
+\item Derive the mean and variance of an average of $n$ independent variables with equal finite variance.
+\item Define weak stationarity in your own words and give a counterexample.
+\item Explain why trial averaging can suppress evidence of state switches.
+\end{exercises}

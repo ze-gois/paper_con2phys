@@ -1,0 +1,25 @@
+\chapter{Sequences, limits, and continuity}\label{ch:limits}
+\begin{readergoal}Understand the precision behind ``approaches'', ``converges'', and ``continuous'' using explicit tolerances.\end{readergoal}
+\section{An infinite list is a function}
+The sequence $x_n=1/n$ approaches zero as $n$ grows. But what should ``approaches'' mean? We say $x_n\to L$ if, for every tolerance $\varepsilon>0$, there exists an index $N_\varepsilon$ such that $|x_n-L|<\varepsilon$ whenever $n\ge N_\varepsilon$. The order of the quantifiers matters. We must succeed for \emph{every} tolerance, although the required index may depend on the chosen tolerance.
+
+For $x_n=1/n$, choose $N_\varepsilon>1/\varepsilon$. Then $n\ge N_\varepsilon$ implies $|1/n|<\varepsilon$. Convergence is not the same as attaining the limit; no term in this sequence equals zero. Nor is convergence established by drawing the first few points. An infinite claim requires an argument that controls all sufficiently late terms.
+
+\section{Cauchy sequences and completeness}
+A sequence is \emph{Cauchy} if its sufficiently late terms become arbitrarily close to one another: $\forall\varepsilon>0$ there exists $N$ such that $|x_m-x_n|<\varepsilon$ for all $m,n\ge N$. In a complete metric space every Cauchy sequence converges to a point of the space. The rational approximations to $\sqrt2$ form a Cauchy sequence of rationals but fail to converge \emph{within} the rationals. This shows why completeness is essential in analysis.
+
+\section{Functions of a real variable}
+We say $f(x)$ tends to $L$ as $x\to a$ if for every $\varepsilon>0$ we can find $\delta>0$ such that $0<|x-a|<\delta$ implies $|f(x)-L|<\varepsilon$. A function is continuous at $a$ when its limit equals its value at that point. Uniform continuity strengthens the statement by demanding one $\delta$ for a given $\varepsilon$ that works across the entire domain.
+
+\section{Why this matters for continuous-time recordings}
+A continuous-time model $x(t)$ does not mean its actual neuronal source changes smoothly; it means the mathematical function has a value for each real-valued time in its domain. A sampled waveform records only certain time points. Interpolating between them requires assumptions about smoothness or bandwidth. Similarly, increasing the sampling frequency is not a mathematical proof that a measurement device approximates the underlying field arbitrarily well: instrument bandwidth and noise also matter.
+
+\begin{workedexample}[Finite-difference derivatives]
+For a smooth $x(t)$, the quantity $[x(t+h)-x(t)]/h$ may approach a derivative as $h\to0$. In recorded data, however, taking ever smaller $h$ may amplify measurement noise. Convergence of an ideal mathematical expression and consistency of a noisy numerical estimator are separate questions.
+\end{workedexample}
+\begin{exercises}
+\item Prove $2/n\to0$ from the definition.
+\item Give a sequence that is bounded but does not converge.
+\item Determine whether the step function $f(x)=0$ for $x<0$, $f(x)=1$ for $x\ge0$ is continuous at zero.
+\item Explain the conceptual difference between a limit as $n\to\infty$ and a sample size $n$ that remains finite.
+\end{exercises}

@@ -1,0 +1,21 @@
+\chapter{Notation, assumptions, and units}
+\begin{center}\begin{tabular}{p{0.29\textwidth}p{0.60\textwidth}}\toprule
+Symbol & Meaning\\\midrule
+$\in,\subseteq$ & Membership in a set; inclusion of one set in another\\
+$\forall,\exists,\neg,\Rightarrow$ & For all; there exists; not; logical implication\\
+$\mathbb N_0,\mathbb Z,\mathbb Q,\mathbb R,\mathbb C$ & Natural including zero, integer, rational, real, complex numbers\\
+$\|x\|_2,\langle x,y\rangle$ & Euclidean norm and inner product\\
+$E[X],\Var(X),\Cov(X,Y)$ & Expectation, variance, covariance\\
+$\hat\theta,\theta$ & Estimator/estimate and model parameter\\
+$f_s,\Delta t,N$ & Sampling frequency (Hz), interval (s), sample count\\
+$x[n],x(t)$ & Discrete sampled signal and continuous-time signal\\
+$X[k],S_{xx}(f)$ & DFT coefficient; power spectral density\\
+$z(t),a(t),\phi(t)$ & Analytic signal, amplitude envelope, phase\\
+$N(t),\lambda(t\mid\mathcal H_t)$ & Point-process count and conditional intensity\\
+$\mathcal C_{xy}(f)$ & Magnitude-squared coherence\\
+$X\in\mathbb R^{T\times N}$ & Population matrix: times by neurons\\
+$\mathcal X\in\mathbb R^{N\times T\times R}$ & Tensor: neurons by time by trials\\
+\bottomrule\end{tabular}\end{center}
+
+\section*{Explicit conventions}
+PSD values have signal-units-squared per Hz under a density convention; firing rate uses spikes/s; phase is measured in radians unless labeled otherwise. Distinguish the sample count $N$ from the point-process count $N(t)$ using context. The symbol $T$ may denote a recording duration in signal chapters but number of observations in matrix expressions when explicitly defined. We use $\log$ for natural logarithm. Complex inner products are linear in their first argument by the convention stated in Chapter~\ref{ch:functionspaces}. A reported result must disclose its observational unit and any filtering or binning convention.

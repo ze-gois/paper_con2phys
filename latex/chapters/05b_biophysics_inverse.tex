@@ -1,0 +1,111 @@
+\chapter[Extracellular fields and inverse problems]{From membrane currents to extracellular electrodes}
+\label{ch:electrode-physics}
+An extracellular electrode does not measure a neuron's voltage
+in isolation. It measures a difference of electric potential
+created by spatially distributed ionic currents, tissue geometry,
+conductivity, referencing, and acquisition electronics
+\cite{buzsaki2012,einevoll2013}.
+
+\section{Electrochemical driving forces}
+For an ideal dilute permeant ion with valence $z\ne0$, equality
+of electrochemical potentials on the two sides of a membrane gives
+\[
+E_{\mathrm{ion}}=\frac{RT}{zF}
+  \log\frac{c_{\mathrm{out}}}{c_{\mathrm{in}}}.
+\]
+This is the Nernst equilibrium potential under its concentration
+and temperature assumptions. The Goldman--Hodgkin--Katz formula
+extends the constant-field model to multiple monovalent ionic
+species with permeability parameters; it is not equivalent to
+measuring those permeabilities from a single LFP.
+In the Hodgkin--Huxley description the sodium current is modeled
+as $I_{\mathrm{Na}}=\bar g_{\mathrm{Na}}m^3h(V-E_{\mathrm{Na}})$;
+gating variables obey voltage-dependent kinetic equations.
+The passive cable approximation has the schematic form
+\[
+c_m\partial_t V(x,t)=g_a\partial_{xx}V(x,t)
+   -g_m(V-E_L)+i_{\mathrm{ext}}(x,t),
+\]
+with coefficients per unit length and consistent units.
+Cable and membrane models determine transmembrane sources; they
+are not by themselves electrode forward models.
+
+\section{Quasistatic field equation}
+At electrophysiological frequencies and spatial scales where
+inductive effects are negligible, write $\mathbf E=-\nabla\phi$.
+Let impressed current $\mathbf J_p$ and Ohmic return current
+$-\boldsymbol\sigma\nabla\phi$ sum to a divergence-free total
+current. Current conservation implies
+\[
+\nabla\!\cdot(\boldsymbol\sigma\nabla\phi)
+       =\nabla\!\cdot\mathbf J_p,
+\quad\text{or}\quad
+-\nabla\!\cdot(\boldsymbol\sigma\nabla\phi)=q,
+\quad q=-\nabla\!\cdot\mathbf J_p.
+\]
+The tensor $\boldsymbol\sigma$ may be anisotropic and spatially
+inhomogeneous. To solve the equation, the domain, conductivity,
+boundary conditions and electrode reference must be specified.
+For an infinite isotropic medium, a point source of strength $I$
+located at $\mathbf r_0$ gives, away from that point,
+\[
+\phi(\mathbf r)=\frac{I}{4\pi\sigma
+  |\mathbf r-\mathbf r_0|}.
+\]
+Superposition yields a discrete source model $\mathbf v=G\mathbf s$
+when the forward physics is linear, with lead-field entries obtained
+by integrating the Green kernel over chosen source basis functions.
+A dipole arises as the leading far-field contribution when net
+source current cancels; line-source models integrate along a dendrite.
+
+\begin{proposition}[Uniqueness for fixed Dirichlet conditions]
+Let $\Omega$ be a bounded connected region and
+$\boldsymbol\sigma$ uniformly positive definite. If two weak
+solutions of the same elliptic equation have equal Dirichlet
+boundary values, they agree (almost everywhere).
+\end{proposition}
+\begin{proof}
+Their difference $w$ satisfies the homogeneous equation and
+zero boundary values. Multiply by $w$, integrate by parts,
+and use the boundary condition:
+$\int_\Omega\nabla w\cdot\boldsymbol\sigma\nabla w\,dx=0$.
+Positivity implies $\nabla w=0$; the boundary forces $w=0$.
+For pure Neumann conditions, uniqueness holds only up to an
+additive constant, with a compatibility condition on source flux.
+\end{proof}
+
+\section{Why the inverse need not be unique}
+Suppose an electrode array measures $\mathbf v=G\mathbf s$.
+If $G\mathbf h=0$ for nonzero $\mathbf h$, then
+$G(\mathbf s+\mathbf h)=G\mathbf s$. This is exact
+finite-dimensional nonidentifiability. In the continuum, smoothing
+operators can also be ill-conditioned or compact, so tiny
+measurement errors may cause enormous source errors even when
+uniqueness holds in a restricted model.
+\emph{Hadamard well-posedness} requires existence, uniqueness
+and continuous dependence of solutions on data. A linear operator
+is \emph{compact} if it maps bounded sets into sets with compact
+closure; its singular values in infinite-dimensional inverse problems
+can converge to zero.
+For singular system $Gv_j=\sigma_j u_j$ and data $b$,
+the formal inverse contains $\langle b,u_j\rangle/\sigma_j$
+and magnifies noise when
+$\sigma_j\to0$. A classical Picard-type condition controls the
+squared normalized coefficients for compatible data.
+Tikhonov regularization instead solves
+\[
+\widehat{\mathbf s}_\lambda
+=\arg\min_{\mathbf s}
+\{\|G\mathbf s-\mathbf v\|_2^2
+ +\lambda\|\mathbf s\|_2^2\}
+=(G^\top G+\lambda I)^{-1}G^\top\mathbf v.
+\]
+\begin{example}[MATLAB and interpretation]\sloppy
+\path{field_potential_forward.m} receives $G$;
+it does \emph{not} compute tissue conductivity or the Green kernel.
+\path{field_potential_inverse_tikhonov.m}
+returns one regularized source estimate, not a unique membrane-current
+pattern. \path{current_source_density.m} needs
+spatial geometry and differentiated potentials; references and
+volume conduction remain crucial.
+\end{example}

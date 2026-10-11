@@ -1,0 +1,86 @@
+\chapter[Linear algebra and geometry]{Vector spaces, matrices, and high-dimensional geometry}
+Let $X\in\R^{T\times N}$ collect $N$ neural variables across $T$
+observations. Its columns may be neurons, channels, or features;
+centering across rows changes the statistical quantity being modeled.
+Linear algebra does not specify how trials should be aligned or how
+observations should be validated.
+
+\entry{25}{Rank--nullity theorem}
+{For linear $A:V\to W$ with $\dim V<\infty$,
+$\dim\ker A+\rank A=\dim V$.}
+{Count identifiable and unidentifiable latent directions.}
+\entry{26}{Orthogonal projection theorem}
+{In a Hilbert space every element has a unique closest
+point in a closed subspace; the residual is orthogonal to that subspace.}
+{Derive least squares and orthogonal signal decompositions.}
+\entry{27}{Spectral theorem}
+{A real symmetric matrix admits an orthonormal eigenbasis and real
+eigenvalues; a covariance matrix has nonnegative eigenvalues.}
+{Explain the eigenvectors underlying population PCA.}
+\entry{28}{Singular value decomposition}
+{Every real matrix $X$ admits $X=U\Sigma V^\top$
+with orthogonal factors and nonnegative singular values.}
+{Implement low-rank population representations.}
+\entry{29}{Eckart--Young--Mirsky theorem}
+{Truncating SVD to rank $k$ gives an optimal rank-$k$ approximation
+in Frobenius and spectral norms, more generally unitarily invariant norms.}
+{Give a reconstruction criterion for reduced-dimensional activity.}
+\entry{30}{Courant--Fischer min--max theorem}
+{Eigenvalues of a symmetric matrix have variational characterizations
+over subspaces via Rayleigh quotients.}
+{Derive why sequential PCA directions maximize remaining variance.}
+\entry{31}{Gauss--Markov theorem}
+{With a full-column-rank linear model, zero-mean errors
+with common variance and no correlation, OLS is BLUE.}
+{Clarify which optimality claim linear decoders can and cannot make.}
+\entry{32}{Schur complement identities}
+{For an invertible block, Schur complements characterize
+positive definiteness and block inverses under the stated conditions.}
+{Compute conditional Gaussian covariance and latent uncertainty.}
+\entry{33}{Weyl eigenvalue inequalities}
+{For Hermitian $A,E$, sorted eigenvalues of $A+E$ differ
+from those of $A$ by at most $\|E\|_2$.}
+{Control eigenspectrum changes caused by covariance perturbations.}
+\entry{34}{Davis--Kahan sin-theta theorem}
+{For symmetric matrices with separated spectral clusters,
+their invariant subspaces have angle bounds proportional
+to perturbation size divided by a suitable eigengap.}
+{Assess when estimated neural subspaces are stable.}
+\entry{35}{Sherman--Morrison--Woodbury identity}
+{For invertible $A,C$ and required inverse,
+$(A+UCV)^{-1}=A^{-1}-A^{-1}U(C^{-1}+VA^{-1}U)^{-1}VA^{-1}$.}
+{Speed covariance updates when their rank is small.}
+\entry{36}{Matrix determinant lemma}
+{For invertible $A,C$,
+$\det(A+UCV)=\det(C^{-1}+VA^{-1}U)\det(C)\det(A)$.}
+{Accelerate Gaussian latent-variable likelihood evaluations.}
+\entry{37}{Mercer's theorem}
+{For a continuous positive-semidefinite kernel on a compact
+domain with a suitable finite reference measure,
+an orthogonal eigenfunction expansion exists under its hypotheses.}
+{Understand kernel feature representations in GP modeling.}
+\entry{38}{Karhunen--Loeve theorem}
+{A second-order process admits a mean-square orthogonal expansion
+in covariance eigenfunctions under suitable regularity.}
+{Link temporal covariance to latent trajectories and function-space PCA.}
+\entry{39}{Kruskal's uniqueness criterion for CP tensors}
+{A canonical polyadic tensor decomposition is essentially unique
+if its factor Kruskal ranks meet an appropriate sufficient bound,
+e.g.\ $k_A+k_B+k_C\geq 2R+2$ for three factors.}
+{Reason about identifiability in trial-by-time-by-neuron decompositions.}
+
+\begin{definition}
+For covariance $C\succeq0$ with eigenvalues $\lambda_i$,
+the participation ratio is
+\[
+D_{\mathrm{PR}}=\frac{(\sum_i\lambda_i)^2}{\sum_i\lambda_i^2}.
+\]
+It measures effective spectral dimensionality, not the intrinsic
+manifold dimension without further assumptions.
+\end{definition}
+\begin{caution}
+Truncated SVD solves a matrix approximation problem; recovering
+biological latent variables is an additional inference problem.
+Coherent noise, trial structure, and preprocessing can dominate
+the covariance eigenspectrum.
+\end{caution}

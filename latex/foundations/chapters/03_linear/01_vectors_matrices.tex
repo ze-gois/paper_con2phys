@@ -1,0 +1,25 @@
+\chapter{Vectors, matrices, and linear mappings}\label{ch:linear}
+\begin{readergoal}Learn the grammar of population matrices before using covariance, singular values, or latent factors.\end{readergoal}
+\section{Arrays are not merely spreadsheets}
+A vector is an element of a vector space: an object that can be added to another vector and scaled while obeying specific algebraic rules. A matrix $A\in\mathbb R^{m\times n}$ represents a linear mapping $A:\mathbb R^n\to\mathbb R^m$. Its $j$th column is the image of the $j$th standard basis vector. The product $Ax$ forms linear combinations of these columns. Dimensions are part of the meaning: $AB$ is defined only when the number of columns of $A$ equals the number of rows of $B$.
+
+For a population of $N$ neurons sampled at $T$ time points, set $X\in\mathbb R^{T\times N}$, with rows indexing time and columns indexing neurons. Then $Xv$ is a time series obtained by weighting neurons with $v\in\mathbb R^N$. If a recording is stored in channel-by-time orientation, as often happens in MATLAB, it must be transposed before blindly applying a formula whose convention is time-by-neuron.
+
+\section{Rank, kernels, and invertibility}
+The rank of $A$ is the dimension of its image or column space. Its kernel $\ker A=\{x:Ax=0\}$ contains directions invisible to the mapping. Rank-nullity says $\dim\ker A+\rank A=n$. A square matrix is invertible precisely when its kernel contains only zero. A measurement operator with a nontrivial kernel cannot uniquely reconstruct arbitrary inputs: different sources differ by kernel vectors while producing identical observations.
+
+\section{Inner products and projections}
+The Euclidean inner product is $\langle x,y\rangle=x^\top y$, with length $\|x\|_2=\sqrt{x^\top x}$. For a matrix $U$ whose columns are orthonormal, $U^\top U=I$, the orthogonal projection onto their span is $P=UU^\top$. Check $P^2=P$ and $P^\top=P$. The residual $(I-P)x$ is orthogonal to the selected subspace.
+
+\section{Least squares as orthogonal projection}
+If $X$ has full column rank, minimizing $\|y-X\beta\|_2^2$ yields the normal equations $X^\top X\hat\beta=X^\top y$ and solution $\hat\beta=(X^\top X)^{-1}X^\top y$. In practice, QR or SVD is usually numerically safer than explicitly forming the inverse of $X^\top X$; squaring the condition number can magnify numerical problems.
+
+\begin{workedexample}[Which axis contains the data?]
+A matrix of 30 channels and 1,000,000 samples has shape $30\times10^6$. An operation computing covariances among channels should treat the 30 channels as variables, not the million sample positions. A mistaken transpose can yield a million-by-million covariance matrix or an out-of-memory failure. Mathematical notation doubles as a memory-design contract.
+\end{workedexample}
+\begin{exercises}
+\item Verify the projection identities for a unit vector $u$ and $P=uu^\top$.
+\item Find the kernel of $A=\begin{bmatrix}1&1\\2&2\end{bmatrix}$.
+\item Derive the normal equations by differentiating the squared residual norm.
+\item Explain why rank deficiency compromises parameter uniqueness.
+\end{exercises}

@@ -1,0 +1,48 @@
+\chapter{Bridges between counting and number systems}\label{ch:bridges-numbers}
+\begin{readergoal}Understand why integers, rational numbers, real numbers, and complex numbers have the algebraic properties used later in measurement and numerical analysis.\end{readergoal}
+
+\bridgeentry{addition-induction}{Associativity of addition from recursion}
+\begin{proposition}If addition on $\mathbb N_0$ is defined by $a+0=a$ and $a+S(b)=S(a+b)$, then $(a+b)+c=a+(b+c)$.\end{proposition}
+\begin{proof}Induct on $c$. For $c=0$ both sides equal $a+b$. Assume the identity for $c$. Then $(a+b)+S(c)=S((a+b)+c)=S(a+(b+c))=a+S(b+c)=a+(b+S(c))$.\end{proof}
+\paragraph{Example.} Accumulating three disjoint spike-count windows is independent of how we group the additions. It is not independent of whether the windows overlap.
+
+\bridgeentry{integer-pairs}{Constructing integers from pairs of naturals}
+\begin{proposition}For $(a,b),(c,d)\in\mathbb N_0^2$, define $(a,b)\sim(c,d)$ when $a+d=b+c$. This is an equivalence relation. Addition $[(a,b)]+[(c,d)]=[(a+c,b+d)]$ is independent of representatives.\end{proposition}
+\begin{proof}Reflexivity and symmetry follow from equality. If $a+d=b+c$ and $c+f=d+e$, adding equations and canceling $c+d$ yields $a+f=b+e$, so transitivity holds. If $a+b'=b+a'$ and $c+d'=d+c'$, adding gives $(a+c)+(b'+d')=(b+d)+(a'+c')$, proving representative-independent addition.\end{proof}
+\paragraph{Example.} The signed time difference between events is modeled by an integer when timestamps lie on a sample grid; negative offsets have a meaning not available in the natural numbers.
+
+\bridgeentry{rational-pairs}{Rational arithmetic is independent of representation}
+\begin{proposition}For integers $a,c$ and nonzero integers $b,d$, set $(a,b)\sim(c,d)$ when $ad=bc$. Rational addition $[(a,b)]+[(c,d)]=[(ad+bc,bd)]$ is well-defined.\end{proposition}
+\begin{proof}If $ab'=a'b$ and $cd'=c'd$, then after multiplying by $dd'$ and $bb'$, respectively, one obtains $(ad+bc)b'd'=(a'd'+b'c')bd$. Thus equivalent input fractions yield equivalent output fractions. The nonzero-denominator condition ensures the construction remains in its domain.\end{proof}
+\paragraph{Example.} $1/2$ and $500/1000$ represent the same rational sampling interval; changing the fraction's written form should not change computed sampling times in exact arithmetic.
+
+\bridgeentry{rational-density}{There is a rational between distinct reals}
+\begin{proposition}If $a<b$ are real, there exists $q\in\mathbb Q$ with $a<q<b$.\end{proposition}
+\begin{proof}Choose $n\in\mathbb N$ with $n(b-a)>1$ using the Archimedean property (proved next). Choose an integer $m$ with $na<m\leq na+1$. Since $m\leq na+1<nb$, the rational $q=m/n$ is strictly between $a$ and $b$.\end{proof}
+\paragraph{Example.} Any ideal real-valued threshold can be approximated by rational thresholds, but a recorded voltage has finite instrument resolution and may not distinguish them.
+
+\bridgeentry{archimedean}{Archimedean property from completeness}
+\begin{proposition}For every real $x$ there is a natural number $n>x$.\end{proposition}
+\begin{proof}Otherwise $\mathbb N_0$ would be nonempty and bounded above. Let $s=\sup\mathbb N_0$. Then $s-1$ is not an upper bound, so some $n>s-1$ belongs to $\mathbb N_0$. Its successor $n+1>s$ also belongs to $\mathbb N_0$, contradicting that $s$ is an upper bound.\end{proof}
+\paragraph{Example.} Given any finite desired time resolution $\Delta>0$, a sufficiently large integer sampling-rate multiple can make $1/n<\Delta$ in an ideal mathematical model. Hardware bandwidth is a separate question.
+
+\bridgeentry{supremum-epsilon}{A supremum can be approached from below}
+\begin{proposition}If a nonempty set $A\subset\mathbb R$ is bounded above and $s=\sup A$, then for every $\varepsilon>0$ some $a\in A$ satisfies $s-\varepsilon<a\leq s$.\end{proposition}
+\begin{proof}If no such $a$ existed, every element of $A$ would be at most $s-\varepsilon$. Then $s-\varepsilon$ would be an upper bound smaller than the least upper bound $s$, a contradiction.\end{proof}
+\paragraph{Example.} The maximal attainable value of an optimization criterion can be a supremum without being reached by any tested finite set of hyperparameters.
+
+\bridgeentry{floor-bins}{Floor partitions nonnegative time into half-open bins}
+\begin{proposition}For $\Delta>0$ and $t\geq0$, there is a unique $k\in\mathbb N_0$ with $k\Delta\leq t<(k+1)\Delta$, namely $k=\lfloor t/\Delta\rfloor$.\end{proposition}
+\begin{proof}The integer-part property gives $k\leq t/\Delta<k+1$. Multiplying by positive $\Delta$ yields the interval condition. Two distinct integers cannot satisfy the inequalities because their half-open intervals do not overlap.\end{proof}
+\paragraph{Example.} The timestamp $t=0.100$ s belongs to the second $0.1$-s bin $[0.1,0.2)$ if timestamps and boundaries are exact. Floating-point computations require explicit endpoint handling.
+
+\bridgeentry{complex-modulus}{Conjugation makes complex magnitude multiplicative}
+\begin{proposition}For $z,w\in\mathbb C$, $\overline{zw}=\bar z\bar w$ and $|zw|=|z||w|$.\end{proposition}
+\begin{proof}Expanding $(a+ib)(c+id)$ and reversing the sign of the imaginary part proves the conjugation identity. Since $|z|^2=z\bar z$, we have $|zw|^2=zw\overline{zw}=(z\bar z)(w\bar w)=|z|^2|w|^2$. Taking nonnegative square roots establishes the result.\end{proof}
+\paragraph{Example.} Complex Fourier coefficients encode both amplitude and phase; replacing every coefficient by its modulus loses phase information even though magnitudes multiply neatly.
+
+\begin{exercises}
+\item Prove cancellation in the natural numbers using induction.
+\item Exhibit two distinct integer pairs representing the same integer.
+\item Show that the union of two adjacent half-open time bins is again a half-open interval.
+\end{exercises}

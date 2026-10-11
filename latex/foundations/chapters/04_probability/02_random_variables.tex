@@ -1,0 +1,27 @@
+\chapter{Random variables, expectation, and statistical moments}\label{ch:moments}
+\begin{readergoal}Define distributions and calculate moments before discussing firing-rate variability or moving-window envelope statistics.\end{readergoal}
+\section{A random variable is a function}
+A random variable $X:\Omega\to\mathbb R$ assigns a numerical value to each possible outcome, subject to a measurability requirement that ensures events such as $\{\omega:X(\omega)\le x\}$ have defined probabilities. Its cumulative distribution function is $F_X(x)=P(X\le x)$. Discrete random variables have probability mass functions; sufficiently regular continuous variables have probability densities. A density is not itself a probability; probabilities arise through integration over regions.
+
+\section{Means, variance, skewness, kurtosis}
+The mean is $\mu=E[X]$; variance is $\sigma^2=E[(X-\mu)^2]$; standardized skewness is $\gamma_1=E[(X-\mu)^3]/\sigma^3$; and standardized kurtosis is $\gamma_2=E[(X-\mu)^4]/\sigma^4$. Some authors report excess kurtosis $\gamma_2-3$, which equals zero for a Gaussian distribution. If $\sigma=0$, standardized higher moments are undefined. Higher moments are sensitive to rare large amplitudes and may require large samples for stable estimation.
+
+For a time-indexed envelope $A(t)$, a sliding-window empirical mean is $\hat\mu(t)=\frac1{M}\sum_{j=0}^{M-1}A(t+j\Delta t)$ with analogous central moments. If consecutive windows overlap heavily, the resulting statistics are strongly dependent: sampling an estimate every 100 ms does not create a new independent 10-s experiment at every step.
+
+\section{Covariance and correlation}
+Covariance is $\Cov(X,Y)=E[(X-EX)(Y-EY)]$. Its scale depends on units, while Pearson correlation normalizes by standard deviations: $\rho=\Cov(X,Y)/(\sigma_X\sigma_Y)$ for nonzero variances. A zero correlation does not guarantee independence in general. Let $X$ be symmetric around zero and $Y=X^2$; then $\Cov(X,Y)=E[X^3]-E[X]E[X^2]=0$, although $Y$ is determined by $X$.
+
+\section{The law of total variance}
+For random variables $X,Z$ with finite variance,
+\[\Var(X)=E[\Var(X\mid Z)]+\Var(E[X\mid Z]).\]
+The first term measures variation remaining after conditioning; the second measures variation in conditional means. This identity is an essential bridge to decomposing neuronal trial-to-trial variability into point-process and gain contributions \cite{Goris2014}.
+
+\begin{workedexample}[Poisson versus overdispersed counts]
+For $N\sim\mathrm{Poisson}(\lambda)$, $E[N]=\Var(N)=\lambda$. If $N\mid\Lambda\sim\mathrm{Poisson}(\Lambda)$ and $\Lambda$ varies, then $\Var(N)=E[\Lambda]+\Var(\Lambda)$. Extra variance can arise from latent fluctuations even if spikes are conditionally Poisson.
+\end{workedexample}
+\begin{exercises}
+\item Calculate the population mean, variance, skewness, and kurtosis of the discrete values $0,1,2$ under equal probabilities.
+\item Prove $\Var(aX+b)=a^2\Var(X)$.
+\item Explain the difference between window overlap and an actual temporal correlation in the source.
+\item Derive the overdispersion identity from total variance.
+\end{exercises}

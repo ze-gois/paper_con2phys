@@ -1,0 +1,52 @@
+\chapter{Bridges from sets to random variables and spike counts}\label{ch:bridges-probability}
+\begin{readergoal}Understand random events, independence, averages, covariance, and the law of total variance from elementary probability definitions.\end{readergoal}
+
+\bridgeentry{event-sigma}{Events form a sigma-algebra rather than an arbitrary list}
+\begin{proposition}If $\mathcal F$ is a sigma-algebra on $\Omega$, it contains $\varnothing$, and it is closed under finite intersections and countable intersections.\end{proposition}
+\begin{proof}By definition $\Omega\in\mathcal F$, complements of members belong to $\mathcal F$, and countable unions of members belong to $\mathcal F$. Thus $\varnothing=\Omega^c$ is in $\mathcal F$. De Morgan's laws turn intersections into complements of unions of complements, so the intersections also belong to $\mathcal F$.\end{proof}
+\paragraph{Example.} A predicate such as ``the spike count exceeds five'' must refer to a measurable event before assigning it a probability. In finite discrete experiments all subsets of the sample space can be used.
+
+\bridgeentry{independent-complements}{Independence survives taking complements}
+\begin{proposition}If events $A,B$ are independent, then $A^c,B$ and $A^c,B^c$ are independent.\end{proposition}
+\begin{proof}Since $B=(A\cap B)\sqcup(A^c\cap B)$, finite additivity gives $\Prob(A^c\cap B)=\Prob(B)-\Prob(A\cap B)=(1-\Prob(A))\Prob(B)$. Hence $A^c$ and $B$ are independent. Repeating the same calculation with complement of $B$ yields independence of both complements.\end{proof}
+\paragraph{Example.} Independence of independent-trial events includes their non-occurrences. Recorded spike counts from adjacent bins generally do not automatically satisfy this condition.
+
+\bridgeentry{expectation-linear}{Expectation is linear even for dependent variables}
+\begin{proposition}If $X,Y$ are integrable and $a,b\in\mathbb R$, then $\E[aX+bY]=a\E[X]+b\E[Y]$.\end{proposition}
+\begin{proof}In a finite experiment, expand the probability-weighted sum $\sum_\omega (aX(\omega)+bY(\omega))\Prob(\{\omega\})$ and distribute multiplication and addition. For integrable variables the corresponding property follows from linearity of the Lebesgue integral. No independence assumption is used.\end{proof}
+\paragraph{Example.} The expected combined spike count of two units equals the sum of their expected individual counts even if their activities are strongly correlated.
+
+\bridgeentry{indicators}{Indicator variables encode event counts}
+\begin{proposition}For measurable $A$, $\E[\mathbf1_A]=\Prob(A)$. For events $A_1,\ldots,A_n$, the count $N=\sum_{j=1}^n\mathbf1_{A_j}$ satisfies $\E N=\sum_{j=1}^n\Prob(A_j)$.\end{proposition}
+\begin{proof}The indicator takes value one on $A$ and zero on $A^c$, so its expectation is $1\cdot\Prob(A)+0\cdot\Prob(A^c)$. Apply expectation linearity to the finite sum.\end{proof}
+\paragraph{Example.} A per-bin count is a sum of event indicators. Its variance depends on cross-covariances, so its expectation alone cannot establish Poisson statistics.
+
+\bridgeentry{tower}{Conditional expectation obeys the tower property}
+\begin{theorem}[Law of total expectation]If $X$ is integrable and $G$ a conditioning variable, then $\E[\E[X\mid G]]=\E[X]$.\end{theorem}
+\begin{proof}For a finite-valued $G$, write $\E[X\mid G=g]$ as a conditional weighted average. Multiplying by $\Prob(G=g)$ and summing over $g$ recovers the sum over every outcome, hence $\E[X]$. The general statement follows from the defining integral identity of conditional expectation with the conditioning event chosen as the entire sample space.\end{proof}
+\paragraph{Example.} A latent behavioral state changes conditional firing rate, but averaging over states recovers the unconditional mean if the weighting distribution is correct.
+
+\bridgeentry{variance-total}{Total variance separates within- and between-state effects}
+\begin{theorem}[Law of total variance]If $X$ is square-integrable, then $\Var(X)=\E[\Var(X\mid G)]+\Var(\E[X\mid G])$.\end{theorem}
+\begin{proof}Use $\Var(X)=\E[X^2]-(\E X)^2$ and $\Var(X\mid G)=\E[X^2\mid G]-(\E[X\mid G])^2$. Take expectations of the latter, apply the tower property to $X^2$, and add $\Var(\E[X\mid G])=\E[(\E[X\mid G])^2]-(\E X)^2$. The intermediate squared-conditional-mean terms cancel.\end{proof}
+\paragraph{Example.} Trial-to-trial latent gain can produce spike-count variance above its conditional Poisson component. The decomposition does not say which physiological variable the gain represents.
+
+\bridgeentry{covariance-bilinear}{Covariance is bilinear under finite moments}
+\begin{proposition}For square-integrable $X,Y,Z$ and scalars $a,b$, covariance is linear in its first argument:
+\[
+\Cov(aX+bY,Z)=a\Cov(X,Z)+b\Cov(Y,Z).
+\]
+\end{proposition}
+\begin{proof}By definition, $\Cov(W,Z)=\E[(W-\E W)(Z-\E Z)]$. Insert $W=aX+bY$, use expectation linearity to center it as $a(X-\E X)+b(Y-\E Y)$, distribute, and use expectation linearity once more.\end{proof}
+\paragraph{Example.} The variance of a pooled population count includes covariance between neurons. Ignoring correlated noise can misstate the precision of a population statistic.
+
+\bridgeentry{poisson-mixture}{Random Poisson intensity creates overdispersion}
+\begin{proposition}If $N\mid G\sim\operatorname{Poisson}(\mu G)$ with $\mu>0$, $G>0$, $\E G=1$, and finite $\Var(G)$, then $\E N=\mu$ and $\Var(N)=\mu+\mu^2\Var(G)$.\end{proposition}
+\begin{proof}Conditional Poisson mean and variance are both $\mu G$. Total expectation gives $\E N=\mu\E G=\mu$. Total variance gives $\Var(N)=\E[\mu G]+\Var(\mu G)=\mu+\mu^2\Var(G)$.\end{proof}
+\paragraph{Example.} The Fano factor is $\Var(N)/\E N=1+\mu\Var(G)$. It differs from Fano's information-theoretic inequality. An estimator such as \texttt{\detokenize{spike_count_fano.m}} measures a sample statistic; it does not identify $G$ without a latent-variable model.
+
+\begin{exercises}
+\item Produce two dependent Bernoulli variables and verify expectation linearity numerically.
+\item Derive $\Var(X+Y)=\Var(X)+\Var(Y)+2\Cov(X,Y)$.
+\item Compare Poisson and lognormal-gain mixed-Poisson simulations at equal mean counts.
+\end{exercises}

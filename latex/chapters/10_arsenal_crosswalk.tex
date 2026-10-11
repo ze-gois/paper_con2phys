@@ -1,0 +1,112 @@
+\chapter{Theorems and the existing MATLAB arsenal}
+The paths below are checked against the repository's
+\path{arsenal/path/} directory at the start of
+this edition. Each source file is an exploratory primitive
+rather than a guarantee of complete replication of the
+published method. Consult \path{arsenal/METHODS.tsv}
+for the current implementation statuses.
+
+\begin{longtable}{p{0.27\linewidth}p{0.37\linewidth}p{0.24\linewidth}}
+\toprule
+Mathematical prerequisite & MATLAB source (under arsenal/path) &
+Analysis and caution\\
+\midrule
+\endhead
+Sampling, convolution, Hilbert and Bedrosian &
+\path{bandpass_lfp.m}, \path{analytic_phase.m} &
+Signal phase depends on justified filtering; nonstationarity can create apparent PAC.\\
+Wiener--Khinchin, Parseval &
+\path{welch_psd.m}, \path{coherence_spectrum.m} &
+Finite-window PSD/coherence estimates, not exact population spectra.\\
+Slepian spectral concentration &
+\path{multitaper_psd.m}, \path{multitaper_coherence.m} &
+DPSS estimates; estimator design and inference require further checks.\\
+Periodic / aperiodic modeling &
+\path{aperiodic_slope.m}, \path{irasa_decomposition.m} &
+Exploratory methods; fitting a background does not certify an oscillation.\\
+Circular statistics &
+\path{circular_mean.m}, \path{rayleigh_test.m} &
+Circular inferential assumptions and dependence of phases matter.\\
+Phase-amplitude and phase locking &
+\path{modulation_index.m}, \path{pac_mean_vector_length.m}, \path{phase_locking_value.m} &
+Non-sinusoidal harmonics and surrogates need explicit controls.\\
+Randomization inference &
+\path{paired_signflip_test.m}, \path{jitter_spike_surrogate.m} &
+Exchangeability or an explicit conditional jitter null is required.\\
+Spectral theorem and SVD &
+\path{population_pca.m}, \path{assembly_pca.m} &
+Variance-optimal directions need not identify biological sources.\\
+Effective spectral dimension &
+\path{participation_ratio.m}, \path{eigenspectrum_powerlaw.m} &
+Participation ratio does not automatically equal manifold dimension.\\
+Low-rank regression &
+\path{reduced_rank_regression.m}, \path{communication_subspace_projection.m} &
+Cross-validated prediction needed before mechanistic interpretation.\\
+Tensor decomposition &
+\path{tensor_cp_als.m} &
+CP-ALS primitive is not a complete TCA analysis pipeline.\\
+Conditional expectation, variance &
+\path{spike_count_fano.m}, \path{noise_correlation.m} &
+Count windows and latent gain change sampling interpretations.\\
+Point-process likelihood &
+\path{poisson_spike_glm.m}, \path{spike_history_design.m} &
+Binned IRLS approximation; missing latent drive and overdispersion checks.\\
+Poisson event statistics &
+\path{spike_bin_counts.m}, \path{peri_event_histogram.m} &
+Temporal interval conventions and boundaries affect event counts.\\
+Autoregressive prediction, Wold &
+\path{granger_causality.m} &
+Temporal VAR score; not spectral Granger or direct causation.\\
+Linear dynamics / skew symmetry &
+\path{jpca_dynamics.m} &
+Skew-symmetric fit on prepared trajectories; not full published jPCA.\\
+Linear inverse problems &
+\path{field_potential_inverse_tikhonov.m} &
+Regularized estimate, not uniquely identified neural currents.\\
+Mutual information and DPI &
+\path{mutual_information.m}, \path{transfer_entropy.m} &
+Finite-sample bias, history embedding and discretization matter.\\
+\bottomrule
+\end{longtable}
+
+\section{Theorems without a dedicated implementation}
+The catalogue also includes Kolmogorov extension, time-rescaling
+goodness-of-fit, Davis--Kahan perturbation, Takens embedding,
+and Kalman observability. Gaussian KL divergence and Gaussian
+conditioning are now derived explicitly in the Gaussian toolkit These are
+\emph{mathematical prerequisites or future checks}, not claims
+that their complete scientific implementations exist in the
+repository. The presence of \path{gaussian_process_smoothing.m}
+must not be interpreted as a full GPFA model.
+
+\section{Operational contract}
+Read input shapes and units from the MATLAB function help.
+Document sample rate, time stamps, channel orientation,
+boundary conventions, electrode reference, trial alignment,
+and the meaning of each null hypothesis. Benchmark a method
+against simulated data of known ground truth before trying
+to infer physiology from an empirical recording.
+
+\section{From biological generators to filters and estimates}
+The physical forward chain has distinct operations:
+a cable/membrane source model supplies transmembrane currents;
+a conductivity model with boundary conditions constructs a lead field;
+\path{field_potential_forward.m} applies a \emph{supplied} lead field;
+\path{bandpass_lfp.m} then uses Butterworth sections and forward--backward
+noncausal filtering; spectral estimators operate on that processed trace.
+Inverting a supplied lead field is regularized but not necessarily unique.
+No software primitive converts a fitted spectral peak directly into a
+uniquely identified membrane current.
+
+\section{Model-fitting limitations exposed by the new chapters}
+\path{poisson_spike_glm.m} uses a binned canonical Poisson model with
+clipped linear predictors: deriving the ideal log-concave Poisson
+objective does not guarantee that every numerical iterate of the
+implementation maximizes the same unclipped likelihood.
+\path{tensor_cp_als.m} is a ridge-regularized CP-ALS primitive; alternating
+steps are not a global-convergence theorem. \path{granger_causality.m}
+returns a temporal predictive log-variance ratio, while
+\path{transfer_entropy.m} uses discretized first-order
+conditional mutual information. The Gaussian equivalence theorem
+does not claim these distinct implementations have matching finite-sample
+outputs or identify causal interventions.

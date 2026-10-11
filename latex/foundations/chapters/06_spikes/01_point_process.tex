@@ -1,0 +1,24 @@
+\chapter{Spike trains as point processes}\label{ch:points}
+\begin{readergoal}Model spike timestamps without pretending they are uniformly sampled voltages.\end{readergoal}
+\section{Events rather than amplitudes}
+A spike train is a locally finite collection of event times $\{t_1,\ldots,t_K\}$. Its counting process is $N(t)=\#\{j:t_j\le t\}$. It is nondecreasing, integer valued, and jumps at event times. In generalized-function notation $dN(t)/dt=\sum_j\delta(t-t_j)$, but the counting process is the more elementary construction.
+
+\section{Poisson models and their scope}
+For a homogeneous Poisson process with rate $\lambda>0$, counts in disjoint intervals are independent and $N(b)-N(a)\sim\mathrm{Poisson}(\lambda(b-a))$. The waiting times are exponentially distributed, and the memoryless model has no refractory period. Real neurons often violate some of these assumptions. A time-inhomogeneous Poisson model admits $\lambda(t)$, with integrated intensity $\int_a^b\lambda(s)ds$ over an interval.
+
+A conditional intensity $\lambda(t\mid\mathcal H_t)$ is a limiting event rate given the observed history $\mathcal H_t$. Roughly,
+\[\lambda(t\mid\mathcal H_t)=\lim_{\Delta\downarrow0}\frac{P(N(t+\Delta)-N(t)=1\mid\mathcal H_t)}{\Delta},\]
+when the limit is defined and multiple jumps are negligible at small scales. History dependence permits refractory behavior, bursting, and coupling covariates.
+
+\section{Binning and the loss of exact timing}
+Dividing time into bins of width $\Delta$ creates counts $n_k=N((k+1)\Delta)-N(k\Delta)$. This may simplify statistics but loses information about positions inside bins. Narrower bins increase temporal precision yet yield sparse counts; wider bins stabilize rate estimates but obscure precise coincidence. A precise synchrony claim therefore needs a time-resolution convention and an explicit null model.
+
+\begin{workedexample}[Poisson probability of a silent window]
+A 10-spikes/s homogeneous Poisson process has expected count $\lambda\Delta=0.1$ in 10 ms. The chance of observing zero spikes is $e^{-0.1}\approx0.905$. Frequent silent bins are compatible with a nonzero underlying intensity.
+\end{workedexample}
+\begin{exercises}
+\item Derive the probability of at least one spike in a window under a homogeneous Poisson model.
+\item Explain why spike sorting uncertainty can affect autocorrelograms.
+\item Distinguish an observed spike count from conditional intensity.
+\item Give a point-process model that excludes spikes for a fixed period after each event.
+\end{exercises}

@@ -1,0 +1,79 @@
+\chapter[Wavelets and spectral inference]{Time--frequency representations and estimator uncertainty}
+\label{ch:spectral-inference}
+A discrete Fourier transform can be computed exactly while
+an estimate of an unknown stochastic power spectrum remains
+noisy. The distinction is central to electrophysiological inference.
+
+\section{Why the raw periodogram is not generally consistent}
+For a zero-mean Gaussian white-noise series with variance $\sigma^2$
+and length $T$, define at a non-DC Fourier frequency
+\[
+I_T(f_k)=\frac{1}{T}\left|\sum_{t=0}^{T-1}
+ X_t e^{-2\pi ikt/T}\right|^2.
+\]
+At generic positive Fourier frequencies below Nyquist, real and
+imaginary Fourier coefficients are independent normals with the
+appropriate variance; hence
+$2I_T(f_k)/\sigma^2\sim\chi^2_2$
+under this exact white Gaussian model. Consequently the
+periodogram variance does not vanish as $T$ increases.
+Averaging approximately independent tapered or segmented
+estimates reduces variance, at a cost of frequency resolution
+and possible bias. For $K$ independent identical exponential
+spectral ordinates, $2K\bar I/S\sim\chi^2_{2K}$;
+Welch overlap and tapered spectra violate exact independence,
+so their effective degrees of freedom need calibration.
+
+\section{Short-time Fourier transform, wavelets and admissibility}
+A window $w$ produces the short-time Fourier transform
+$V_wx(\tau,f)=\int x(t)\overline{w(t-\tau)}
+ e^{-2\pi ift}\,dt$. Window duration sets an uncertainty
+trade-off; the display resolution is not a ground-truth
+measurement of a neural oscillation's instantaneous frequency.
+For a continuous wavelet $\psi$, the usual admissibility
+condition is
+\[
+C_\psi=\int_{\mathbb R}\frac{|\Psi(f)|^2}{|f|}\,df<\infty.
+\]
+It requires zero mean for sufficiently regular wavelets,
+so an uncorrected finite-frequency Morlet wavelet is only
+approximately admissible; a DC correction makes the distinction
+explicit. Reconstruction follows with the appropriate wavelet
+normalization. Discrete wavelet frames require bounds
+$A\|x\|^2\le\sum_j|\langle x,\psi_j\rangle|^2
+\le B\|x\|^2$ for positive finite $A,B$.
+
+\section{Coherence, phase consistency and finite samples}
+Even when the population coherence is zero, the squared
+magnitude of a finite-sample coherence estimate is nonnegative
+and generally biased upward. A simple idealized average of
+$K$ independent complex Gaussian spectral replicates gives,
+under zero population coherence, an estimator with
+$\E[\widehat C]\approx1/K$; this is \emph{not} a universal
+threshold for overlapped, tapered or strongly dependent data.
+For iid spike phases $\phi_1,\ldots,\phi_N$, the usual
+phase-locking value (PLV) is $|N^{-1}\sum_j e^{i\phi_j}|$.
+Even uniformly distributed phases produce a positive finite-sample
+value. The pairwise phase consistency (PPC)
+\[
+\widehat{\mathrm{PPC}}=
+\frac{1}{N(N-1)}\sum_{j\ne k}
+\cos(\phi_j-\phi_k)
+\]
+has zero expectation for independent uniform phases,
+provided the sampling and independence conditions hold.
+Surrogates made by Fourier phase randomization typically preserve
+individual Fourier magnitudes; iterative amplitude-adjusted Fourier
+transforms (IAAFT) approximately preserve both the marginal amplitude
+distribution and a target power spectrum. Neither automatically
+preserves cross-channel dependence or experimental trial structure.
+
+\begin{example}[What is—and is not—implemented]\sloppy
+\path{welch_psd.m},
+\path{multitaper_psd.m},
+\path{wavelet_coherence.m} and
+\path{pairwise_phase_consistency.m}
+produce numerical estimators. A scientific significance statement
+requires effective degrees of freedom, trial/block design and
+an appropriate null; it is not guaranteed by the function name.
+\end{example}

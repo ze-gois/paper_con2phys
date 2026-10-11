@@ -1,0 +1,26 @@
+\chapter{Derivatives, integrals, and differential equations}\label{ch:calculus}
+\begin{readergoal}Build rate of change and accumulation from limits and relate them to state variables and observed neural signals.\end{readergoal}
+\section{A derivative is a limit of ratios}
+For a differentiable function $f$, the derivative at $t$ is
+\[f'(t)=\lim_{h\to0}\frac{f(t+h)-f(t)}h.\]
+Its units are output units divided by input units: differentiating voltage with respect to time gives volts per second. A derivative expresses an instantaneous rate of change under a continuous model; a finite difference merely estimates this rate using discrete observations. The distinction becomes serious for noisy measurements.
+
+\section{Integration as accumulation}
+A Riemann integral $\int_a^b f(t)\,dt$ is a limit of sums of function values multiplied by small interval widths. If $r(t)$ is a firing intensity in spikes/s, its integral over $[a,b]$ has units of expected spikes, and under a conditional-intensity point-process model it represents integrated intensity, not the realized count. If $p(t)$ is power in an appropriate density scale, integrating it over time yields an accumulated quantity with corresponding units.
+
+The fundamental theorem of calculus connects these operations: if $F(t)=\int_a^t f(s)\,ds$ and $f$ is continuous, then $F'(t)=f(t)$. Thus differentiation and integration are linked through limiting constructions.
+
+\section{Differential equations: rules for evolving states}
+A differential equation specifies how a variable changes, not necessarily its value at every time. Consider
+\[\tau\frac{dx}{dt}=-x+u(t).\]
+With $u(t)=u_0$ constant, the solution is $x(t)=u_0+[x(0)-u_0]e^{-t/\tau}$. The time constant $\tau>0$ controls relaxation. Without an initial condition, many trajectories satisfy the same differential equation. This is a model for first-order filtering and a building block for membrane and firing-rate dynamics.
+
+\section{A distinction between models and data}
+Recorded spikes are events and need not be represented by a differentiable function. The firing-rate function is an inferred or modeled quantity. Writing $\dot r(t)$ for the derivative of an estimated rate assumes a degree of smoothness that the raw point process does not possess. We will state these choices explicitly when we develop state-space models.
+
+\begin{exercises}
+\item Differentiate $f(t)=e^{-t/\tau}$ and confirm the result has units of inverse time.
+\item Solve $dx/dt=-ax$ for $a>0$ and a specified initial condition.
+\item Explain why a spike-count cumulative function is not ordinarily differentiable at spike times.
+\item Compute $\int_0^T 3\,dt$ and interpret it for a rate of 3 spikes/s.
+\end{exercises}

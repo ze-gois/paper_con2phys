@@ -1,0 +1,26 @@
+\chapter{Definitions, proof, and mathematical maturity}\label{ch:proof}
+\begin{readergoal}Learn to construct and audit arguments, identify hidden hypotheses, and write counterexamples.\end{readergoal}
+\section{The anatomy of an argument}
+A proof begins with an exact statement and a list of assumptions. It proceeds through steps justified by a definition, an axiom, or an earlier result. The conclusion is valid \emph{conditional on those assumptions}. Mathematical evidence and empirical evidence answer different questions: a covariance matrix is positive semidefinite by construction, but a measured covariance need not describe only neuronal interactions.
+
+\section{Direct proof and proof by contrapositive}
+We say an integer $n$ is even if $n=2k$ for some integer $k$. To prove that the sum of two even integers is even, write $a=2k$ and $b=2m$. Then $a+b=2(k+m)$; since $k+m$ is an integer, the sum is even. Notice the explicit use of the definition. An assertion such as ``the result is obvious'' hides exactly the step a beginner may need.
+
+For the contrapositive method, consider: if $n^2$ is even, then $n$ is even. Prove instead that odd $n=2k+1$ implies $n^2=4k(k+1)+1$, which is odd. This avoids assuming the conclusion.
+
+\section{Contradiction, induction, and counterexamples}
+Proof by contradiction begins with the negation of the proposed conclusion, then derives an impossibility. The classic irrationality argument for $\sqrt2$ assumes $\sqrt2=a/b$ with coprime integers $a,b$, derives that both must be even, and contradicts coprimality. We shall revisit this when constructing the real numbers.
+
+A single valid counterexample refutes a universal proposition. To refute ``every high-power spectral peak is neuronal,'' one can simulate a sinusoidal electrical artifact. To refute ``correlation implies coupling,'' one can simulate two independently noisy signals influenced by a common source. These examples do not show that neuronal oscillations or coupling never occur; they refute the unrestricted inference.
+
+\section{Existence, uniqueness, and identifiability}
+Three questions recur throughout this book: Does the object exist? Is it uniquely determined? Can we infer it from the observations? The first two are mathematical; the third also depends on a measurement model. For example, different neuronal current distributions may produce the same measured extracellular potential, so a valid forward model does not guarantee a unique inverse solution.
+
+\begin{proposition}If $A$ and $B$ are subsets of a fixed universe $U$, then $A=B$ if and only if both $A\subseteq B$ and $B\subseteq A$.\end{proposition}
+\begin{proof}If $A=B$, either inclusion follows immediately. Conversely, the first inclusion implies every element of $A$ belongs to $B$, and the second implies every element of $B$ belongs to $A$. The two sets therefore have exactly the same elements.\end{proof}
+\begin{exercises}
+\item Prove that the intersection of two subsets is contained in each subset.
+\item Give two distinct functions with the same value at zero.
+\item Distinguish ``the algorithm converges'' from ``the result estimates the intended biological quantity.''
+\item Write a three-line counterexample to ``a zero Pearson correlation implies independence.''
+\end{exercises}

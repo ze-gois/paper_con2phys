@@ -1,0 +1,105 @@
+\documentclass[11pt,a4paper,oneside,openany]{book}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{lmodern,amsmath,amssymb,amsthm,mathtools,bm}
+\usepackage{booktabs,longtable,geometry,graphicx,microtype,enumitem}
+\usepackage{hyperref,xcolor,fancyhdr}
+\geometry{margin=2.55cm,headheight=14pt}
+\hypersetup{colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black,urlcolor=blue!55!black,pdftitle={From Ordinary Language to Computational Neuroscience},pdfauthor={CON2EPHYS research notebook}}
+\numberwithin{equation}{chapter}
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{remark}[definition]{Remark}
+\theoremstyle{definition}
+\newtheorem{workedexample}[definition]{Worked example}
+\newtheorem{readergoal}[definition]{Reading goal}
+\newenvironment{exercises}{\par\medskip\noindent\textbf{Exercises}\begin{enumerate}[leftmargin=2em,itemsep=0.18em]}{\end{enumerate}\medskip}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\Prob}{\mathbb P}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcounter{bridgecount}
+\newcommand{\bridgeentry}[2]{%
+  \refstepcounter{bridgecount}%
+  \section*{Bridge \thebridgecount: #2}%
+  \addcontentsline{toc}{section}{Bridge \thebridgecount: #2}%
+  \label{bridge:#1}}
+
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\small CON$^2$EPHYS Mathematics}\fancyhead[R]{\small\nouppercase{\leftmark}}\fancyfoot[C]{\thepage}
+\setlength{\parskip}{0.25em}
+\title{\Huge From Ordinary Language to\\ Computational Neuroscience\\[1em]\Large A Mathematical Foundation for Electrophysiological Analysis\\[0.5em]\normalsize A modular companion to CON$^2$EPHYS \texttt{arsenal/path}}
+\author{CON$^2$EPHYS Research Manuscript}
+\date{Bridge edition --- October 2026\\\small Independent exposition inspired by Halmos and Mendelson}
+\begin{document}
+\frontmatter
+\maketitle
+\chapter*{Preface}\addcontentsline{toc}{chapter}{Preface}
+This book begins with statements in ordinary English, not with calculus, matrix notation, or a list of methods. Its reader need not know what a set, function, derivative, matrix, probability, or oscillation is. We will name each mathematical object before asking the reader to manipulate it, and we will distinguish statements about abstract models from statements about nervous systems. The purpose is not to make mathematics superficial: it is to make the deepest methods accessible by building their prerequisites instead of assuming them.
+
+We follow two complementary pedagogical inspirations. Halmos develops the set-theoretic language of mathematics through informal but precise exposition; Mendelson connects logic, sets, and successive number systems to the foundations of analysis. Neither book is copied here. Their themes guide an original scientific text culminating in signal processing, neuronal point processes, statistical inference, and population dynamics.
+
+Every chapter includes formal mathematics, an electrophysiological interpretation, limitations, and exercises. A reader should practice proving elementary results as well as simulating advanced algorithms. Source-data quality, estimand definitions, and null hypotheses receive the same attention as derivations. The earlier edition presented a provisional \texttt{arsenal/path} mapping. The repository is now verified; for actual MATLAB filenames and method status, consult the companion theorem crosswalk and \texttt{arsenal/METHODS.tsv}.
+\tableofcontents
+\input{appendices/reader_guide}
+\mainmatter
+\part{The language of mathematics}
+\input{chapters/00_language/01_ordinary_language}
+\input{chapters/00_language/02_logic}
+\input{chapters/00_language/03_proof}
+\input{chapters/00_language/04_sets}
+\input{chapters/00_language/05_relations}
+\input{chapters/00_language/06_functions}
+\input{bridges/01_language_relations}
+\part{The construction of number systems}
+\input{chapters/01_numbers/01_naturals}
+\input{chapters/01_numbers/02_integers}
+\input{chapters/01_numbers/03_rationals}
+\input{chapters/01_numbers/04_reals}
+\input{chapters/01_numbers/05_complex}
+\input{bridges/02_numbers}
+\part{Calculus and analysis}
+\input{chapters/02_analysis/01_sequences}
+\input{chapters/02_analysis/02_calculus}
+\input{chapters/02_analysis/03_multivariable}
+\input{chapters/02_analysis/04_integration}
+\input{bridges/03_analysis}
+\part{Linear algebra and numerical models}
+\input{chapters/03_linear/01_vectors_matrices}
+\input{chapters/03_linear/02_spectral}
+\input{chapters/03_linear/03_tensors_inverse}
+\input{bridges/04_linear_algebra}
+\part{Probability, statistics, and time}
+\input{chapters/04_probability/01_probability}
+\input{chapters/04_probability/02_random_variables}
+\input{chapters/04_probability/03_inference_stochastic}
+\input{bridges/05_probability}
+\part{Mathematics of electrophysiological signals}
+\input{chapters/05_signals/01_sampling}
+\input{chapters/05_signals/02_fourier_filters}
+\input{chapters/05_signals/03_spectral_estimation}
+\input{chapters/05_signals/04_hilbert_circular_pac}
+\input{chapters/05_signals/05_connectivity}
+\input{chapters/05_signals/06_biophysics}
+\input{bridges/06_discrete_signals}
+\part{Point processes and neuronal populations}
+\input{chapters/06_spikes/01_point_process}
+\input{chapters/06_spikes/02_glm_jitter}
+\input{chapters/07_population/01_population}
+\input{chapters/07_population/02_dynamics_manifolds}
+\part{Scientific inference and reproducible methods}
+\input{chapters/08_inference/01_statistics}
+\input{chapters/08_inference/02_numerical}
+\input{chapters/09_projects/01_roadmap}
+\appendix
+\input{appendices/notation_new}
+\input{appendices/arsenal_map_new}
+\input{appendices/exercises_new}
+\backmatter
+\input{appendices/bibliography}
+\end{document}

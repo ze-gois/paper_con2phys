@@ -1,0 +1,18 @@
+\chapter{Selected answers, proof sketches, and further problems}
+\section{Selected answers}
+\paragraph{Why empty collections matter (Chapter~\ref{ch:english}).} The statement $\forall x\in\varnothing\,P(x)$ is true because no element provides a counterexample. This is not evidence that any spike occurred: it is a logical consequence of quantifying over an empty domain.
+\paragraph{Conditional order (Chapter~\ref{ch:logic}).} ``Every cell fires at some time'' has the form $\forall u\exists tF(u,t)$. ``There exists a time when every cell fires'' is $\exists t\forall uF(u,t)$. The second implies the first for a nonempty common time domain, but not conversely.
+\paragraph{Count normalization (Chapter~\ref{ch:rationals}).} Twenty spikes in 5 s gives 4/s; thirty spikes in 15 s gives 2/s. Their unweighted mean is 3/s; the pooled rate is $50/20=2.5$/s. The different answers correspond to different weighting rules.
+\paragraph{Projection (Chapter~\ref{ch:linear}).} $P^2=UU^\top UU^\top=U I U^\top=P$. Also $P^\top=P$. For any $v$ in the column span of $U$, $Pv=v$.
+\paragraph{Gain model (Chapter~\ref{ch:population}).} Because $N\mid G$ is Poisson with mean $G\mu$, total variance yields $\Var N=E[G\mu]+\Var(G\mu)=\mu+\mu^2\Var G$ when $E G=1$.
+\section{Capstone proof and analysis problems}
+\begin{enumerate}
+\item Start from the definition of a function and develop the meaning of a sampled time series, including its domain, range, units, and missing data.
+\item Prove that the covariance matrix of a finite centered real data matrix is positive semidefinite. Identify when it fails to be positive definite.
+\item From a linear state-space model, construct two different latent coordinate systems that generate identical observations.
+\item Compare a phase-locking measure with an amplitude-weighted PAC measure on signals with very low amplitude. Characterize instability.
+\item Write a full conditional resampling test for spike synchrony, explicitly stating what remains fixed under the null.
+\item Derive the memory footprint and main arithmetic complexity of a covariance-based versus an SVD-based approach for $T\ll N$.
+\item Design and report a blinded synthetic benchmark where an algorithm is required to distinguish an oscillation from a steep aperiodic spectrum.
+\end{enumerate}
+These problems are deliberately cumulative. They require assembling definitions from several parts rather than treating methods as isolated formulas.

@@ -1,0 +1,77 @@
+\chapter{Real analysis, inequalities, and integration}
+Before manipulating signals, one must specify their domains, continuity,
+integrability, and normed spaces. A sampled waveform is a finite vector;
+a continuous-time waveform belongs to a function class. The two are
+connected through sampling hypotheses, not merely by notation.
+
+\entry{11}{Triangle inequality}
+{In a normed space $\|x+y\|\leq\|x\|+\|y\|$.}
+{Bound approximation and reconstruction errors.}
+\entry{12}{Cauchy--Schwarz inequality}
+{In an inner-product space $|\langle x,y\rangle|
+\leq\|x\|\|y\|$; for square-integrable random variables,
+$|\Cov(X,Y)|^2\leq\Var(X)\Var(Y)$.}
+{Bound Pearson correlation, coherence, and inner-product decoders.}
+\entry{13}{Holder's inequality}
+{For $1/p+1/q=1$ with $p,q\geq1$, and $f\in L^p$,
+$g\in L^q$, $\int|fg|\leq\|f\|_p\|g\|_q$.}
+{Establish existence of products and moments.}
+\entry{14}{Minkowski's inequality}
+{For $p\geq1$, $\|f+g\|_p\leq\|f\|_p+\|g\|_p$.}
+{Justify $L^p$ norms on signals and residuals.}
+\entry{15}{Bolzano--Weierstrass theorem}
+{Every bounded sequence in finite-dimensional Euclidean space
+has a convergent subsequence.}
+{Understand compactness arguments in parameter estimation.}
+\entry{16}{Heine--Borel theorem}
+{A subset of $\R^n$ is compact if and only if it is closed and bounded.}
+{Provide conditions for existence of finite-dimensional constrained optima.}
+\entry{17}{Extreme value theorem}
+{Continuous functions on nonempty compact sets attain their
+minimum and maximum.}
+{Show that certain constrained model-fitting objectives have minimizers.}
+\entry{18}{Mean value theorem}
+{If $f$ is continuous on $[a,b]$ and differentiable on $(a,b)$,
+then some $c\in(a,b)$ satisfies
+$f(b)-f(a)=f'(c)(b-a)$.}
+{Control local approximation and numerical differentiation errors.}
+\entry{19}{Taylor's theorem with remainder}
+{Under requisite differentiability, a function equals its order-$k$
+Taylor polynomial plus a controlled remainder.}
+{Linearize nonlinear neural state equations near operating points.}
+\entry{20}{Fundamental theorem of calculus}
+{For continuous $f$, $F(x)=\int_a^x f(t)\,dt$
+satisfies $F'(x)=f(x)$; suitable primitives recover integrals.}
+{Relate firing intensities to integrated expected event counts.}
+\entry{21}{Dominated convergence theorem}
+{If measurable $f_n\to f$ almost everywhere and
+$|f_n|\leq g$ for integrable $g$, then
+$\int f_n\to\int f$.}
+{Justify exchanging controlled limits and expectations.}
+\entry{22}{Monotone convergence and Fatou's lemma}
+{For nonnegative measurable increasing $f_n\uparrow f$,
+$\int f_n\uparrow\int f$; Fatou gives
+$\int\liminf f_n\leq\liminf\int f_n$.}
+{Handle nonnegative measures and event-count approximations.}
+\entry{23}{Radon--Nikodym theorem}
+{If $\nu$ is a sigma-finite measure absolutely continuous
+relative to a sigma-finite measure $\mu$, there is a
+measurable density $d\nu/d\mu$.}
+{Define likelihood and probability density correctly.}
+\entry{24}{Banach fixed-point theorem}
+{A contraction on a nonempty complete metric space has exactly
+one fixed point, reached by iteration from any starting point.}
+{Justify convergence of certain recursive estimators under contraction.}
+
+\begin{definition}
+A sequence $x_n$ converges to $x$ in a metric space if
+for every $\epsilon>0$ there is an $N$ such that
+$n\geq N$ implies $d(x_n,x)<\epsilon$.
+Convergence in probability, almost surely, and in $L^2$ have
+different definitions; none should silently replace another.
+\end{definition}
+\begin{caution}
+The derivative of an estimated signal can amplify measurement noise.
+A valid derivative theorem for a smooth function does not prove that a
+finite-difference estimate of noisy LFP samples is accurate.
+\end{caution}

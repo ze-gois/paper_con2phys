@@ -1,0 +1,46 @@
+\documentclass[11pt,a4paper,oneside]{book}
+\input{preamble/packages}
+\input{preamble/notation}
+\title{Mathematical Foundations of Computational Electrophysiology\\
+\large A theorem-driven companion to CON\textsuperscript{2}PHYS}
+\author{CON\textsuperscript{2}PHYS study notes}
+\date{Revised working edition --- October 2026}
+\begin{document}
+\frontmatter
+\hypersetup{pageanchor=false}
+\maketitle
+\hypersetup{pageanchor=true}
+\tableofcontents
+\input{chapters/00_guide}
+\mainmatter
+\part{Language and mathematical foundations}
+\input{chapters/01_logic_sets}
+\input{chapters/02b_measure_probability}
+\input{chapters/02_analysis}
+\part{Vector spaces and statistical inference}
+\input{chapters/03_linear_algebra}
+\input{chapters/04_probability}
+\input{chapters/04b_gaussian_toolkit}
+\part{Physical and digital origins of neural measurements}
+\input{chapters/05b_biophysics_inverse}
+\input{chapters/05a_filtering_sampling}
+\part{Spectra, spike trains, and neural dynamics}
+\input{chapters/05_harmonic_analysis}
+\input{chapters/05c_wavelets_spectral_inference}
+\input{chapters/08_foundational_nine}
+\input{chapters/06_point_processes}
+\input{chapters/06b_spike_renewal_spectra}
+\input{chapters/06a_glm_optimization}
+\input{chapters/07a_population_geometry}
+\input{chapters/07b_dependence_causality}
+\input{chapters/07_dynamics}
+\input{chapters/07c_dynamics_oscillators}
+\input{chapters/07d_robust_numerical_inference}
+\part{Connections and worked mathematics}
+\input{chapters/09_proofs}
+\input{chapters/10_arsenal_crosswalk}
+\input{chapters/11_exercises}
+\backmatter
+\bibliographystyle{plain}
+\bibliography{refs/references}
+\end{document}
