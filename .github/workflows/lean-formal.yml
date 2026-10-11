@@ -38,4 +38,7 @@ jobs:
         if: always()
         with:
           name: mathematical-inventory
-          path: mathematics/formal_inventory.json
+          path: |
+            mathematics/formal_inventory.json
+            formal/lean/build/direct_dependencies.tsv
+            formal/lean/build/direct_dependencies.json
