@@ -52,8 +52,8 @@ t = double(data.spike_timestamp(data.spike_cluster==unit_id));
 rate = firing_rate(t,0,size(data.lfp_3,2)/fs);
 ```
 
-Para o último exemplo, a duração correta é
-`size(data.lfp_3,2)/fs`, não `numel(data.lfp_3)/fs` quando há vários canais.
+Ao selecionar uma unidade, confira o vínculo entre cluster, brain area e timestamps.
+Não derive duração do registro com `numel` sobre uma matriz multicanal.
 
 ## Famílias presentes
 
