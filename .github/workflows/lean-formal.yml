@@ -29,6 +29,11 @@ jobs:
         run: |
           lake build
           lake env lean Con2physFormal/Logic.lean
+      - name: Export and validate direct proof dependency graph
+        working-directory: formal/lean
+        run: |
+          lake env lean Con2physFormal/DependencyGraph.lean
+          python3 tools/dependency_graph.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
