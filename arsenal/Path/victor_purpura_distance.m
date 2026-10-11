@@ -2,7 +2,8 @@ function distance = victor_purpura_distance(spikes_a,spikes_b,q)
 %VICTOR_PURPURA_DISTANCE Spike-train edit distance; Victor & Purpura 1997.
 % DOI: 10.1088/0954-898X/8/2/003. Spike times in seconds.
 % Insert/delete each cost 1, shift from t to s costs q*abs(t-s).
-assert(isvector(spikes_a) && isvector(spikes_b) && isscalar(q));
+assert((isvector(spikes_a) || isempty(spikes_a)) && ...
+    (isvector(spikes_b) || isempty(spikes_b)) && isscalar(q));
 assert(isfinite(q) && q>=0);
 a=sort(double(spikes_a(:))); b=sort(double(spikes_b(:)));
 assert(all(isfinite(a)) && all(isfinite(b)));
