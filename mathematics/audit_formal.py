@@ -110,7 +110,7 @@ def validate(registry: dict, inventory: dict) -> list[str]:
         if declaration and r.get("lean_source"):
             short_name = declaration.split(".")[-1]
             lean_text = (ROOT / r["lean_source"]).read_text(encoding="utf8")
-            if not re.search(r"\\b(?:theorem|lemma)\\s+" + re.escape(short_name) + r"\\b", lean_text):
+            if not re.search(r"\b(?:theorem|lemma)\s+" + re.escape(short_name) + r"\b", lean_text):
                 failures.append(f"{key}: Lean declaration {short_name} missing")
         if r.get("english_panel"):
             body = (ROOT / r["english_panel"]).read_text(encoding="utf8")
