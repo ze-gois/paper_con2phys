@@ -1,29 +1,32 @@
-# CON²PHYS mathematical theorems
+# CON²PHYS mathematical library
 
-This modular LaTeX textbook progresses from ordinary English propositions to computational electrophysiology.
+Two complementary **standalone** LaTeX books are maintained in this folder.
 
-## Build
+## Volume I: From Ordinary Language to Computational Neuroscience
 
-From the repository root: make -C latex pdf
+- **Source:** [foundations/main.tex](foundations/main.tex)
+- **Contents:** 34 original chapters in 8 numbered parts, three formal appendices, an introductory reader guide, and an embedded bibliography.
+- **Pedagogy:** ordinary English, logic, proof, sets, relations, functions, number systems, analysis, algebra, statistics, stochastic processes, electrophysiology, and neural population methods.
+- **Build:** `make -C latex foundations` from the repository root; output is `latex/foundations/build/main.pdf`.
+- **Provenance:** imported as an intact, previously compiled source edition; its preface and arsenal-map appendix explicitly reflect the earlier provisional status of method matching. See [foundations/INTEGRATION.md](foundations/INTEGRATION.md) for verified repository context.
 
-Requires pdflatex and bibtex. Output: latex/build/main.pdf.
+The original supplied source edition was independently compiled into **92 A4 pages**. The former shorthand '9 parts' was inaccurate: the LaTeX master explicitly contains **8** `\\part` commands.
 
-## Layout
+## Volume II: Mathematical theorems for computational electrophysiology
 
-- main.tex: book entry point
-- preamble/: packages, theorem styles, notation
-- chapters/01 through 07: 92 numbered mathematical results with hypotheses, formulae, and neural connections
-- chapters/08_foundational_nine.tex: nine additional results from the initial inventory, with corrected limitations
-- chapters/09_proofs.tex: selected complete proofs and derivations
-- chapters/10_arsenal_crosswalk.tex: mapping to actual MATLAB functions
-- chapters/11_exercises.tex: proof and computational exercises
-- refs/references.bib: methodological reading references
+- **Source:** [main.tex](main.tex) (at `latex/main.tex`).
+- **Contents:** 92 numbered theorem/principle/identity entries, nine additional theorem families from the original inventory, derivations, exercises, and an actual-file crosswalk to MATLAB `arsenal/path`.
+- **Build:** `make -C latex theorems`; output `latex/build/main.pdf`. Requires `pdflatex` and `bibtex`.
 
-## Editorial contract
+## Commands
 
-1. Introduce symbols and hypotheses before their use.
-2. Distinguish theorems, identities, axioms, criteria and model choices.
-3. Explain counterexamples and failure modes.
-4. Link only to functions actually present in arsenal/path.
-5. A successful smoke test does not establish physiological validity.
-6. Keep this in latex/; do not modify MATLAB implementations for documentation.
+```sh
+make -C latex foundations   # Volume I; pdflatex only
+make -C latex theorems      # Volume II; pdflatex + bibtex
+make -C latex all           # Both volumes
+make -C latex clean         # Remove both build directories
+```
+
+Both manuscripts have independent preambles and namespaces. Do **not** blindly `\\input` one master book into the other. Mathematical results must state hypotheses, and no analytical function is automatically validated for scientific inference.
+
+For implementation statuses, use [../arsenal/METHODS.tsv](../arsenal/METHODS.tsv) and [../arsenal/README.md](../arsenal/README.md).

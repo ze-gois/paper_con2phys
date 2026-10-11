@@ -1,30 +1,35 @@
-# CON²EPHYS Mathematics — foundational edition
+# From Ordinary Language to Computational Neuroscience
 
-An original, modular English-language textbook whose path runs from ordinary mathematical language to advanced computational neuroscience: logic, sets, relations, functions, number systems, analysis, linear algebra, probability, signal processing, spike trains, and population dynamics.
+Original 92-page foundational edition of the CON²PHYS mathematics textbook.
 
-The source tree is designed to live at `paper_con2ephys/latex/`, alongside `arsenal/path/`.
+This modular manuscript was developed independently as a pedagogical progression from **ordinary English** through **logic, sets, relations, functions, number systems, analysis, linear algebra, probability, signals, spike trains, neural populations, and inference**.
+
+The book has **34 chapters, 8 parts and 3 formal appendices**. A reader guide and bibliography are also included. The book is original instructional writing inspired by Halmos and Mendelson; it does not reproduce either source.
 
 ## Build
 
+From the repository root:
+
 ```sh
-cd latex
-latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
-# or, without latexmk:
-# pdflatex main.tex && pdflatex main.tex && pdflatex main.tex
+make -C latex foundations
 ```
 
-Outputs: `main.pdf`. Chapters live in numbered subdirectories under `chapters/`. The `appendices/` directory supplies an instructional guide, notation, an explicitly *provisional* method-to-math map, and exercises. The maintained source reference ledger is `references.bib`; the compiled bibliography is `appendices/bibliography.tex` so the project does not require a local BibTeX executable.
+Or directly:
 
-## Editorial principles
+```sh
+make -C latex/foundations pdf
+```
 
-1. Begin with an English sentence and define the mathematical language before using it.
-2. Move from examples to definitions to derivations and proofs; do not merely list methods.
-3. State all hypotheses, constraints, units, and null models.
-4. Make a distinction between numerical implementation, statistical inference, and physiological interpretation.
-5. Put exercises and counterexamples near each mathematical concept.
-6. Keep source material original. Halmos and Mendelson are pedagogical inspirations, not text to reproduce.
-7. Until GitHub access is available, method names in the arsenal map are *families*, not verified MATLAB file names.
+Output: `latex/foundations/build/main.pdf`.
 
-## Repository status
+This volume does not require BibTeX to compile: it uses a maintained `references.bib` ledger and a self-contained `appendices/bibliography.tex` for typesetting.
 
-The GitHub connector did not locate `paper_con2ephys`; no remote changes are claimed. The former Portuguese 2026-10-11 source is retained under `legacy/2026-10-11-portuguese/`, and is not included in the new compiled book. Build artifacts and auxiliary files are excluded from release bundles.
+## Research linkage
+
+- Current MATLAB code: [../../arsenal/path](../../arsenal/path)
+- Current implementation statuses: [../../arsenal/METHODS.tsv](../../arsenal/METHODS.tsv)
+- Detailed mathematical theorem catalogue: [../main.tex](../main.tex)
+- Existing-function crosswalk: [../chapters/10_arsenal_crosswalk.tex](../chapters/10_arsenal_crosswalk.tex)
+- Provenance and integration notes: [INTEGRATION.md](INTEGRATION.md)
+
+The existing chapter text and its period-specific statements were preserved on import. The master source is the same edition that independently compiled to **92 A4 pages**.
