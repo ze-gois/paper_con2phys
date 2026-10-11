@@ -1,39 +1,32 @@
-name: Build mathematics books
-
+name: Build CON2PHYS books
 on:
   push:
-    branches:
-      - docs/theorems-mathematical-foundations
-    paths:
-      - "latex/**"
-      - ".github/workflows/latex-books.yml"
+    branches: [main, refactor/two-books-layout]
+    paths: ["books/**", "latex/**", "mathematics/**", ".github/workflows/latex-books.yml"]
   pull_request:
-    paths:
-      - "latex/**"
-      - ".github/workflows/latex-books.yml"
+    paths: ["books/**", "latex/**", "mathematics/**", ".github/workflows/latex-books.yml"]
 
 jobs:
-  build:
+  books:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - name: Install TeX Live
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
             texlive-latex-base texlive-latex-recommended \
             texlive-latex-extra texlive-fonts-recommended lmodern
-      - name: Check source integrity
-        run: make -C latex check
-      - name: Compile both books
-        run: make -C latex all
+      - name: Check both manuscripts
+        run: make -C books check
+      - name: Build both manuscripts
+        run: make -C books all
       - name: Archive PDFs
         uses: actions/upload-artifact@v4
         with:
-          name: con2phys-mathematics
+          name: con2phys-books
           path: |
-            latex/build/main.pdf
-            latex/foundations/build/main.pdf
+            books/electrophysiology/build/main.pdf
+            books/formal_foundations/build/main.pdf
           if-no-files-found: error
