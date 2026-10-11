@@ -23,6 +23,12 @@ assert(isequal(size(d.basis),[6 2]));
 assert(norm(d.basis'*d.basis-eye(2),'fro')<1e-9);
 discr=linear_discriminability(activity(1:60,:),activity(61:end,:),.1);
 assert(discr.dprime_squared>0);
+% Unequal trial counts, multiple features: pooled covariance uses scalar n.
+a_check=[0 0;2 0;0 2]; b_check=[1 1;3 1;1 3;3 3];
+check=linear_discriminability(a_check,b_check,.1);
+delta_check=mean(b_check)-mean(a_check);
+cov_check=(2*cov(a_check)+3*cov(b_check))/5+.1*eye(2);
+assert(abs(check.dprime_squared-delta_check*(cov_check\delta_check'))<1e-12);
 decoded=crossvalidated_ridge_decoder(activity,labels,5,1);
 assert(decoded.accuracy>.95);
 source=randn(180,5);

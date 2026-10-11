@@ -41,3 +41,13 @@ assert(isequal(size(avg),[2 26]) && all(sem(:)>=0))
 snr=spike_waveform_snr(avg,broadband(:,1:90));
 assert(isfinite(snr.snr) && snr.snr>5)
 disp('electrophysiology methods synthetic checks completed')
+
+%% Regression: one channel remains channels x samples, including SNR input.
+single_channel=reshape([1 3;2 4;3 5],[3 1 2]);
+[avg_one,sem_one]=spike_waveform_average(single_channel);
+assert(isequal(size(avg_one),[1 2]) && isequal(avg_one,[2 4]));
+assert(isequal(size(sem_one),[1 2]));
+assert(max(abs(sem_one-[1 1]/sqrt(3)))<1e-12);
+snr_one=spike_waveform_snr(avg_one,repmat([-1 1],1,5));
+assert(isscalar(snr_one.by_channel) && snr_one.channel==1);
+assert(abs(snr_one.snr-4*.67448975)<1e-12);

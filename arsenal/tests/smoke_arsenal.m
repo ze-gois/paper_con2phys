@@ -95,3 +95,14 @@ assert(isfinite(g.log_variance_ratio))
 glm=poisson_spike_glm(randn(50,2),double(rand(50,1)>.5),.1);
 assert(all(isfinite(glm.coefficients)))
 disp('arsenal smoke checks completed')
+
+%% Regression checks: decimal bins, silence, missing spikes and half-open edges.
+[bin,center,edges]=spike_bin_counts([0 .1 .2 .3 NaN Inf],0,.3,.1);
+assert(isequal(bin,[1;1;1]) && numel(center)==3 && edges(end)==.3);
+assert(isequal(spike_bin_counts([],0,.3,.1),zeros(3,1)));
+[~,~,edges]=spike_bin_counts([],0,.35,.1);
+assert(numel(edges)==4 && edges(end)<.35);
+[centers,rate,by_trial]=peri_event_histogram([],[0 1],[0;.1;.3]);
+assert(isequal(size(centers),[2 1]) && all(rate==0) && all(by_trial(:)==0));
+[~,~,by_trial]=peri_event_histogram([0 .1 .3 NaN Inf],0,[0 .1 .3]);
+assert(isequal(by_trial,[1 1]));
