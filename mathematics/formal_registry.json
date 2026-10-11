@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "pinned": {
+    "lean": "leanprover/lean4:v4.34.0",
+    "mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+    "mathlib_ref": "v4.34.0",
+    "mathlib_license": "Apache-2.0"
+  },
+  "scope": "pilot logic chapter; other results remain pending",
+  "results": [
+    {
+      "id": "LOGIC-001",
+      "name": "De Morgan conjunction",
+      "english_source": "books/formal_foundations/chapters/00_language/02_logic.tex",
+      "lean_source": "formal/lean/Con2physFormal/Logic.lean",
+      "lean_declaration": "Con2physFormal.Logic.deMorganAnd",
+      "status": "pending_ci",
+      "verification_evidence": null,
+      "direct_dependencies": [
+        "Mathlib import",
+        "tauto tactic"
+      ],
+      "axiom_audit": "Lean #print axioms in source",
+      "formal_statement": "¬ (P ∧ Q) ↔ ¬ P ∨ ¬ Q"
+    },
+    {
+      "id": "LOGIC-002",
+      "name": "De Morgan disjunction",
+      "english_source": "books/formal_foundations/chapters/00_language/02_logic.tex",
+      "lean_source": "formal/lean/Con2physFormal/Logic.lean",
+      "lean_declaration": "Con2physFormal.Logic.deMorganOr",
+      "status": "pending_ci",
+      "verification_evidence": null,
+      "direct_dependencies": [
+        "Mathlib import",
+        "tauto tactic"
+      ],
+      "axiom_audit": "Lean #print axioms in source",
+      "formal_statement": "¬ (P ∨ Q) ↔ ¬ P ∧ ¬ Q"
+    },
+    {
+      "id": "LOGIC-003",
+      "name": "Classical contraposition",
+      "english_source": "books/formal_foundations/chapters/00_language/02_logic.tex",
+      "lean_source": "formal/lean/Con2physFormal/Logic.lean",
+      "lean_declaration": "Con2physFormal.Logic.contrapositive",
+      "status": "pending_ci",
+      "verification_evidence": null,
+      "direct_dependencies": [
+        "Mathlib import",
+        "tauto tactic"
+      ],
+      "axiom_audit": "Lean #print axioms in source",
+      "formal_statement": "(P → Q) ↔ (¬ Q → ¬ P)"
+    },
+    {
+      "id": "LOGIC-004",
+      "name": "Negated universal",
+      "english_source": "books/formal_foundations/chapters/00_language/02_logic.tex",
+      "lean_source": "formal/lean/Con2physFormal/Logic.lean",
+      "lean_declaration": "Con2physFormal.Logic.notForall",
+      "status": "pending_ci",
+      "verification_evidence": null,
+      "direct_dependencies": [
+        "Mathlib import",
+        "push_neg tactic"
+      ],
+      "axiom_audit": "Lean #print axioms in source",
+      "formal_statement": "(¬ ∀ x, P x) ↔ ∃ x, ¬ P x"
+    },
+    {
+      "id": "LOGIC-005",
+      "name": "Negated existential",
+      "english_source": "books/formal_foundations/chapters/00_language/02_logic.tex",
+      "lean_source": "formal/lean/Con2physFormal/Logic.lean",
+      "lean_declaration": "Con2physFormal.Logic.notExists",
+      "status": "pending_ci",
+      "verification_evidence": null,
+      "direct_dependencies": [
+        "Mathlib import",
+        "push_neg tactic"
+      ],
+      "axiom_audit": "Lean #print axioms in source",
+      "formal_statement": "(¬ ∃ x, P x) ↔ ∀ x, ¬ P x"
+    }
+  ]
+}

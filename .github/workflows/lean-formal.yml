@@ -9,18 +9,21 @@ jobs:
   lean:
     runs-on: ubuntu-latest
     timeout-minutes: 40
-    defaults:
-      run:
-        working-directory: formal/lean
     steps:
       - uses: actions/checkout@v4
-      - uses: leanprover/lean-action@v1
+      - name: Audit English mathematics and Lean links
+        run: |
+          python3 mathematics/audit_formal.py --write
+          python3 mathematics/audit_formal.py --check
+      - name: Lean build and kernel check
+        uses: leanprover/lean-action@v1
         with:
           lake-package-directory: formal/lean
-      - name: Check Lean declarations and axioms
-        run: |
-          lake build
-          lake env lean Con2physFormal/Logic.lean
-      - name: Check source-registry integrity
-        working-directory: .
-        run: python3 mathematics/audit_formal.py --check
+      - name: Print axiomatic dependencies
+        working-directory: formal/lean
+        run: lake env lean Con2physFormal/Logic.lean
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mathematical-inventory
+          path: mathematics/formal_inventory.json
