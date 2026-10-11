@@ -73,6 +73,14 @@ def scan() -> dict:
         "files": files,
     }
 
+def source_fingerprint(source: str) -> str:
+    """FNV-1a over Unicode codepoints, a drift detector (not a security hash)."""
+    h = 2166136261
+    for c in source:
+        h = ((h ^ ord(c)) * 16777619) & 0xFFFFFFFF
+    return f"{h:08x}"
+
+
 def validate(registry: dict, inventory: dict) -> list[str]:
     failures = []
     if inventory["files_count"] < 40:
@@ -87,6 +95,27 @@ def validate(registry: dict, inventory: dict) -> list[str]:
             value = r.get(field)
             if value and not (ROOT / value).is_file():
                 failures.append(f"{key}: missing {field}: {value}")
+        for field, hash_field in (
+            ("english_source", "english_source_fingerprint"),
+            ("lean_source", "lean_source_fingerprint"),
+            ("english_panel", "english_panel_fingerprint"),
+        ):
+            source = r.get(field)
+            expected = r.get(hash_field)
+            if source and expected:
+                actual = source_fingerprint((ROOT / source).read_text(encoding="utf8"))
+                if actual != expected:
+                    failures.append(f"{key}: {field} changed since manual verification")
+        declaration = r.get("lean_declaration")
+        if declaration and r.get("lean_source"):
+            short_name = declaration.split(".")[-1]
+            lean_text = (ROOT / r["lean_source"]).read_text(encoding="utf8")
+            if not re.search(r"\\b(?:theorem|lemma)\\s+" + re.escape(short_name) + r"\\b", lean_text):
+                failures.append(f"{key}: Lean declaration {short_name} missing")
+        if r.get("english_panel"):
+            body = (ROOT / r["english_panel"]).read_text(encoding="utf8")
+            if key not in body:
+                failures.append(f"{key}: no corresponding identifier in English panel")
         if r.get("status") == "verified" and not r.get("verification_evidence"):
             failures.append(f"{key}: marked verified without immutable evidence")
         if r.get("status") not in ("pending_ci", "pending", "verified"):

@@ -31,7 +31,11 @@
         "propext",
         "Classical.choice",
         "Quot.sound"
-      ]
+      ],
+      "english_source_fingerprint": "6b2fd5e6",
+      "english_panel": "books/formal_foundations/formal/logic_side_by_side.tex",
+      "english_panel_fingerprint": "69b1c19b",
+      "lean_source_fingerprint": "13796c72"
     },
     {
       "id": "LOGIC-002",
@@ -52,7 +56,11 @@
       ],
       "axiom_audit": "Lean #print axioms in source",
       "formal_statement": "¬ (P ∨ Q) ↔ ¬ P ∧ ¬ Q",
-      "axiomatic_dependencies": []
+      "axiomatic_dependencies": [],
+      "english_source_fingerprint": "6b2fd5e6",
+      "english_panel": "books/formal_foundations/formal/logic_side_by_side.tex",
+      "english_panel_fingerprint": "69b1c19b",
+      "lean_source_fingerprint": "13796c72"
     },
     {
       "id": "LOGIC-003",
@@ -77,7 +85,11 @@
         "propext",
         "Classical.choice",
         "Quot.sound"
-      ]
+      ],
+      "english_source_fingerprint": "6b2fd5e6",
+      "english_panel": "books/formal_foundations/formal/logic_side_by_side.tex",
+      "english_panel_fingerprint": "69b1c19b",
+      "lean_source_fingerprint": "13796c72"
     },
     {
       "id": "LOGIC-004",
@@ -102,7 +114,11 @@
         "propext",
         "Classical.choice",
         "Quot.sound"
-      ]
+      ],
+      "english_source_fingerprint": "6b2fd5e6",
+      "english_panel": "books/formal_foundations/formal/logic_side_by_side.tex",
+      "english_panel_fingerprint": "69b1c19b",
+      "lean_source_fingerprint": "13796c72"
     },
     {
       "id": "LOGIC-005",
@@ -125,7 +141,11 @@
       "formal_statement": "(¬ ∃ x, P x) ↔ ∀ x, ¬ P x",
       "axiomatic_dependencies": [
         "propext"
-      ]
+      ],
+      "english_source_fingerprint": "6b2fd5e6",
+      "english_panel": "books/formal_foundations/formal/logic_side_by_side.tex",
+      "english_panel_fingerprint": "69b1c19b",
+      "lean_source_fingerprint": "13796c72"
     }
   ]
 }
