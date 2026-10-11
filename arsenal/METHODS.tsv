@@ -37,10 +37,10 @@ Peyrache et al.	2010	Population coactivation patterns	assembly_pca; assembly_exp
 Lopes-dos-Santos et al.	2013	PCA/ICA assemblies	assembly_pca; assembly_expression	parcial	10.1016/j.jneumeth.2013.04.010
 van de Ven et al.	2016	Assembly reactivation	assembly_expression	primitiva apenas	10.1016/j.neuron.2016.10.020
 Russo & Durstewitz	2017	Lagged assembly detection	-	planejado	10.7554/eLife.19428
-Yu et al.	2009	Gaussian-process factor analysis	population_pca	primitiva apenas	10.1152/jn.90941.2008
-Churchland et al.	2012	jPCA rotational dynamics	population_pca	primitiva apenas	10.1038/nature11129
+Yu et al.	2009	Gaussian-process factor analysis	gaussian_process_smoothing	primitiva apenas	10.1152/jn.90941.2008
+Churchland et al.	2012	jPCA rotational dynamics	jpca_dynamics; population_pca	parcial	10.1038/nature11129
 Cunningham & Yu	2014	Dimensionality reduction	population_pca; participation_ratio	parcial	10.1038/nn.3776
-Kobak et al.	2016	Demixed PCA	population_pca	primitiva apenas	10.7554/eLife.10989
+Kobak et al.	2016	Demixed PCA	condition_marginalization; population_pca	primitiva apenas	10.7554/eLife.10989
 Pandarinath et al.	2018	LFADS	-	planejado	10.1038/s41592-018-0109-9
 Schneider et al.	2023	CEBRA	-	planejado	10.1038/s41586-023-06031-6
 Stam et al.	2007	Phase lag index	phase_lag_index	parcial	10.1002/hbm.20346
@@ -59,3 +59,19 @@ Panzeri & Treves	1996	Information bias correction	mutual_information	sem correca
 Panzeri et al.	2007	Spike information bias	mutual_information	sem correcao	10.1152/jn.00559.2007
 Maris & Oostenveld	2007	Permutation cluster test	paired_signflip_test	primitiva apenas	10.1016/j.jneumeth.2007.03.024
 Oostenveld et al.	2011	FieldTrip	-	integracao futura	10.1155/2011/156869
+Stringer et al.	2019	Eigenspectrum response geometry	eigenspectrum_powerlaw; population_dimension_scaling	parcial	10.1038/s41586-019-1346-5
+Stringer et al.	2019	Spontaneous multivariate behavioral activity	population_pca; condition_marginalization	primitiva apenas	10.1126/science.aav7893
+Williamson et al.	2016	Population dimensionality scaling	population_dimension_scaling; participation_ratio	parcial	10.1371/journal.pcbi.1005141
+Semedo et al.	2019	Communication subspace via RRR	reduced_rank_regression; communication_subspace_projection	parcial	10.1016/j.neuron.2019.01.026
+Heller & David	2022	Decoding-based dimensionality reduction (dDR)	targeted_dimensionality_reduction; linear_discriminability; crossvalidated_ridge_decoder	parcial	10.1371/journal.pone.0271136
+Do & Yau	2010	ipRGC physiology review	-	fora do criterio metodologico	10.1152/physrev.00013.2010
+Mante et al.	2013	Context-dependent recurrent population dynamics	condition_marginalization; jpca_dynamics	referencia; modelo nao implementado	10.1038/nature12742
+Whiteway et al.	2020	Latent-variable population decoding	crossvalidated_ridge_decoder	primitiva apenas; decodificador latente pendente	10.1101/2020.01.06.896423
+Gao et al.	2017	Theory of multineuronal dimensionality	population_dimension_scaling; participation_ratio	referencia teorica	10.1101/214262
+Zhang et al.	2024	Spatial PCA vs SVM on EEG	population_pca	comparacao; SVM ainda pendente	10.1016/j.neuroimage.2024.120625
+Juavinett et al.	2017	Intrinsic signal optical imaging	-	fora do criterio eletrofisiologico	10.1038/nprot.2016.158
+Goris et al.	2014	Stimulus drive and multiplicative gain variability	condition_marginalization; noise_correlation	primitiva apenas; ganho latente pendente	10.1038/nn.3711
+Heller & David	2021	dDR preprint (versao anterior a Heller 2022)	targeted_dimensionality_reduction	preprint mesma linha de pesquisa; nao contar como novo metodo	10.1101/2021.04.18.440336
+Gallego et al.	2017	Neural manifolds review	population_pca; jpca_dynamics	referencia	10.1016/j.neuron.2017.05.025
+Greenidge et al.	2024	Gaussian-process multiclass regression decoder	-	planejado; GP smoothing nao equivale a GP multiclass	10.1162/neco_a_01630
+Williams et al.	2018	Tensor component analysis	tensor_cp_als	primitiva CP-ALS; TCA completo pendente	10.1016/j.neuron.2018.05.015
