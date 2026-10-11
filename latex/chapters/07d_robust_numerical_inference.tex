@@ -1,0 +1,78 @@
+\chapter[Robust and numerical inference]{Robust estimates, information bias, and numerical stability}
+\label{ch:robust-numerical}
+Analysis pipelines need both statistical robustness to unusual
+data points and numerical robustness to finite precision.
+Neither follows merely from a mathematical formula being valid.
+
+\section{Median and median absolute deviation}
+The sample median has finite-sample replacement breakdown
+point approaching $1/2$: fewer than about half the observations
+cannot drive it arbitrarily far by contamination.
+For observations $x_1,\ldots,x_T$, define
+$\operatorname{MAD}=\operatorname{median}_i|x_i-
+\operatorname{median}_j x_j|$.
+For normal errors a common robust scale estimate is
+$1.4826\operatorname{MAD}$, asymptotically calibrated
+under the Gaussian model. For artifacted spike waveforms,
+median/MAD thresholding can be more stable than a mean/standard
+deviation, but physiological artifacts and nonstationarity
+can contaminate even robust estimates. An influence function
+formalizes the estimator's infinitesimal response to a
+point-mass contamination.
+
+\section{Empirical distribution bounds and time-rescaling}
+For iid observations with distribution function $F$, let $F_T$
+be the empirical CDF. A Dvoretzky--Kiefer--Wolfowitz bound
+states for $\epsilon>0$
+\[
+\Prob\left(\sup_x|F_T(x)-F(x)|>\epsilon\right)
+\le2e^{-2T\epsilon^2}.
+\]
+It implies uniform consistency (a Glivenko--Cantelli conclusion)
+in the iid setting. The KS check of rescaled interspike intervals
+uses an exponential or uniform null only when the conditional
+intensity is correctly specified and relevant transformed
+intervals satisfy the needed independence assumptions.
+Repeated fitting and testing on the same data changes calibration.
+
+\section{Information-theoretic chain rules and finite-sample bias}
+For discrete variables, the entropy chain rule is
+$H(X,Y)=H(X)+H(Y\mid X)$ and
+$I(X;Y\mid Z)=H(X\mid Z)-H(X\mid Y,Z)$.
+The Gaussian distribution maximizes differential entropy among
+random vectors with a specified positive-definite covariance,
+with entropy $\frac12\log[(2\pi e)^d\det\Sigma]$.
+A plug-in entropy estimator from a finite discrete histogram
+usually has downward bias. With $K$ effectively occupied bins,
+a leading Miller--Madow-style correction in \emph{nats} is
+$(K-1)/(2T)$ under its asymptotic sampling assumptions.
+It does not cure curse-of-dimensionality or guarantee an unbiased
+information estimator. Continuous estimators such as KSG have
+different nearest-neighbor assumptions and biases; the
+\path{mutual_information.m} implementation
+should not be described as using KSG without verifying code.
+
+\section{Conditioning, least squares, and stable algorithms}
+If a full-rank matrix $X$ has spectral condition number
+$\kappa_2(X)=\sigma_{\max}/\sigma_{\min}$, then
+$\kappa_2(X^\top X)=\kappa_2(X)^2$.
+\begin{proof}
+The singular values of $X$ are the square roots of the
+eigenvalues of $X^\top X$; hence those eigenvalues are
+$\sigma_j^2$ and the ratio of extremes is squared.
+\end{proof}
+This explains why explicitly solving normal equations can
+amplify roundoff relative to QR/SVD solutions. A backward-stable
+algorithm returns an exact answer for a nearby problem; it does
+not guarantee small forward error for ill-conditioned inputs.
+The FFT reduces the computation of a DFT from the naive
+$O(T^2)$ complex arithmetic to $O(T\log T)$ for appropriate
+factorizable sizes. Algorithmic efficiency does not change
+spectral-estimator uncertainty.
+
+\begin{example}[Research reproducibility]\sloppy
+When regressing spike history on population counts, report
+condition numbers, convergence criteria, effective independent
+units, model selection, bin duration and handling of omitted
+variables, not just a coefficient array.
+\end{example}

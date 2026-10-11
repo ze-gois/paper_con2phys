@@ -1,0 +1,89 @@
+\chapter[Population geometry]{Population geometry, detectability, and identifiability}
+\label{ch:population-identifiability}
+A low-dimensional fit is not necessarily a detectable or
+uniquely identified neural mechanism. This chapter separates
+three questions: \emph{Is a component present in the data?}
+\emph{Can the estimator recover its direction?}
+\emph{Does that direction have a unique biological meaning?}
+
+\section{Beyond the Marchenko--Pastur noise edge}
+Consider an idealized population covariance
+$\Sigma=I+\theta vv^\top$, with $\|v\|=1$,
+$\theta>0$, iid Gaussian observations, and
+$N/T\to\gamma\in(0,\infty)$.
+In the standard spiked-Wishart model, the top population
+eigenvalue is $1+\theta$ and the sample-noise edge is
+$(1+\sqrt\gamma)^2$.
+\begin{theorem}[BBP transition, rank-one covariance case]
+When $\theta\le\sqrt\gamma$, the leading sample eigenvalue
+approaches the upper noise edge and the sample top direction
+does not have asymptotically nonzero alignment with $v$.
+When $\theta>\sqrt\gamma$, the sample leading eigenvalue
+converges to $(1+\theta)(1+\gamma/\theta)$, strictly above
+the edge, and asymptotic alignment is nonzero.
+\end{theorem}
+The result depends on the iid isotropic sampling model.
+Temporal dependence, heterogeneous neuron variances, preprocessing,
+and correlated noise modify its calibration.
+A detectable statistical spike is not automatically an
+identified cell assembly or an anatomical network.
+
+\section{Shrinkage is part of covariance estimation}
+For sample covariance $S$ of $N$ variables and a target
+$T_0$ (often proportional to the identity), a linear shrinkage
+estimator is $\widehat\Sigma=(1-\alpha)S+\alpha T_0$.
+The optimal $\alpha$ depends on the loss, assumptions,
+and estimation method. Ledoit--Wolf-type procedures estimate
+shrinkage to reduce high-dimensional covariance risk;
+James--Stein concerns shrinkage of normal means in its classical
+form. Neither is a license to tune hyperparameters on held-out
+test trials.
+
+\section{Nonuniqueness of latent coordinates}
+In Gaussian factor analysis, $y=\Lambda z+\epsilon$ with
+$z\sim\mathcal N(0,I)$, the rotation
+$\Lambda'=\Lambda Q$, $z'=Q^\top z$ for orthogonal $Q$
+leaves the observable covariance $\Lambda\Lambda^\top+\Psi$
+unchanged. The latent axes are therefore not uniquely labeled.
+For a linear state-space model,
+\[
+x_{t+1}=Ax_t+Bu_t+w_t,\qquad y_t=Cx_t+v_t,
+\]
+any invertible $T$ changes coordinates to
+$A'=TAT^{-1}$, $B'=TB$, $C'=CT^{-1}$,
+with transformed process-noise covariance, while preserving
+the measured trajectories. This is \emph{similarity ambiguity},
+not an estimator bug. General nonlinear latent-variable models
+may have even larger coordinate freedom.
+
+\section{Alignment and comparison of subspaces}
+For matrices $X,Y\in\mathbb R^{n\times k}$ of aligned,
+centered samples, the orthogonal Procrustes problem is
+\[
+\min_{Q^\top Q=I}\|XQ-Y\|_F^2.
+\]
+\begin{proposition}[Procrustes solution]
+Let $X^\top Y=U\Sigma V^\top$ be an SVD. Then
+$Q_*=UV^\top$ is an optimal orthogonal alignment.
+\end{proposition}
+\begin{proof}
+Expanding the squared norm leaves the variable term
+$-2\operatorname{tr}(Q^\top X^\top Y)$.
+Writing $Q=U Z V^\top$, the trace is
+$\operatorname{tr}(Z^\top\Sigma)\le\sum_i\sigma_i$,
+maximized by $Z=I$.
+\end{proof}
+Canonical correlation analysis (CCA) instead finds directions
+with maximal \emph{cross-view correlation} after whitening both
+covariance structures. Representational similarity analysis (RSA)
+and centered kernel alignment (CKA) compare geometries through
+different invariances. They require carefully matched observations,
+preprocessing and independent validation sets.
+
+\begin{example}[Existing code]
+\path{population_pca.m} produces an SVD of centered
+recordings. \path{participation_ratio.m} summarizes
+a covariance eigenspectrum. Neither establishes BBP significance,
+latent-factor uniqueness, or a well-identified inter-area
+communication subspace without additional modeling and tests.
+\end{example}

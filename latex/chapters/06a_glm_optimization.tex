@@ -1,0 +1,92 @@
+\chapter[GLMs and optimization]{Exponential families, GLMs, and constrained optimization}
+\label{ch:glm-optimization}
+The Poisson model in \path{poisson_spike_glm.m}
+can be derived from a probabilistic model, rather than treated
+as an unexplained numerical recipe.
+
+\section{Poisson counts as an exponential family}
+For count $Y\in\{0,1,\ldots\}$ and positive mean $\mu$,
+\[
+p(y\mid\mu)=\exp\bigl(y\log\mu-\mu-\log(y!)\bigr).
+\]
+Its natural parameter is $\eta=\log\mu$. For a row of
+covariates $x_i^\top$, exposure duration $\Delta_i>0$,
+and regression coefficients $\beta$, define
+$\mu_i=\Delta_i\exp(x_i^\top\beta)$.
+In matrix form with design $X$,
+\[
+\ell(\beta)=\sum_i[y_i(x_i^\top\beta+\log\Delta_i)
+ -\Delta_i e^{x_i^\top\beta}-\log(y_i!)].
+\]
+\begin{proposition}[Concavity of the Poisson log likelihood]
+For fixed nonnegative counts and strictly positive exposures,
+\[
+\nabla\ell=X^\top(y-\mu),\qquad
+\nabla^2\ell=-X^\top W X,\quad W=\diag(\mu_i)\succ0.
+\]
+Thus $\ell$ is concave; if $X$ has full column rank, it is
+strictly concave at every finite coefficient vector.
+\end{proposition}
+\begin{proof}
+Differentiate the exponential using
+\[\frac{\partial\mu_i}{\partial\beta}=\mu_i x_i.\]
+For nonzero $v$, $-v^\top\nabla^2\ell v
+=\sum_i\mu_i(x_i^\top v)^2$, positive under full rank.
+\end{proof}
+\emph{Strict concavity is not existence of a finite maximizer.}
+For all-zero counts and an unpenalized intercept, likelihood
+increases as the intercept tends to $-\infty$.
+
+\section{IRLS as Fisher scoring}
+Set $\eta=X\beta+\log\Delta$ and $\mu=e^\eta$.
+Newton scoring solves, at the current iterate,
+\[
+(X^\top W X)\,\delta=X^\top(y-\mu),
+\qquad \beta_{\mathrm{new}}=\beta+\delta.
+\]
+This is equivalent to weighted least squares on the working
+response $z=\eta+(y-\mu)/\mu$, with the exposure offset
+kept fixed. For the canonical Poisson family, the observed
+negative Hessian agrees with expected Fisher information.
+A quadratic ridge penalty adds $-\lambda P\beta$ to the score
+and $\lambda P$ to the negative Hessian. If the algorithm
+\emph{clips} $\eta$, or lacks line search, the numerical
+iterations need not monotonically improve the original
+unclipped likelihood. This is relevant to the present IRLS draft.
+
+\section{Jensen, the ELBO, and EM monotonicity}
+For latent variable $Z$ and any density $q(z)$ supported
+where the joint model is positive, Jensen gives
+\[
+\log p_\theta(y)
+=\log\int q(z)\frac{p_\theta(y,z)}{q(z)}\,dz
+\ge \mathcal L(q,\theta)
+:=\E_q[\log p_\theta(y,Z)]-\E_q[\log q(Z)].
+\]
+The identity
+$\log p_\theta(y)=\mathcal L(q,\theta)
+ +D_{\mathrm{KL}}(q\|p_\theta(z\mid y))$
+shows exactly when the lower bound is tight.
+Exact EM alternates an E-step setting $q$ to the posterior and
+an M-step not decreasing the ELBO. This gives nondecreasing
+observed-data likelihood, but \emph{not} a global optimum.
+For phase--amplitude coupling, the Tort modulation index is
+a normalized KL divergence between a binned phase-dependent
+amplitude distribution and the uniform distribution; positivity
+comes from Gibbs' inequality, while binning and surrogates
+are additional statistical decisions.
+
+\section{KKT and alternating least squares}
+For differentiable convex $f$ with inequality constraints
+$g_j(\beta)\le0$ and equality constraints $h_k(\beta)=0$,
+KKT conditions (with appropriate constraint qualifications)
+require stationarity, feasibility, nonnegative multipliers and
+complementary slackness. Sparse Lasso penalties require
+subgradients rather than ordinary derivatives at zero.
+For a CP tensor decomposition, exact minimization over a factor
+block cannot increase the unpenalized objective \emph{of that
+specified block problem}; alternating such steps does not
+make the multi-factor objective convex or guarantee global
+optimality. The exploratory \path{tensor_cp_als.m}
+includes ridge terms and does not track a monotonic objective;
+a monotonicity claim for that code must be tested, not assumed.

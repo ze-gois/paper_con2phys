@@ -1,0 +1,79 @@
+\chapter{A working toolkit for Gaussian models}
+\label{ch:gaussian-toolkit}
+Gaussian conditioning silently appears in Kalman filters, Gaussian
+processes, factor analysis, and several multivariate estimators.
+It belongs before relying on their formulas.
+
+\begin{definition}[Multivariate normal vector]
+A vector $X\in\mathbb R^d$ is jointly Gaussian if every scalar
+linear combination $a^\top X$ is normally distributed (possibly
+degenerate). Its mean $\mu$ and covariance $\Sigma\succeq0$
+characterize its distribution. When $\Sigma\succ0$, its density is
+\[
+ p(x)=(2\pi)^{-d/2}|\Sigma|^{-1/2}
+ \exp\!\left[-\frac12(x-\mu)^\top\Sigma^{-1}(x-\mu)\right].
+\]
+\end{definition}
+\begin{theorem}[Gaussian conditioning by a Schur complement]
+Suppose $(X,Y)$ is jointly normal and partition its mean and
+covariance into $\mu_X,\mu_Y$ and blocks $\Sigma_{XX}$,
+$\Sigma_{XY}$, $\Sigma_{YY}$. If $\Sigma_{YY}$ is invertible,
+\[
+\begin{aligned}
+\E[X\mid Y=y]&=\mu_X+\Sigma_{XY}\Sigma_{YY}^{-1}(y-\mu_Y),\\
+\Cov(X\mid Y)&=\Sigma_{XX}
+ -\Sigma_{XY}\Sigma_{YY}^{-1}\Sigma_{YX}.
+\end{aligned}
+\]
+\end{theorem}
+\begin{proof}
+Define $R=X-\mu_X-\Sigma_{XY}\Sigma_{YY}^{-1}(Y-\mu_Y)$.
+Then $\Cov(R,Y)=0$. Joint Gaussianity makes $R$ and $Y$
+independent. Expanding $\Cov(R)$ gives the Schur complement.
+\end{proof}
+
+\begin{proposition}[Wishart sample-covariance model]
+If $Z_1,\ldots,Z_T$ are independent $\mathcal N_d(0,\Sigma)$
+with known zero mean, then $\sum_{t=1}^T Z_tZ_t^\top$
+has a Wishart distribution with scale $\Sigma$ and $T$
+degrees of freedom. The usual centered sample covariance instead
+involves $T-1$ degrees of freedom for independent Gaussian samples.
+\end{proposition}
+This distributional assumption is the model behind classical
+random-covariance results; the same formula does not describe
+arbitrarily correlated neuronal time bins.
+
+\begin{proposition}[Multivariate Stein identity]
+For $X\sim\mathcal N_d(\mu,\Sigma)$ and a differentiable
+function $f$ with appropriate integrability and boundary decay,
+\[
+\E[(X-\mu)f(X)]=\Sigma\,\E[\nabla f(X)].
+\]
+\end{proposition}
+\begin{proof}
+For a nondegenerate Gaussian density $p$,
+$\nabla p(x)=-\Sigma^{-1}(x-\mu)p(x)$.
+Integrate $\nabla(fp)$ and use the vanishing boundary term.
+\end{proof}
+
+\section{Gaussian KL divergence}
+For full-rank Gaussian distributions
+$P=\mathcal N(\mu_0,\Sigma_0)$ and
+$Q=\mathcal N(\mu_1,\Sigma_1)$ in dimension $d$,
+\[
+D_{\mathrm{KL}}(P\|Q)=\frac12\left[
+\operatorname{tr}(\Sigma_1^{-1}\Sigma_0)
++(\mu_1-\mu_0)^\top\Sigma_1^{-1}(\mu_1-\mu_0)
+-d+\log\frac{\det\Sigma_1}{\det\Sigma_0}\right].
+\]
+A proof expands $\E_P[\log p(X)-\log q(X)]$, then
+uses the covariance trace identity. The formula requires
+positive-definite covariance matrices; singular distributions
+need measure-theoretic treatment of their supports.
+
+\begin{example}[Neural latent variables]
+A Kalman measurement update is repeated conditioning of a joint
+Gaussian state--observation vector. Its familiar gain matrix is
+therefore a Schur-complement calculation, not a property of
+all nonlinear or non-Gaussian observation processes.
+\end{example}

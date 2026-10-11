@@ -1,0 +1,82 @@
+\chapter{The measure-theoretic vocabulary behind probability}
+\label{ch:measure-vocabulary}
+A probability model is not merely a formula for averages. It states
+\emph{which outcomes exist}, \emph{which events can be assigned
+probabilities}, and \emph{which calculations are allowed}.
+This chapter provides the missing hypotheses for Results 21--24,
+40--46, and 71--76.
+
+\begin{definition}[Sigma-algebra and measure]
+For a set $\Omega$, a $\sigma$-algebra $\mathcal F$ is a family of
+subsets containing $\Omega$, closed under complements and countable
+unions. A measure $\mu:\mathcal F\to[0,\infty]$ satisfies
+$\mu(\varnothing)=0$ and countable additivity over disjoint events.
+A probability measure has $\mu(\Omega)=1$. A measure is
+\emph{$\sigma$-finite} if $\Omega$ is a countable union of
+measurable sets of finite measure.
+\end{definition}
+\begin{definition}[Random variable and expectation]
+A real-valued random variable $X$ is a measurable map
+$(\Omega,\mathcal F)\to(\mathbb R,\mathcal B(\mathbb R))$:
+for every Borel set $B$, its preimage $X^{-1}(B)$ is an event.
+If $\int|X|\,d\Prob<\infty$, define $\E X=\int X\,d\Prob$.
+The space $L^2$ consists of equivalence classes of variables with
+$\E|X|^2<\infty$; equality almost surely is identified.
+Its inner product is $\langle X,Y\rangle=\E[X\overline Y]$.
+A \emph{Hilbert space} is a complete inner-product space; $L^2$
+is one. Completeness is what makes orthogonal projection possible.
+\end{definition}
+\begin{proposition}[Conditional expectation is a projection]
+For $X\in L^2$ and a sub-$\sigma$-algebra $\mathcal G\subseteq
+\mathcal F$, the conditional expectation $\E[X\mid\mathcal G]$
+is characterized by being $\mathcal G$-measurable and satisfying
+$\E[(X-\E[X\mid\mathcal G])Z]=0$ for all bounded
+$\mathcal G$-measurable $Z$. It is the orthogonal projection of
+$X$ onto the closed subspace $L^2(\mathcal G)$.
+\end{proposition}
+\begin{proof}
+The defining conditional-expectation identity gives orthogonality
+for bounded $Z$. Truncation followed by $L^2$ approximation
+extends it to $Z\in L^2(\mathcal G)$.
+The projection theorem then characterizes the minimizer of
+$\E[(X-Z)^2]$ among such $Z$.
+\end{proof}
+This explains why a conditional firing-rate prediction is an
+optimal mean-square prediction \emph{relative to the variables
+conditioned upon}, not relative to every unobserved brain state.
+
+\begin{definition}[Stationarity, ergodicity, and predictability]
+A process $X_t$ is \emph{wide-sense stationary} if its mean is
+constant and $\Cov(X_t,X_s)$ depends only on $t-s$.
+It is \emph{strictly stationary} if all finite-dimensional
+joint laws are time-shift invariant. An invariant process is
+\emph{ergodic} when invariant events have probability zero or one.
+A predictable intensity $\lambda(t\mid\mathcal H_{t-})$ is
+measurable relative to information available \emph{just before}
+$t$; this forbids predicting a spike using its own occurrence.
+The time-integrated intensity is called its \emph{compensator}
+when the Doob--Meyer conditions are satisfied.
+For a regular parametric model $p_\theta$, the \emph{score} is
+$U_\theta=\nabla_\theta\log p_\theta(X)$ and
+\emph{Fisher information} is
+$\mathcal I(\theta)=\E_\theta[U_\theta U_\theta^\top]$,
+under assumptions justifying its finiteness and calculus.
+\end{definition}
+\begin{proposition}[Law of total variance revisited]
+For $X\in L^2$,
+\[
+\Var(X)=\E[\Var(X\mid\mathcal G)]
+ +\Var(\E[X\mid\mathcal G]).
+\]
+\end{proposition}
+\begin{proof}
+Write $X-\E X=(X-M)+(M-\E X)$ where
+$M=\E[X\mid\mathcal G]$. The cross term vanishes by
+orthogonality. Taking squared expectations yields the identity.
+\end{proof}
+\begin{example}[LFP recording versus ensemble]
+If a stationary and ergodic model describes a long LFP trace,
+its time average can estimate the ensemble mean under integrability.
+Stationarity alone does not justify equating those means, nor does
+increasing the sample rate create independent trials.
+\end{example}

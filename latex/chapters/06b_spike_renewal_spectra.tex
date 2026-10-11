@@ -1,0 +1,91 @@
+\chapter[Spike-train renewal and spectra]{Renewal processes, spike-train spectra, and bin limits}
+\label{ch:renewal-spectral}
+A spike train may be treated as a random counting measure
+$n(t)=\sum_j\delta(t-t_j)$, where the Dirac deltas are
+\emph{distributions}, not finite-amplitude voltage spikes.
+This representation connects point processes to Fourier spectra
+and to continuous-time LFP shot-noise models.
+
+\section{How Bernoulli bins approach a Poisson process}
+Partition a fixed duration $T$ into $m=T/\Delta$ bins,
+each with independent event probability $p_\Delta=\lambda\Delta$.
+Then $N_T\sim\operatorname{Binomial}(m,p_\Delta)$, with
+\[
+\Prob(N_T=0)=(1-\lambda T/m)^m
+\longrightarrow e^{-\lambda T}.
+\]
+The binomial probability generating function likewise converges
+to $\exp[\lambda T(s-1)]$, proving convergence of the
+\emph{total count} to a Poisson distribution. Independence
+of disjoint bins and consistency across intervals give the
+homogeneous Poisson-process limit. A form of Le Cam's inequality
+bounds total-variation error in Poisson approximations by a
+constant multiple of $\sum_i p_i^2$; hence fixed $T$ and
+$p_i=\lambda\Delta$ make this error vanish as $\Delta\to0$.
+This approximation is not a guarantee for refractory or bursty
+neuronal processes.
+
+\section{Renewal variability}
+Suppose interspike intervals $S_1,S_2,\ldots$ are iid,
+strictly positive, with mean $m$ and finite variance $v$.
+Their coefficient of variation is $CV^2=v/m^2$.
+Under standard renewal limit conditions, for long observation
+windows $T$ the spike count satisfies
+\[
+\E[N(T)]\sim T/m,\qquad
+\Var[N(T)]\sim (v/m^3)T,\qquad
+\frac{\Var N(T)}{\E N(T)}\longrightarrow CV^2.
+\]
+Thus \emph{long-window} count Fano factor and ISI $CV^2$
+are related for a renewal model. Nonrenewal history,
+trial mixing, latent gain, short windows and nonstationarity
+can break the empirical approximation.
+
+\section{Bartlett spectra and shot-noise LFP}
+For a stationary point process, the Bartlett spectrum is the
+spectrum of its centered event-counting measure, including
+the shot-noise contribution. A homogeneous Poisson train of
+rate $\lambda$ has flat continuous spectral density
+$S_{nn}(f)=\lambda$ in a two-sided Hz convention
+(the DC mean is treated separately).
+For a stationary renewal process with inter-event characteristic
+function $\varphi(f)=\E[e^{-2\pi ifS}]$, the nonzero-frequency
+continuous spectral density takes the form
+\[
+S_{nn}(f)=\lambda
+\frac{1-|\varphi(f)|^2}{|1-\varphi(f)|^2},
+\]
+under the usual nonlattice and regularity assumptions.
+This shows how refractoriness or regular spiking produces
+spectral structure without sinusoidal membrane oscillations.
+
+If an idealized LFP component is a linear superposition of
+spike-triggered kernels, $y(t)=\int h(t-s)\,dN(s)$,
+its centered spectrum satisfies
+$S_{yy}(f)=|H(f)|^2S_{nn}(f)$;
+independent measurement noise adds its own spectrum.
+If both $n$ and $y$ derive from the same events, their cross-spectrum
+is proportional to $H(f)S_{nn}(f)$ with sign/conjugation depending
+on the cross-spectrum convention. This is an example of
+\emph{spike--field coherence without a claim of synaptic causation}.
+
+\section{Hawkes excitation and stability}
+For a linear Hawkes intensity
+$\lambda(t)=\mu+\sum_{t_j<t}h(t-t_j)$ with
+$h\ge0$, $\mu>0$ and branching ratio
+$\nu=\int_0^\infty h(s)\,ds<1$,
+a stationary version exists under the standard construction,
+and its mean rate is $\bar\lambda=\mu/(1-\nu)$.
+When $\nu\ge1$, this stationary finite-mean construction
+fails in the usual nonnegative linear model; the statement
+does not apply without alteration to inhibitory or nonlinear
+point-process intensities.
+
+\begin{example}[Arsenal interpretation]\sloppy
+Compare \path{spike_count_fano.m},
+\path{spike_field_coherence.m} and
+\path{spike_field_ppc.m} on Poisson,
+renewal, and latent-rate simulations. A function operating on
+binned counts or spike phases does not itself implement a
+continuous-time Bartlett spectral estimator.
+\end{example}

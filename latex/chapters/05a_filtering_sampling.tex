@@ -1,0 +1,69 @@
+\chapter{Digital filtering, stability, and aliasing}
+\label{ch:filter-theory}
+The first operation in many LFP workflows is band-pass filtering.
+Its interpretation requires a distinction between a sampled sequence,
+its discrete-time filter, and the underlying analog field.
+
+\section{Poisson summation and aliasing}
+For suitable rapidly decreasing $x(t)$, Fourier convention
+$X(f)=\int x(t)e^{-2\pi i f t}\,dt$, and sampling frequency $F_s$,
+Poisson summation gives the periodic spectrum of its samples:
+\[
+\sum_{n\in\mathbb Z}x(n/F_s)e^{-2\pi i n f/F_s}
+=F_s\sum_{k\in\mathbb Z}X(f+kF_s).
+\]
+The observed spectrum is thus a \emph{sum of translated copies}.
+The copies overlap unless the analog spectrum is sufficiently
+bandlimited; an anti-alias filter must act \emph{before} digitization.
+As a concrete counterexample, the sequences from frequencies $f$
+and $f+F_s$ agree because
+$e^{2\pi i(f+F_s)n/F_s}=e^{2\pi ifn/F_s}$.
+No post-acquisition algorithm can distinguish them without
+additional prior information.
+
+\section{Convolution, the $z$-transform, and poles}
+For a causal linear time-invariant discrete filter,
+$y[n]=\sum_{k=0}^\infty h[k]x[n-k]$, with
+\[
+H(z)=\sum_{k=0}^\infty h[k]z^{-k}.
+\]
+Its frequency response is $H(e^{i\omega})$ when that boundary
+value exists. Absolute summability $\sum_k|h[k]|<\infty$
+is sufficient for bounded-input bounded-output (BIBO) stability.
+For rational causal filters in minimal form, BIBO stability
+requires all poles strictly inside the unit circle.
+
+\begin{proposition}[First-order recursive filter]
+For $y[n]=a y[n-1]+x[n]$ with zero initial condition,
+$h[k]=a^k\mathbf 1_{k\ge0}$. The system is BIBO stable
+if and only if $|a|<1$.
+\end{proposition}
+\begin{proof}
+The absolute impulse-response sum is
+$\sum_{k\ge0}|a|^k=(1-|a|)^{-1}$ when $|a|<1$.
+If $|a|\ge1$, the impulse response is not absolutely summable;
+there exists a bounded input producing an unbounded output.
+\end{proof}
+\section{FIR versus IIR; delay and zero-phase processing}
+An FIR filter has a finite impulse response and is BIBO stable.
+An IIR filter may have sharper transitions for a given order, but
+its poles and finite-precision implementation need inspection.
+For nonzero frequency response, define group delay
+$\tau_g(\omega)=-d\arg H(e^{i\omega})/d\omega$.
+A forward-backward filter ideally has response
+$H(e^{i\omega})H(e^{-i\omega})=|H(e^{i\omega})|^2$
+for real filter coefficients. This suppresses phase delay but
+is \emph{noncausal}, changes the effective magnitude response,
+and requires boundary extrapolation: edge transients are not removed.
+An ideal brick-wall filter has an infinitely long sinc-shaped
+impulse response; abrupt truncation creates Gibbs-type ringing.
+
+\begin{example}[What the arsenal computes]
+\path{bandpass_lfp.m} designs a Butterworth band-pass,
+converts it to second-order sections and applies
+\path{filtfilt}. The returned trace is a
+zero-phase \emph{offline estimate}, not the output of a causal
+online instrument. The initial and final samples need explicit
+transient inspection. Filtering cannot remove volume conduction,
+spike-sorting errors or physiological common inputs.
+\end{example}
