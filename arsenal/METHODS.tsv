@@ -1,0 +1,61 @@
+author	year	method	functions	status	doi
+Bruns	2004	Fourier/Hilbert/wavelet	welch_psd; analytic_phase; morlet_wavelet	parcial	10.1016/j.jneumeth.2004.03.002
+Mitra & Pesaran	1999	Multitaper	multitaper_psd	parcial	10.1016/S0006-3495(99)77236-X
+Bokil et al.	2010	Chronux multitaper	multitaper_psd; coherence_spectrum	parcial	10.1016/j.jneumeth.2010.06.020
+Donoghue et al.	2020	Periodic/aperiodic decomposition	aperiodic_slope; spectral_peak_candidates	parcial	10.1038/s41593-020-00744-x
+Cole & Voytek	2019	Cycle-by-cycle	cycle_by_cycle	parcial	10.1152/jn.00273.2019
+Pettersen et al.	2006	Inverse CSD	current_source_density	parcial	10.1016/j.jneumeth.2005.12.005
+Buzsaki et al.	2012	Extracellular field biophysics	current_source_density	referencia	10.1038/nrn3241
+Lachaux et al.	1999	Phase synchronization	phase_locking_value	parcial	
+Canolty et al.	2006	Phase-amplitude coupling	analytic_phase; modulation_index	parcial	10.1126/science.1128115
+Tort et al.	2010	Phase-amplitude modulation index	modulation_index; circular_shift_surrogate	parcial	10.1152/jn.00106.2010
+Vinck et al.	2010	Pairwise phase consistency	pairwise_phase_consistency; spike_field_ppc	parcial	10.1016/j.neuroimage.2010.01.073
+Vinck et al.	2011	Weighted phase lag index	weighted_phase_lag_index	parcial	
+Aru et al.	2015	Cross-frequency coupling confounds	modulation_index; phase_randomized_surrogate	referencia	10.1016/j.conb.2014.08.002
+Bastos & Schoffelen	2016	Connectivity caveats	coherence_spectrum; granger_causality	referencia	10.3389/fnsys.2015.00175
+Siegel et al.	2012	Spectral neuronal interactions	coherence_spectrum	referencia	10.1038/nrn3137
+Quiroga et al.	2004	Wavelet spike detection and clustering	spike_threshold_detection; spike_waveform_pca	parcial	10.1162/089976604774201631
+Hill et al.	2011	Spike sorting quality metrics	-	planejado	10.1523/JNEUROSCI.0971-11.2011
+Rossant et al.	2016	Dense-array spike sorting	template_match_waveforms	parcial	10.1038/nn.4268
+Magland et al.	2020	SpikeForest benchmark	-	planejado	10.7554/eLife.55167
+Buccino et al.	2020	SpikeInterface workflow	-	integracao futura	10.7554/eLife.61834
+Pachitariu et al.	2024	Kilosort4	template_match_waveforms	primitiva apenas	10.1038/s41592-024-02232-7
+Windolf et al.	2025	DREDge drift correction	-	planejado	10.1038/s41592-025-02614-5
+Watters et al.	2025	MEDiCINe motion inference	-	planejado	10.1523/ENEURO.0529-24.2025
+UnitMatch	2025	Longitudinal unit matching	template_match_waveforms	primitiva apenas	
+Efficient and reproducible pipelines for spike sorting	2026	Sorting pipeline benchmarking	-	planejado	
+Nawrot et al.	1999	Spike rate estimation	peri_event_histogram; firing_rate	parcial	10.1016/S0165-0270(99)00127-2
+Grun et al. I	2002	Unitary events stationary test	crosscorrelogram	primitiva apenas	10.1162/089976602753284455
+Grun et al. II	2002	Unitary events nonstationary test	-	planejado	10.1162/089976602753284464
+Truccolo et al.	2005	Point-process GLM	spike_bin_counts; poisson_spike_glm	parcial	10.1152/jn.00697.2004
+Kass et al.	2005	Spike-train statistical inference	peri_event_histogram; spike_count_fano	referencia	10.1152/jn.00648.2004
+Shimazaki & Shinomoto	2010	Adaptive bandwidth firing rates	-	planejado	10.1007/s10827-009-0180-4
+Cohen & Kohn	2011	Noise correlations	noise_correlation	parcial	10.1038/nn.2842
+Amarasingham et al.	2012	Conditional jitter	jitter_spike_surrogate	parcial	10.1152/jn.00633.2011
+Harris et al.	2003	Hippocampal assemblies	assembly_pca; assembly_expression	primitiva apenas	10.1038/nature01834
+Peyrache et al.	2010	Population coactivation patterns	assembly_pca; assembly_expression	parcial	10.1007/s10827-009-0154-6
+Lopes-dos-Santos et al.	2013	PCA/ICA assemblies	assembly_pca; assembly_expression	parcial	10.1016/j.jneumeth.2013.04.010
+van de Ven et al.	2016	Assembly reactivation	assembly_expression	primitiva apenas	10.1016/j.neuron.2016.10.020
+Russo & Durstewitz	2017	Lagged assembly detection	-	planejado	10.7554/eLife.19428
+Yu et al.	2009	Gaussian-process factor analysis	population_pca	primitiva apenas	10.1152/jn.90941.2008
+Churchland et al.	2012	jPCA rotational dynamics	population_pca	primitiva apenas	10.1038/nature11129
+Cunningham & Yu	2014	Dimensionality reduction	population_pca; participation_ratio	parcial	10.1038/nn.3776
+Kobak et al.	2016	Demixed PCA	population_pca	primitiva apenas	10.7554/eLife.10989
+Pandarinath et al.	2018	LFADS	-	planejado	10.1038/s41592-018-0109-9
+Schneider et al.	2023	CEBRA	-	planejado	10.1038/s41586-023-06031-6
+Stam et al.	2007	Phase lag index	phase_lag_index	parcial	10.1002/hbm.20346
+Dhamala et al.	2008	Spectral Granger causality	granger_causality	primitiva temporal	10.1016/j.neuroimage.2008.02.020
+Nolte et al.	2008	Phase slope index	phase_slope_index	parcial	10.1103/PhysRevLett.100.234101
+Barnett & Seth	2014	Multivariate Granger causality	granger_causality	parcial	10.1016/j.jneumeth.2013.10.018
+Cekic et al.	2018	Time-varying Granger review	granger_causality	referencia	10.1002/sim.7621
+Timme & Lapish	2018	Information-theoretic estimators	mutual_information; transfer_entropy	parcial	10.1523/ENEURO.0052-18.2018
+Huang et al.	1998	EMD/Hilbert-Huang	empirical_mode_decomposition; analytic_phase	exploratorio	10.1098/rspa.1998.0193
+Csicsvari et al.	1999	Joint spike-LFP analysis	spike_field_ppc; spike_triggered_average	primitiva apenas	10.1523/JNEUROSCI.19-01-00274.1999
+Mazzoni et al.	2008	Simulated LFP and spectral information	welch_psd; mutual_information	primitiva apenas	10.1371/journal.pcbi.1000239
+Stark et al.	2014	Sharp-wave ripple interactions	ripple_candidate_events	primitiva apenas	10.1016/j.neuron.2014.06.023
+Wen & Liu	2016	IRASA	irasa_decomposition	exploratorio	10.1007/s10548-015-0448-0
+Liu et al.	2022	Ripple detection consensus	ripple_candidate_events	triagem apenas	10.1038/s41467-022-33536-x
+Panzeri & Treves	1996	Information bias correction	mutual_information	sem correcao	10.1080/0954898X.1996.11978656
+Panzeri et al.	2007	Spike information bias	mutual_information	sem correcao	10.1152/jn.00559.2007
+Maris & Oostenveld	2007	Permutation cluster test	paired_signflip_test	primitiva apenas	10.1016/j.jneumeth.2007.03.024
+Oostenveld et al.	2011	FieldTrip	-	integracao futura	10.1155/2011/156869
