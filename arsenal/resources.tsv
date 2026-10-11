@@ -1,0 +1,8 @@
+resource	kind	url	status	relevance
+SpikeInterface	open_source_framework	https://github.com/SpikeInterface/spikeinterface	actively_maintained	sorting pre/postprocessing quality benchmark
+Kilosort4	open_source_sorter	https://github.com/MouseLand/Kilosort	current_sorter	actual sorting algorithm external to MATLAB arsenal
+AIND Ephys Pipeline	workflow	https://github.com/AllenNeuralDynamics/aind-ephys-pipeline	actively_maintained	Nextflow plus SpikeInterface and Kilosort4 reproducible workflow
+Allen ecephys_spike_sorting	legacy_workflow	https://github.com/AllenInstitute/ecephys_spike_sorting	unmaintained_legacy	methodological reference only; migrate to SpikeInterface
+iBOTS LFP Analysis in Python	course	https://learn.ibots-bonn.de/docs/lfp_analysis/	accessible	LFP signal processing CSD spikes and frequency analysis
+iBOTS LFP workshop	course_page	https://ibots-bonn.de/teaching/lfp-analysis/	accessible	multi-area Neuropixels case study
+SpikeInterface Neuropixels example	example	https://github.com/SpikeInterface/spikeinterface/blob/main/examples/how_to/analyze_neuropixels.py	upstream_example	quality metrics and waveform templates
