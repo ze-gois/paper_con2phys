@@ -1,0 +1,24 @@
+\chapter{Integration, function spaces, and transforms}\label{ch:functionspaces}
+\begin{readergoal}Prepare the mathematical ground for Hilbert spaces, Fourier coefficients, energy, and stochastic-process covariance.\end{readergoal}
+\section{From vectors of numbers to functions}
+The Euclidean inner product $\sum_{i=1}^n x_iy_i$ measures agreement between two finite vectors. For sufficiently integrable real functions on an interval, the analogous quantity is
+\[\langle f,g\rangle=\int_a^b f(t)g(t)\,dt.\]
+For complex functions we conjugate the second or first argument according to convention; here we use $\langle f,g\rangle=\int_a^b f(t)\overline{g(t)}\,dt$, linear in the first argument. The induced norm is $\|f\|_2=(\int |f|^2)^{1/2}$. Signals with finite squared integral belong to the space $L^2$, after identifying functions equal almost everywhere.
+
+\section{Orthogonality and approximation}
+Two functions are orthogonal when their inner product is zero. If $e_1,\ldots,e_k$ are orthonormal, the projection of $f$ onto their span is $\sum_j\langle f,e_j\rangle e_j$. The error is orthogonal to the span: this is the same geometry later used in least squares, PCA, and finite-basis spectral expansions.
+
+\section{Measure and probability: what does ``almost everywhere'' mean?}
+A measure assigns nonnegative sizes to suitable sets. In the familiar one-dimensional setting, interval length is the basic example. The Lebesgue integral extends Riemann integration and provides a stable theory for limits of integrable functions. ``Almost everywhere'' means except on a set of measure zero. Two functions that differ at finitely many time points can represent the same $L^2$ element, even though pointwise spike events at those instants could be scientifically significant. This reminds us that the choice of mathematical object must fit the observation type.
+
+\section{Generalized signals and impulses}
+The ideal Dirac delta $\delta(t-t_0)$ is not an ordinary $L^2$ function. In generalized-function notation its defining property is $\int f(t)\delta(t-t_0)\,dt=f(t_0)$ for suitable test functions. A spike train can be represented formally as $s(t)=\sum_j\delta(t-t_j)$, but practical recordings contain finite-time waveforms and discrete timestamps. Both descriptions are useful, and neither should be confused with the other.
+
+\begin{workedexample}[Projection onto one sinusoid]
+On $[0,T]$, let $e(t)=\sqrt{2/T}\cos(2\pi kt/T)$ for a nonzero integer $k$. Its squared integral is one. The coefficient $a=\int_0^T x(t)e(t)\,dt$ determines the best approximation $ae(t)$ to $x(t)$ within this one-dimensional subspace under squared-integral error. This is the geometric core of Fourier analysis.
+\end{workedexample}
+\begin{exercises}
+\item Verify that $\int_0^T\sin(2\pi nt/T)\cos(2\pi mt/T)\,dt=0$ for positive integers $m,n$.
+\item Explain why delta functions require care in ordinary function spaces.
+\item State the difference between orthogonality and statistical independence.
+\end{exercises}

@@ -1,0 +1,24 @@
+\chapter{The real number system, order, and completeness}\label{ch:reals}
+\begin{readergoal}Understand why the real line is more than rational arithmetic, and why continuity and convergence depend on completeness.\end{readergoal}
+\section{The real line as an ordered field}
+We wish to represent distances, times, and voltages without rational-number gaps. The real numbers $\mathbb R$ are an \emph{ordered field} satisfying a further completeness property. One characterization is the \emph{least-upper-bound property}: every nonempty subset of $\mathbb R$ bounded above has a least upper bound. If $A=\{x\in\mathbb R:x^2<2,\ x\ge0\}$, then $\sup A=\sqrt2$. This value cannot be supplied by rational numbers alone.
+
+A real number may be developed rigorously using Dedekind cuts or equivalence classes of Cauchy sequences of rational numbers; either construction requires proving that the resulting operations and order are well defined. We will use the completeness axiom without adopting one construction as primary. For a fuller foundational treatment, consult \cite{MendelsonNumbers}.
+
+\section{Bounds, supremum, and infimum}
+A number $M$ is an upper bound for $A$ if $x\le M$ for every $x\in A$. The supremum is the smallest such bound; it need not belong to the set. For the open interval $(0,1)$, the supremum is 1, although 1 is not a member. The infimum is defined dually. A \emph{maximum} must be a member of the set and greater than or equal to every other member; distinguish maximum from supremum.
+
+\section{Distances and the triangle inequality}
+The absolute value defines distance on $\mathbb R$ by $d(x,y)=|x-y|$. Distance is nonnegative, symmetric, zero precisely for equal points, and obeys $d(x,z)\le d(x,y)+d(y,z)$. These four properties define a \emph{metric} on a more general space. A tolerance criterion for a numerical solution is meaningful only with a specified distance, scale, and units.
+
+\section{Interval notation and physical uncertainty}
+The interval $[a,b]$ includes endpoints, whereas $(a,b)$ excludes them. An experimental measurement can be modeled as an uncertain value lying in some interval, but the interval should not be mistaken for a statistical confidence interval without an inference procedure. A confidence interval concerns the long-run coverage of an estimator under a model; it is not simply an arbitrary range surrounding a measurement.
+
+\begin{workedexample}[The value of completeness]
+Take a sequence of rational approximations $1,1.4,1.41,1.414,\ldots$ to $\sqrt2$. Each term can be rational while its limit is not. A space of numbers meant to support convergence of such sequences must contain the limiting value. The same idea underlies convergence of numerical algorithms for signal processing.
+\end{workedexample}
+\begin{exercises}
+\item Find the supremum, infimum, minimum, and maximum, when defined, for $A=(0,1]$.
+\item Prove the reverse triangle inequality $\big||x|-|y|\big|\le |x-y|$.
+\item Explain why a bounded measurement record does not imply its generating stochastic process has bounded support.
+\end{exercises}
