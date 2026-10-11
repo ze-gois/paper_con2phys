@@ -1,0 +1,26 @@
+name: Formal Lean
+on:
+  push:
+    branches: [main, feat/lean-formal-inventory-pilot]
+    paths: ["formal/lean/**", "books/formal_foundations/**", "mathematics/**", ".github/workflows/lean-formal.yml"]
+  pull_request:
+    paths: ["formal/lean/**", "books/formal_foundations/**", "mathematics/**", ".github/workflows/lean-formal.yml"]
+jobs:
+  lean:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: formal/lean
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: formal/lean
+      - name: Check Lean declarations and axioms
+        run: |
+          lake build
+          lake env lean Con2physFormal/Logic.lean
+      - name: Check source-registry integrity
+        working-directory: .
+        run: python3 mathematics/audit_formal.py --check
