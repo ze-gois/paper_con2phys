@@ -1,3 +1,4 @@
+a00_startup
 clc
 clear
 a01_probing

@@ -8,11 +8,14 @@ The existing `a`, `b`, `c`, and `d` scripts remain the loading/exploration pipel
 Run `a01_probing` to load one animal, then any question script. Each question
 calls the **script** `q00_prepare` and leaves a result named `q01`, …, `q15`.
 No question reloads or modifies `data`, generates a figure, or writes files.
-Local functions implement the calculations; there is no package or class API.
+Scripts call public functions in `path/` and methodological primitives in
+`arsenal/path/`; each function file has one public entry point matching its name.
+Private local helpers and nested GUI callbacks remain inside their owning function.
 MATLAB R2019a or newer and Signal Processing Toolbox are required. No Statistics
 and Machine Learning Toolbox is required.
 
 ```matlab
+a00_startup
 a01_probing
 q01_firing_rate
 q02_broadband_power
@@ -233,3 +236,24 @@ It checks time-grid conventions, three bands, multiple channels, constant and
 invalid signals, direct recomputation of all four moments, and sensitivity to
 the numerical chunk size. Its presence does **not** imply it has been executed
 on MATLAB or tested on CON²PHYS recordings.
+
+## Estrutura de funcoes
+
+- `a00_startup` adiciona `path/` e `arsenal/path/` na sessao, usando a localizacao
+  do proprio script. Nao altera `pwd` nem executa `savepath`.
+- Os scripts de carregamento, inspecao e preparacao chamam essa inicializacao.
+- `path/` contem carregamento, interfaces graficas e auxiliares do questionario.
+  Os scripts permanecem na raiz, com parametros e resultados no workspace.
+- `arsenal/path/` contem as primitivas independentes do dataset. O nome usa
+  minusculas tambem no Linux. Documentacao e testes ficam fora dessas pastas.
+- Q08 usa `pairwise_phase_consistency`; o binning do questionario usa
+  `spike_counts_edges`, que aceita bordas irregulares e unidades silenciosas.
+
+O arsenal foi incorporado da branch `draft/arsenal-methods` (commit
+`38b09629de2c0340dedca8bc574e6e6bdee180b8`), preservando seu catalogo, referencias e testes. Os metodos
+continuam exploratorios; a integracao nao constitui validacao cientifica.
+As configuracoes atuais `qcfg`, os resultados e as modificacoes da main foram
+preservados. A estrutura `qutil` foi substituida por chamadas diretas.
+
+Teste de integracao: `run('tests/test_path_integration.m')`. MATLAB nao esta
+disponivel no ambiente de autoria; a execucao numerica permanece pendente.

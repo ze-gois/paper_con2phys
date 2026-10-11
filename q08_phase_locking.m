@@ -13,11 +13,11 @@ for a=1:3
         t=qctx.spikes{u}; t=t(t>=2 & t<qctx.duration-2);
         z=interp1((0:qctx.n-1)/qctx.fs,analytic,t,'linear');
         z=z(isfinite(z) & abs(z)>0); z=z./abs(z); n=numel(z); spike_n(u)=n;
-        if n>=qcfg.minimum_spikes, ppc(u)=(abs(sum(z))^2-n)/(n*(n-1)); end
+        if n>=qcfg.minimum_spikes, ppc(u)=pairwise_phase_consistency(angle(z)); end
     end
 end
 values=cell(3,1); for a=1:3, values{a}=ppc(qctx.area==a); end
-q08=qutil.summary(values,qctx.labels,'PPC (dimensionless)', ...
+q08=summarize_questionnaire(values,qctx.labels,'PPC (dimensionless)', ...
     '4-10 Hz zero-phase filter; complex interpolation; discard 2 s edges; >=50 spikes/unit; unit bootstrap.',qcfg);
 q08.unit=table(qctx.ids,qctx.area,spike_n,ppc,'VariableNames',{'cluster','area','spikes','ppc'});
 q08.limitations='Reference-channel choice and spike dependence matter; inspect channel sensitivity and surrogate locking.';

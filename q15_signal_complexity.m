@@ -1,6 +1,6 @@
 %% Q15: normalized LFP permutation entropy during stimulus-to-trial-end.
 q00_prepare
-[t,~,valid]=qutil.trials(data,qcfg); t=t(valid,:);
+[t,~,valid]=trial_times(data,qcfg); t=t(valid,:);
 values=cell(3,1); per_channel=cell(3,1); delay=max(1,round(.01*qctx.fs));
 for a=1:3
     field=sprintf('lfp_%d',a); v=nan(size(t,1),size(data.(field),1));
@@ -19,7 +19,7 @@ for a=1:3
     end
     per_channel{a}=v; values{a}=mean(v,2,'omitnan');
 end
-q15=qutil.summary(values,qctx.labels,'normalized permutation entropy [0,1]', ...
+q15=summarize_questionnaire(values,qctx.labels,'normalized permutation entropy [0,1]', ...
     'LFP order 3, delay 10 ms, linear detrending, no added band filter; channel mean per trial; trial bootstrap.',qcfg);
 q15.channel_entropy=per_channel; q15.retained_trials=find(valid);
 q15.limitations='High entropy can reflect measurement noise; not a direct measure of computational complexity. Check order, delay, trial duration and spectral sensitivity.';

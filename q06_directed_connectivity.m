@@ -1,6 +1,6 @@
 %% Q6: conditional time-domain Granger proxy from population spike counts.
 q00_prepare
-counts=qutil.bins(qctx.spikes,0:.02:qctx.duration); pop=nan(size(counts,1),3);
+counts=spike_bins(qctx.spikes,0:.02:qctx.duration); pop=nan(size(counts,1),3);
 for a=1:3, pop(:,a)=mean(counts(:,qctx.area==a),2); end
 pairs=[1 2;3 2;3 1]; values=cell(3,1); order=5; L=round(qcfg.block_seconds/.02);
 for p=1:3
@@ -23,7 +23,7 @@ for p=1:3
     end
     values{p}=v;
 end
-q06=qutil.summary(values,{'Area 1 -> 2';'Area 3 -> 2';'Area 3 -> 1'}, ...
+q06=summarize_questionnaire(values,{'Area 1 -> 2';'Area 3 -> 2';'Area 3 -> 1'}, ...
     'log residual variance ratio','20 ms counts, fixed VAR order 5 (100 ms), conditional on all three areas; block bootstrap.',qcfg);
 q06.limitations='Exploratory in-sample predictability, positively biased; requires stationarity, residual and lag sensitivity checks; not causal evidence.';
 q06.provenance=qctx.provenance;

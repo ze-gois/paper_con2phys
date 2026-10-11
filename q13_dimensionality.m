@@ -1,6 +1,6 @@
 %% Q13: covariance participation ratio during stimulus-to-outcome.
 q00_prepare
-[t,~,valid]=qutil.trials(data,qcfg); t=t(valid,:);
+[t,~,valid]=trial_times(data,qcfg); t=t(valid,:);
 stream=RandStream('mt19937ar','Seed',qcfg.seed);
 m=min([qcfg.matched_units;arrayfun(@(a)sum(qctx.area==a),(1:3)')]);
 assert(m>=2,'Dimensionality requires >=2 units per area.');
@@ -9,7 +9,7 @@ for a=1:3
     units=find(qctx.area==a); trials=cell(size(t,1),1);
     for k=1:size(t,1)
         edges=t(k,2):.1:t(k,3);
-        if numel(edges)>=3, trials{k}=qutil.bins(qctx.spikes(units),edges); end
+        if numel(edges)>=3, trials{k}=spike_bins(qctx.spikes(units),edges); end
     end
     trials=trials(~cellfun(@isempty,trials)); retained(a)=numel(trials);
     if numel(trials)<2, continue; end
@@ -33,9 +33,3 @@ q13=struct('summary',table(qctx.labels,point,ci(:,1),ci(:,2),retained, ...
     'answer','Pending across-animal comparison','limitations','CI includes random unit-subset variability. Raw covariance weights high-variance units; task and noise both contribute.');
 q13.provenance=qctx.provenance;
 disp(q13.summary)
-
-function d=participation(x)
-    d=nan; if size(x,1)<3, return; end
-    c=cov(x); denom=sum(c(:).^2);
-    if denom>0, d=trace(c)^2/denom; end
-end

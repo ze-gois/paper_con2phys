@@ -1,6 +1,6 @@
 %% Q9: broad/narrow waveform COUNT ratio, explicitly an E/I proxy.
 q00_prepare
-[narrow,width]=qutil.waveform(data,qcfg);
+[narrow,width]=waveform_class(data,qcfg);
 ratio=nan(3,1); ci=nan(3,2); counts=zeros(3,2); valid_boot=zeros(3,1);
 stream=RandStream('mt19937ar','Seed',qcfg.seed);
 for a=1:3
