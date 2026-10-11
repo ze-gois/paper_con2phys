@@ -5,7 +5,7 @@
 Este diretório contém funções MATLAB reutilizáveis extraídas das operações
 matemáticas relevantes para métodos publicados em eletrofisiologia. A unidade
 de implementação é **uma função pública por arquivo `.m`** em [Path](Path/).
-O arquivo [METHODS.tsv](METHODS.tsv) registra 91 entradas bibliográficas (incluindo 2 referências excluídas por escopo)
+O arquivo [METHODS.tsv](METHODS.tsv) registra 97 entradas bibliográficas (incluindo 2 referências excluídas por escopo)
 e associa artigos a primitivas, limitações e métodos ainda não reproduzidos.
 
 ## Organização
@@ -23,6 +23,7 @@ arsenal/
     population_geometry.bib
     large_scale_ephys.bib
     consensus_verified.bib
+    bosc_circular_glm.bib
   Path/
     welch_psd.m
     multitaper_psd.m
@@ -32,6 +33,7 @@ arsenal/
     smoke_population.m
     smoke_ephys_methods.m
     smoke_consensus_methods.m
+    smoke_bosc_circ_glm.m
 ```
 
 O diretório `Path/` deve ser adicionado ao MATLAB path **na sessão que executa
@@ -95,6 +97,7 @@ deve ser interpretada como garantia de fidelidade à implementação publicada.
 Teste sintético adicional:
 ```matlab
 run('arsenal/tests/smoke_consensus_methods.m')
+run('arsenal/tests/smoke_bosc_circ_glm.m')
 ```
 
 ## Famílias presentes
@@ -211,6 +214,55 @@ run('arsenal/tests/smoke_consensus_methods.m')
 Esse teste gera dados sintéticos e confere contratos básicos. Não substitui
 verificação contra waveforms com ground truth, testes de unidades duplicadas,
 efeitos da geometria laminar ou comparações com código de referência.
+
+## Oscilações BOSC, estatística circular e GLM acoplado
+
+Seis novas referências foram registradas em
+[references/bosc_circular_glm.bib](references/bosc_circular_glm.bib),
+incluindo correções bibliográficas de Whitten, Kajikawa e Linderman.
+
+- `bosc_detect`: triagem de episódios oscilatórios com wavelets Morlet,
+  modelo global de fundo espectral em log-log, limite de potência da
+  distribuição exponencial e duração mínima em ciclos.
+- `oscillation_episode`: converte excedências binárias por amostra
+  em episódios sustentados, com início, fim, duração e fração temporal.
+- `circular_mean`, `rayleigh_test`: média circular (com pesos, quando
+  aplicável) e teste de não uniformidade de Rayleigh. Entradas em radianos;
+  observações dependentes exigem testes que respeitem a correlação temporal.
+- `spike_history_design`: matriz causal de regressores defasados,
+  sem observar spikes presentes/futuros.
+- `coupling_filters`: ajusta um GLM Poisson por unidade usando apenas
+  o histórico dos disparos de todas as unidades; devolve coeficientes
+  alvo x fonte x lag. Os coeficientes são dependências preditivas
+  condicionais, **não sinapses nem evidência de causalidade física**.
+
+A função BOSC é uma **versão exploratória**: o ajuste global do
+fundo pode ser contaminado por picos, não há adaptação a mudanças de
+estado, e episódios próximos das bordas da wavelet são excluídos.
+A implementação não equivale a eBOSC. Os estimadores circulares não
+reproduzem a toolbox CircStat inteira, e a inferência do coupled GLM
+não reproduz a reconstrução/decodificação populacional de Pillow et al.
+
+O método rSLDS de Linderman et al. permanece **planejado**:
+`slds_inference.m` não foi criado artificialmente como placeholder,
+pois dependerá de inferência aproximada probabilística e validação
+com estados latentes simulados. O estudo de Cunningham & Yu foi
+atualizado no catálogo com aplicações a manifolds, sem duplicação.
+
+Os DOIs enviados para Whitten, Kajikawa e Linderman não
+correspondiam aos artigos citados. As referências corretas são:
+Whitten (2011) `10.1016/j.neuroimage.2010.08.064`;
+Kajikawa & Schroeder (2011) `10.1016/j.neuron.2011.09.029`;
+Linderman et al. (2017) está em PMLR 54, pp. 914-922, AISTATS,
+com URL bibliográfica, sem reutilizar o DOI IEEE informado.
+
+```matlab
+run('arsenal/tests/smoke_bosc_circ_glm.m')
+```
+
+A existência desses testes **não significa que tenham sido executados**.
+O arquivo `METHODS.tsv` contém seis colunas separadas por TAB,
+inclusive DOI vazio quando não confirmado.
 
 ## Contratos e limites
 
