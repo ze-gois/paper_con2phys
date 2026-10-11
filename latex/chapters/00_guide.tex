@@ -1,0 +1,41 @@
+\chapter*{How to read this book}
+\addcontentsline{toc}{chapter}{How to read this book}
+We begin with ordinary sentences. The claim \emph{Every spike belongs to a
+recorded neuron} can be true, false, or ambiguous if the meaning of
+\emph{belongs} is not specified. Mathematics begins by removing ambiguity:
+we give names to objects, describe relations among them, and state
+exactly when a claim follows from its assumptions.
+
+A \emph{set} is a collection of objects. A \emph{relation} describes
+which ordered pairs satisfy a condition. A \emph{function} assigns one output
+to each admissible input. A signal is a function of time; a spike train can
+be represented by a counting measure; a covariance matrix represents
+pairwise relations among random variables; a neural trajectory is a
+function whose values lie in a vector space.
+
+\paragraph{How to use the numbered results.}
+Results 1--92 form a prerequisite-aware catalogue of named theorems,
+lemmas, inequalities, criteria, and identities. A later chapter adds nine
+further results from the first inventory. The neutral word \emph{result}
+is used deliberately: several entries are identities, axioms, or named
+principles, not standalone theorems. The extended chapter proves a
+selection; short entries are not a substitute for complete proofs.
+
+\paragraph{Notation.} We write $x\in A$ for membership, $A\subseteq B$
+for inclusion, $f:A\to B$ for a function, $\E[X]$ for expectation,
+$\Cov(X,Y)$ for covariance, and $X^*$ for conjugate transpose.
+
+\paragraph{An example before advanced mathematics.}
+Let $U=\{u_1,u_2,u_3\}$ be the set of identified units and let
+$T=[0,10)$ seconds. A spike event is an ordered pair
+$(u,t)\in U\times T$. The relation $R\subseteq U\times T$
+records which spikes occurred. A count function maps each unit
+$u\in U$ to its number of spike times in $T$.
+This is the progression from a sentence to sets, relations, functions,
+numbers, and finally a statistical model.
+
+\paragraph{Scientific caution.}
+The repository's \texttt{arsenal/README.md} explicitly describes its
+MATLAB methods as exploratory and not validated for scientific inference.
+The mathematical validity of a formula is separate from the adequacy
+of the assumptions required to infer physiology from data.
