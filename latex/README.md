@@ -5,12 +5,13 @@ Two complementary **standalone** LaTeX books are maintained in this folder.
 ## Volume I: From Ordinary Language to Computational Neuroscience
 
 - **Source:** [foundations/main.tex](foundations/main.tex)
-- **Contents:** 34 original chapters in 8 numbered parts, three formal appendices, an introductory reader guide, and an embedded bibliography.
+- **Contents:** 40 chapters in 8 numbered parts (34 original + 6 bridge chapters), three formal appendices, an introductory reader guide, and an embedded bibliography.
 - **Pedagogy:** ordinary English, logic, proof, sets, relations, functions, number systems, analysis, algebra, statistics, stochastic processes, electrophysiology, and neural population methods.
 - **Build:** `make -C latex foundations` from the repository root; output is `latex/foundations/build/main.pdf`.
-- **Provenance:** imported as an intact, previously compiled source edition; its preface and arsenal-map appendix explicitly reflect the earlier provisional status of method matching. See [foundations/INTEGRATION.md](foundations/INTEGRATION.md) for verified repository context.
+- **The 48 mathematical bridges:** [bridges/README.md](foundations/bridges/README.md) explains six new chapters interleaved after their prerequisites, each with a proved proposition or theorem and a neuroscience-oriented example.
+- **Provenance:** the 34 original chapters were preserved and the master now includes six bridge chapters. The older appendix preserves its historical provisional mapping; see [foundations/INTEGRATION.md](foundations/INTEGRATION.md) for verified repository context.
 
-The original supplied source edition was independently compiled into **92 A4 pages**. The former shorthand '9 parts' was inaccurate: the LaTeX master explicitly contains **8** `\\part` commands.
+The original edition was **92 A4 pages**; the expanded edition with 48 proved bridges compiles to **112 A4 pages**. The master contains **8** `\\part` divisions.
 
 ## Volume II: Mathematical theorems for computational electrophysiology
 
