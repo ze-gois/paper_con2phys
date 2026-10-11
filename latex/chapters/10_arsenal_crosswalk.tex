@@ -71,8 +71,9 @@ Finite-sample bias, history embedding and discretization matter.\\
 
 \section{Theorems without a dedicated implementation}
 The catalogue also includes Kolmogorov extension, time-rescaling
-goodness-of-fit, Gaussian KL theory, Davis--Kahan perturbation,
-Takens embedding, and Kalman observability. These are
+goodness-of-fit, Davis--Kahan perturbation, Takens embedding,
+and Kalman observability. Gaussian KL divergence and Gaussian
+conditioning are now derived explicitly in the Gaussian toolkit These are
 \emph{mathematical prerequisites or future checks}, not claims
 that their complete scientific implementations exist in the
 repository. The presence of \texttt{\detokenize{gaussian_process_smoothing.m}}
@@ -85,3 +86,27 @@ boundary conventions, electrode reference, trial alignment,
 and the meaning of each null hypothesis. Benchmark a method
 against simulated data of known ground truth before trying
 to infer physiology from an empirical recording.
+
+\section{From biological generators to filters and estimates}
+The physical forward chain has distinct operations:
+a cable/membrane source model supplies transmembrane currents;
+a conductivity model with boundary conditions constructs a lead field;
+\path{field_potential_forward.m} applies a \emph{supplied} lead field;
+\path{bandpass_lfp.m} then uses Butterworth sections and forward--backward
+noncausal filtering; spectral estimators operate on that processed trace.
+Inverting a supplied lead field is regularized but not necessarily unique.
+No software primitive converts a fitted spectral peak directly into a
+uniquely identified membrane current.
+
+\section{Model-fitting limitations exposed by the new chapters}
+\path{poisson_spike_glm.m} uses a binned canonical Poisson model with
+clipped linear predictors: deriving the ideal log-concave Poisson
+objective does not guarantee that every numerical iterate of the
+implementation maximizes the same unclipped likelihood.
+\path{tensor_cp_als.m} is a ridge-regularized CP-ALS primitive; alternating
+steps are not a global-convergence theorem. \path{granger_causality.m}
+returns a temporal predictive log-variance ratio, while
+\path{transfer_entropy.m} uses discretized first-order
+conditional mutual information. The Gaussian equivalence theorem
+does not claim these distinct implementations have matching finite-sample
+outputs or identify causal interventions.

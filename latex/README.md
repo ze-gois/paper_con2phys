@@ -16,7 +16,8 @@ The original edition was **92 A4 pages**; the expanded edition with 48 proved br
 ## Volume II: Mathematical theorems for computational electrophysiology
 
 - **Source:** [main.tex](main.tex) (at `latex/main.tex`).
-- **Contents:** 92 numbered theorem/principle/identity entries, nine additional theorem families from the original inventory, derivations, exercises, and an actual-file crosswalk to MATLAB `arsenal/path`.
+- **Contents:** 92 historical catalogue entries, the classical sampling and random-matrix results, 11 new prerequisite-driven chapters, proofs, exercises, and a verified-file crosswalk to MATLAB `arsenal/path`.
+- **2026 gap-analysis revision:** [revision matrix](REVISION_2026_10_GAP_ANALYSIS.md) lists completed topics and remaining gaps in biophysics, filtering, GLM/EM, renewal theory, RMT, inference, causality, and dynamics.
 - **Build:** `make -C latex theorems`; output `latex/build/main.pdf`. Requires `pdflatex` and `bibtex`.
 
 ## Commands
