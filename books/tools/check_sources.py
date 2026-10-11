@@ -1,84 +1,63 @@
 #!/usr/bin/env python3
-"""Check both LaTeX books before compilation, without third-party packages."""
-from __future__ import annotations
-
+"""Source-only checks for the two independent LaTeX books."""
 from pathlib import Path
 import re
 import sys
 
-LATEX = Path(__file__).resolve().parent.parent
-MASTERS = (LATEX / "main.tex", LATEX / "foundations" / "main.tex")
-INPUT = re.compile(r"\\(?:input|include)\s*\{([^}]+)\}")
-CORRUPT_MARKERS = (
+ROOT = Path(__file__).resolve().parent.parent
+BOOKS = (ROOT / "electrophysiology", ROOT / "formal_foundations")
+MARKERS = (
     "The requested file reference is not currently visible",
     "File is not visible in the requested files surface",
     "Use files.search or files.list to rediscover the file",
 )
+INCLUDE = re.compile(r"\\(?:input|include)\s*\{([^}]+)\}")
 
 
-def check() -> int:
-    problems: list[str] = []
-    source_files = sorted(LATEX.rglob("*.tex"))
-    for source in source_files:
-        content = source.read_text(encoding="utf-8")
-        if not content.strip():
-            problems.append(f"{source.relative_to(LATEX)}: empty TeX source")
-        for marker in CORRUPT_MARKERS:
-            if marker in content:
-                problems.append(
-                    f"{source.relative_to(LATEX)}: connector error text stored as source"
-                )
-                break
-
-    for master in MASTERS:
-        book_root = master.parent
-        pending = [master]
-        visited: set[Path] = set()
-        while pending:
-            current = pending.pop()
-            if current in visited:
+def main():
+    problems = []
+    count = 0
+    for root in BOOKS:
+        files = sorted(root.rglob("*.tex"))
+        count += len(files)
+        for path in files:
+            data = path.read_text(encoding="utf-8")
+            if not data.strip() or any(marker in data for marker in MARKERS):
+                problems.append(f"{path}: empty or damaged source")
+        visited = set()
+        todo = [root / "main.tex"]
+        while todo:
+            file = todo.pop().resolve()
+            if file in visited:
                 continue
-            visited.add(current)
-            if not current.is_file():
-                problems.append(f"{current}: missing input")
+            visited.add(file)
+            if not file.is_file():
+                problems.append(f"{file}: missing input")
                 continue
-            # TeX resolves relative \input paths from the compilation directory.
-            for line in current.read_text(encoding="utf-8").splitlines():
+            data = file.read_text(encoding="utf-8")
+            for line in data.splitlines():
                 if line.lstrip().startswith("%"):
                     continue
-                for match in INPUT.finditer(line):
-                    input_name = match.group(1).strip()
-                    candidate = book_root / input_name
-                    if candidate.suffix == "":
-                        candidate = candidate.with_suffix(".tex")
-                    pending.append(candidate.resolve())
+                for match in INCLUDE.finditer(line):
+                    relative = Path(match.group(1).strip())
+                    if not relative.suffix:
+                        relative = relative.with_suffix(".tex")
+                    todo.append(root / relative)
 
-    bridges = sorted((LATEX / "foundations" / "bridges").glob("*.tex"))
-    total = sum(
-        source.read_text(encoding="utf-8").count(r"\bridgeentry{")
-        for source in bridges
-    )
+    bridges = sorted((ROOT / "formal_foundations" / "bridges").glob("*.tex"))
+    total = sum(x.read_text(encoding="utf-8").count(r"\bridgeentry{") for x in bridges)
     if len(bridges) != 6 or total != 48:
-        problems.append(
-            f"Foundations: expected six bridge chapters and 48 entries; "
-            f"found {len(bridges)} chapters and {total} entries"
-        )
-    foundations_master = MASTERS[1].read_text(encoding="utf-8")
-    for bridge in bridges:
-        if rf"\input{{bridges/{bridge.stem}}}" not in foundations_master:
-            problems.append(f"Missing bridge import: {bridge.name}")
-
+        problems.append(f"Expected 6 bridge sources and 48 entries; got {len(bridges)}, {total}")
+    master = (ROOT / "formal_foundations" / "main.tex").read_text(encoding="utf-8")
+    for file in bridges:
+        if rf"\input{{bridges/{file.stem}}}" not in master:
+            problems.append(f"Not imported: {file.name}")
     if problems:
-        for problem in problems:
-            print(f"ERROR: {problem}", file=sys.stderr)
+        print("\n".join("ERROR: " + p for p in problems), file=sys.stderr)
         return 1
-    print(
-        f"Source preflight passed: {len(source_files)} TeX files, "
-        f"{len(bridges)} bridge chapters, {total} bridges, "
-        f"{len(MASTERS)} compilable books."
-    )
+    print(f"Validated {count} LaTeX files in two books and 48 mathematical bridges.")
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(check())
+    raise SystemExit(main())
