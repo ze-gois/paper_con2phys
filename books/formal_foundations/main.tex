@@ -4,9 +4,16 @@
 \usepackage[english]{babel}
 \usepackage{lmodern,amsmath,amssymb,amsthm,mathtools,bm}
 \usepackage{booktabs,longtable,geometry,graphicx,microtype,enumitem}
-\usepackage{hyperref,xcolor,fancyhdr}
+\usepackage{hyperref,xcolor,fancyhdr,listings}
 \geometry{margin=2.55cm,headheight=14pt}
 \hypersetup{colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black,urlcolor=blue!55!black,pdftitle={From Ordinary Language to Computational Neuroscience},pdfauthor={CON2EPHYS research notebook}}
+\lstdefinelanguage{LeanFour}{
+  morekeywords={import,namespace,end,theorem,lemma,def,by,variable,open,
+    where,fun,have,show,exact,intro,apply,example},
+  sensitive=true,
+  morecomment=[l]--,
+  morestring=[b]"
+}
 \numberwithin{equation}{chapter}
 \newtheorem{definition}{Definition}[chapter]
 \newtheorem{proposition}[definition]{Proposition}
