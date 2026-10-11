@@ -5,7 +5,7 @@
 Este diretório contém funções MATLAB reutilizáveis extraídas das operações
 matemáticas relevantes para métodos publicados em eletrofisiologia. A unidade
 de implementação é **uma função pública por arquivo `.m`** em [Path](Path/).
-O arquivo [METHODS.tsv](METHODS.tsv) registra 60 entradas bibliográficas
+O arquivo [METHODS.tsv](METHODS.tsv) registra 76 entradas bibliográficas (incluindo 2 referências excluídas por escopo)
 e associa artigos a primitivas, limitações e métodos ainda não reproduzidos.
 
 ## Organização
@@ -14,12 +14,15 @@ e associa artigos a primitivas, limitações e métodos ainda não reproduzidos.
 arsenal/
   README.md
   METHODS.tsv
+  references/
+    population_geometry.bib
   Path/
     welch_psd.m
     multitaper_psd.m
     ...
   tests/
     smoke_arsenal.m
+    smoke_population.m
 ```
 
 O diretório `Path/` deve ser adicionado ao MATLAB path **na sessão que executa
@@ -72,6 +75,47 @@ Não derive duração do registro com `numel` sobre uma matriz multicanal.
   informação mútua, transfer entropy plug-in, bootstrap iid,
   randomização pareada e jitter de spikes.
 
+## Geometria e dinâmica de populações (seleção complementar)
+
+O catálogo `references/population_geometry.bib` reúne as 20 referências
+fornecidas para esta expansão, com anos e autores revisados. Quatro trabalhos
+já constavam no índice e foram atualizados sem duplicação por DOI.
+Uma preprint de Heller & David (2021) é identificada como predecessora
+do artigo publicado em 2022; Do & Yau (2010) e Juavinett et al. (2017)
+permanecem registrados por proveniência, mas **fora do critério
+de método de análise eletrofisiológica**.
+
+Primitivas adicionadas, uma por arquivo: `eigenspectrum_powerlaw`,
+`population_dimension_scaling`, `condition_marginalization`,
+`targeted_dimensionality_reduction`, `linear_discriminability`,
+`reduced_rank_regression`, `communication_subspace_projection`,
+`jpca_dynamics`, `tensor_cp_als`, `gaussian_process_smoothing`,
+`crossvalidated_ridge_decoder`.
+
+### Exemplo sintético
+
+```matlab
+rng(17)
+x = randn(100,20);
+labels = [zeros(50,1); ones(50,1)];
+x(51:end,1) = x(51:end,1) + 2;
+
+projection = targeted_dimensionality_reduction(x,labels);
+result = crossvalidated_ridge_decoder(x,labels,5,1);
+scale = population_dimension_scaling(x,[5 10 20],10,42);
+```
+
+**Não há equivalência automática** entre os arquivos pequenos e os
+algoritmos originais. `tensor_cp_als` é apenas CP/ALS sem todo o
+pipeline TCA, `gaussian_process_smoothing` não é GPFA,
+`condition_marginalization` não é dPCA completo, `jpca_dynamics`
+não reproduz todo o pipeline jPCA, e o decodificador ridge não é o
+Gaussian-Process Multiclass Regression de Greenidge et al.
+
+Para resultados publicáveis, selecionar posto, regularização, projeções
+e hiperparâmetros exclusivamente no conjunto de treinamento. A estrutura
+de trials deve ser preservada na validação cruzada para evitar leakage.
+
 ## Contratos e limites
 
 1. Funções usam valores e parâmetros explícitos; não acessam `data` nem
@@ -103,6 +147,7 @@ Alvo: MATLAB R2019a ou superior; várias rotinas dependem da
 
 ```matlab
 run('arsenal/tests/smoke_arsenal.m')
+run('arsenal/tests/smoke_population.m')
 ```
 
 O smoke test é sintético; não substitui testes de referência, comparação
