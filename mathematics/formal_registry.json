@@ -6,7 +6,7 @@
     "mathlib_ref": "v4.34.0",
     "mathlib_license": "Apache-2.0"
   },
-  "scope": "pilot logic chapter; other results remain pending",
+  "scope": "pilot five kernel-verified logic results; all other manuscripts results await formal mapping",
   "results": [
     {
       "id": "LOGIC-001",
@@ -14,14 +14,24 @@
       "english_source": "books/formal_foundations/chapters/00_language/02_logic.tex",
       "lean_source": "formal/lean/Con2physFormal/Logic.lean",
       "lean_declaration": "Con2physFormal.Logic.deMorganAnd",
-      "status": "pending_ci",
-      "verification_evidence": null,
+      "status": "verified",
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38179132288",
+        "checked_repository_commit": "efd3d26eca266703e27156d067e2f72406ce36b0",
+        "verified_target": "lake build and lake env lean Con2physFormal/Logic.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      },
       "direct_dependencies": [
         "Mathlib import",
         "tauto tactic"
       ],
       "axiom_audit": "Lean #print axioms in source",
-      "formal_statement": "¬ (P ∧ Q) ↔ ¬ P ∨ ¬ Q"
+      "formal_statement": "¬ (P ∧ Q) ↔ ¬ P ∨ ¬ Q",
+      "axiomatic_dependencies": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
     },
     {
       "id": "LOGIC-002",
@@ -29,14 +39,20 @@
       "english_source": "books/formal_foundations/chapters/00_language/02_logic.tex",
       "lean_source": "formal/lean/Con2physFormal/Logic.lean",
       "lean_declaration": "Con2physFormal.Logic.deMorganOr",
-      "status": "pending_ci",
-      "verification_evidence": null,
+      "status": "verified",
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38179132288",
+        "checked_repository_commit": "efd3d26eca266703e27156d067e2f72406ce36b0",
+        "verified_target": "lake build and lake env lean Con2physFormal/Logic.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      },
       "direct_dependencies": [
         "Mathlib import",
         "tauto tactic"
       ],
       "axiom_audit": "Lean #print axioms in source",
-      "formal_statement": "¬ (P ∨ Q) ↔ ¬ P ∧ ¬ Q"
+      "formal_statement": "¬ (P ∨ Q) ↔ ¬ P ∧ ¬ Q",
+      "axiomatic_dependencies": []
     },
     {
       "id": "LOGIC-003",
@@ -44,14 +60,24 @@
       "english_source": "books/formal_foundations/chapters/00_language/02_logic.tex",
       "lean_source": "formal/lean/Con2physFormal/Logic.lean",
       "lean_declaration": "Con2physFormal.Logic.contrapositive",
-      "status": "pending_ci",
-      "verification_evidence": null,
+      "status": "verified",
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38179132288",
+        "checked_repository_commit": "efd3d26eca266703e27156d067e2f72406ce36b0",
+        "verified_target": "lake build and lake env lean Con2physFormal/Logic.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      },
       "direct_dependencies": [
         "Mathlib import",
         "tauto tactic"
       ],
       "axiom_audit": "Lean #print axioms in source",
-      "formal_statement": "(P → Q) ↔ (¬ Q → ¬ P)"
+      "formal_statement": "(P → Q) ↔ (¬ Q → ¬ P)",
+      "axiomatic_dependencies": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
     },
     {
       "id": "LOGIC-004",
@@ -59,14 +85,24 @@
       "english_source": "books/formal_foundations/chapters/00_language/02_logic.tex",
       "lean_source": "formal/lean/Con2physFormal/Logic.lean",
       "lean_declaration": "Con2physFormal.Logic.notForall",
-      "status": "pending_ci",
-      "verification_evidence": null,
+      "status": "verified",
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38179132288",
+        "checked_repository_commit": "efd3d26eca266703e27156d067e2f72406ce36b0",
+        "verified_target": "lake build and lake env lean Con2physFormal/Logic.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      },
       "direct_dependencies": [
         "Mathlib import",
         "push_neg tactic"
       ],
       "axiom_audit": "Lean #print axioms in source",
-      "formal_statement": "(¬ ∀ x, P x) ↔ ∃ x, ¬ P x"
+      "formal_statement": "(¬ ∀ x, P x) ↔ ∃ x, ¬ P x",
+      "axiomatic_dependencies": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
     },
     {
       "id": "LOGIC-005",
@@ -74,14 +110,22 @@
       "english_source": "books/formal_foundations/chapters/00_language/02_logic.tex",
       "lean_source": "formal/lean/Con2physFormal/Logic.lean",
       "lean_declaration": "Con2physFormal.Logic.notExists",
-      "status": "pending_ci",
-      "verification_evidence": null,
+      "status": "verified",
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38179132288",
+        "checked_repository_commit": "efd3d26eca266703e27156d067e2f72406ce36b0",
+        "verified_target": "lake build and lake env lean Con2physFormal/Logic.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      },
       "direct_dependencies": [
         "Mathlib import",
         "push_neg tactic"
       ],
       "axiom_audit": "Lean #print axioms in source",
-      "formal_statement": "(¬ ∃ x, P x) ↔ ∀ x, ¬ P x"
+      "formal_statement": "(¬ ∃ x, P x) ↔ ∀ x, ¬ P x",
+      "axiomatic_dependencies": [
+        "propext"
+      ]
     }
   ]
 }
