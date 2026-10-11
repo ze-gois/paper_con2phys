@@ -164,3 +164,72 @@ been executed there. Passing a parser is not a numerical validation.
   for timestamp units, waveform sampling and row alignment.
 - [Participation/data version](https://mchini.github.io/con2phys/how_to_participate.html):
   verify dataset v1.1; mouse 12 LFP was corrected on 15 July 2026.
+
+## LFP envelope moments in sliding windows
+
+Run `a00_startup` once to add the reusable functions in `path/` to the MATLAB
+search path. The new function works on **channels x samples** matrices, with
+500 Hz in CON²PHYS and a required Signal Processing Toolbox:
+
+```matlab
+a00_startup
+a01_probing
+moments = cell(1,3);
+for area = 1:3
+    field = sprintf('lfp_%d',area);
+    moments{area} = lfp_envelope_moments(data.(field),data.srate, ...
+        'WindowSeconds',10,'StepSeconds',0.1,'TimeOriginSeconds',0);
+end
+
+% Windows x channels x bands; bands 1:3 are theta, beta and gamma.
+area = 1; channel = 1; theta = 1;
+plot(moments{area}.time_seconds,moments{area}.variance(:,channel,theta))
+xlabel('Time (s)'); ylabel('Envelope variance (amplitude units^2)')
+```
+
+`path/lfp_envelope_moments.m` computes mean, population variance, skewness,
+and **excess** kurtosis (fourth standardized moment minus 3) of the
+absolute Hilbert envelopes of theta 4–12 Hz, beta 13–30 Hz and gamma 30–80 Hz
+Butterworth bandpasses (4th-order prototype, SOS + zero-phase filtfilt).
+Each 10 s complete window advances by 0.1 s. Requested durations are rounded
+to integer sample counts, and `result.config.effective_*_seconds` records
+the exact values; 500 Hz gives 5000-sample windows and 50-sample steps.
+
+Arrays `result.mean`, `result.variance`, `result.skewness` and
+`result.excess_kurtosis` are **[windows x channels x bands]**. Metadata includes
+`time_seconds` (window midpoint from *sample* timestamps),
+`window_start_seconds` (inclusive), `window_end_seconds` (exclusive),
+1-based inclusive sample-index bounds, frequency bands, channel IDs, SOS
+coefficients, channel validity, configuration, and provenance. Times are
+relative to first sample by default, with optional `TimeOriginSeconds`.
+No input arrays are modified, results are not automatically written to disk,
+and no figures are created.
+
+One channel and band are processed at a time, and moments are obtained via
+normalized, blockwise prefix sums rather than forming an enormous array of
+overlapping window samples. `ChunkWindows` (default 512) controls this
+calculation; `OutputClass='single'` reduces output memory at some precision
+cost. The filter and Hilbert transform still use the full recording for each
+channel; this is an **offline** analysis, not streaming or causal filtering.
+No signal concatenation or boundary-crossing windows occur within a call.
+
+Entire channels with NaN or Inf are skipped, reported in
+`result.channel_valid` and `result.provenance.invalid_channel_ids`, and have
+NaN outputs. A constant envelope has zero variance but undefined skewness and
+kurtosis (NaN). Small variance relative to the local block can also make shape
+moments numerically unreliable (NaN). `result.edge_affected` flags windows
+intersecting a configurable 2 s recording-edge margin; these outputs are
+**retained**, not silently discarded. This margin is heuristic rather than a
+guarantee against filter/Hilbert end effects. The 99% overlap at these defaults
+induces strong statistical dependence between neighboring windows.
+
+Synthetic regression script (MATLAB R2019a+):
+
+```matlab
+run('tests/test_lfp_envelope_moments.m')
+```
+
+It checks time-grid conventions, three bands, multiple channels, constant and
+invalid signals, direct recomputation of all four moments, and sensitivity to
+the numerical chunk size. Its presence does **not** imply it has been executed
+on MATLAB or tested on CON²PHYS recordings.
