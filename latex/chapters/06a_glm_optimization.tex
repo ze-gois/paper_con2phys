@@ -44,9 +44,18 @@ Newton scoring solves, at the current iterate,
 (X^\top W X)\,\delta=X^\top(y-\mu),
 \qquad \beta_{\mathrm{new}}=\beta+\delta.
 \]
-This is equivalent to weighted least squares on the working
-response $z=\eta+(y-\mu)/\mu$, with the exposure offset
-kept fixed. For the canonical Poisson family, the observed
+For known exposure offset $o=\log\Delta$, the full
+working response is $z_{\mathrm{full}}=\eta+(y-\mu)/\mu$.
+Weighted least squares on the design matrix $X$ must use
+the offset-adjusted response:
+\[
+z_{\mathrm{WLS}}=z_{\mathrm{full}}-o
+=X\beta+\frac{y-\mu}{\mu},\qquad
+\beta_{\mathrm{new}}=(X^\top W X)^{-1}X^\top Wz_{\mathrm{WLS}},
+\]
+when the inverse exists. Alternatively fit $z_{\mathrm{full}}$
+while holding $o$ fixed as an offset, not as a fitted predictor.
+For the canonical Poisson family, the observed
 negative Hessian agrees with expected Fisher information.
 A quadratic ridge penalty adds $-\lambda P\beta$ to the score
 and $\lambda P$ to the negative Hessian. If the algorithm
@@ -77,12 +86,22 @@ comes from Gibbs' inequality, while binning and surrogates
 are additional statistical decisions.
 
 \section{KKT and alternating least squares}
-For differentiable convex $f$ with inequality constraints
-$g_j(\beta)\le0$ and equality constraints $h_k(\beta)=0$,
-KKT conditions (with appropriate constraint qualifications)
-require stationarity, feasibility, nonnegative multipliers and
-complementary slackness. Sparse Lasso penalties require
-subgradients rather than ordinary derivatives at zero.
+For $\min_\beta f(\beta)$ with differentiable inequalities
+$g_j(\beta)\le0$ and affine equalities $A\beta=b$,
+the KKT system consists of primal feasibility,
+multipliers $\lambda_j\ge0$, complementary slackness
+$\lambda_jg_j(\beta)=0$, and stationarity
+\[
+\nabla f(\beta)+\sum_j\lambda_j\nabla g_j(\beta)+A^\top\nu=0.
+\]
+\emph{Necessity} for a local minimizer requires a suitable
+constraint qualification, such as LICQ.
+\emph{Sufficiency} for global optimality holds when
+$f$ and $g_j$ are convex differentiable functions and
+the equality constraints are affine.
+Slater's condition is a standard qualification under its
+usual convex-program hypotheses. Lasso stationarity uses
+subgradients at zero.
 For a CP tensor decomposition, exact minimization over a factor
 block cannot increase the unpenalized objective \emph{of that
 specified block problem}; alternating such steps does not
