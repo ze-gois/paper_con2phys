@@ -65,4 +65,4 @@ assert(isequal(size(m2.mean),[n 1 3]));
 assert(strcmp(class(m2.mean),'single'));
 assert(max(abs(double(m2.mean(:,1,1))-m.mean(:,1,1)))<1e-5);
 assert(max(abs(double(m2.variance(:,1,1))-m.variance(:,1,1)))<1e-5);
-fprintf('LFP envelope sliding-moments synthetic checks passed.\\n');
+fprintf('LFP envelope sliding-moments synthetic checks passed.\n');
