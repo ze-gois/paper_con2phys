@@ -8,20 +8,27 @@ on:
 jobs:
   lean:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - name: Audit English mathematics and Lean links
         run: |
           python3 mathematics/audit_formal.py --write
           python3 mathematics/audit_formal.py --check
-      - name: Lean build and kernel check
-        uses: leanprover/lean-action@v1
-        with:
-          lake-package-directory: formal/lean
-      - name: Print axiomatic dependencies
+      - name: Install elan using the pinned toolchain
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Resolve pinned Mathlib and download proof cache
         working-directory: formal/lean
-        run: lake env lean Con2physFormal/Logic.lean
+        run: |
+          lake update
+          lake exe cache get
+      - name: Kernel-check Lean project
+        working-directory: formal/lean
+        run: |
+          lake build
+          lake env lean Con2physFormal/Logic.lean
       - uses: actions/upload-artifact@v4
         if: always()
         with:
