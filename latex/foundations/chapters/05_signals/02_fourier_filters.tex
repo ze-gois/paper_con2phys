@@ -1,0 +1,27 @@
+\chapter{Fourier analysis, convolution, and digital filtering}\label{ch:fourier}
+\begin{readergoal}Derive spectral representations and see why filtering is a temporal operation with potential artifacts.\end{readergoal}
+\section{The discrete Fourier transform}
+For $N$ discrete samples, define
+\[X[k]=\sum_{n=0}^{N-1}x[n]e^{-i2\pi kn/N},\qquad k=0,\ldots,N-1.\]
+The inverse is $x[n]=N^{-1}\sum_{k=0}^{N-1}X[k]e^{i2\pi kn/N}$. The frequency index represents $f_k=kf_s/N$ modulo $f_s$. Frequency resolution in the ordinary DFT grid is $\Delta f=f_s/N=1/T$ where $T=N/f_s$. Zero-padding interpolates the frequency grid but does not create new resolving power for nearby components.
+
+Parseval's identity for this convention is $\sum_n|x[n]|^2=N^{-1}\sum_k|X[k]|^2$. One-sided and two-sided PSD conventions differ by factors of two away from DC and Nyquist; implementations must state normalization and units. The PSD estimates power per hertz, not simply squared FFT amplitude.
+
+\section{Convolution and linear time-invariant systems}
+A discrete linear time-invariant filter has output $y[n]=\sum_m h[m]x[n-m]$, where $h$ is its impulse response. Under appropriate conditions, $Y(e^{i\omega})=H(e^{i\omega})X(e^{i\omega})$. The transfer function has both magnitude and phase. Its impulse and step responses show how brief transients can be smeared in time or transformed into artificial-looking oscillations \cite{CheveigneNelken2019}.
+
+\section{FIR, IIR, and zero-phase filtering}
+A finite impulse-response (FIR) filter has a finite set of coefficients; an infinite impulse-response (IIR) filter includes feedback. Applying a forward-backward filter can cancel net phase shift in the interior of a record but is noncausal and changes the effective magnitude response. Boundaries require special handling; filtering a short isolated segment can produce misleading edge effects. In an online decoder, a filter that uses future samples is not available without added latency.
+
+\section{Cross-correlation and spectral duality}
+For a weakly stationary process, the autocovariance $C_{xx}[\ell]=E[(X_n-\mu)(X_{n+\ell}-\mu)]$ is related to the PSD through a Fourier transform (Wiener--Khinchin). This relationship creates a bridge between lag-domain dependencies and frequency-domain power. Oscillatory-looking autocovariance and a spectral peak are related descriptions; neither alone proves the existence of a distinct biological oscillator.
+
+\begin{workedexample}[Moving-average low-pass filter]
+Take $y[n]=(x[n]+x[n-1])/2$. Its frequency response is $H(e^{i\omega})=\tfrac12(1+e^{-i\omega})=e^{-i\omega/2}\cos(\omega/2)$. Thus magnitude attenuation and phase delay both emerge from an apparently simple average. At Nyquist ($\omega=\pi$), the response is zero.
+\end{workedexample}
+\begin{exercises}
+\item Calculate the DFT of a constant sequence and identify its DC term.
+\item Derive the moving-average frequency response for three samples.
+\item Explain the difference between a Fourier coefficient and a PSD estimate.
+\item Design a simulation exposing a filter-induced false oscillatory event.
+\end{exercises}

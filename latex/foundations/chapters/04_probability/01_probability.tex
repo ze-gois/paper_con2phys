@@ -1,0 +1,23 @@
+\chapter{Probability begins with sets of possible outcomes}\label{ch:probability}
+\begin{readergoal}Translate uncertainty into an explicit sample space, events, conditional probabilities, and independence assumptions.\end{readergoal}
+\section{Experiments and events}
+A random experiment has possible outcomes in a \emph{sample space} $\Omega$. An \emph{event} is a subset $A\subseteq\Omega$. A probability measure $P$ assigns numbers to events with $P(A)\ge0$, $P(\Omega)=1$, and countable additivity across disjoint events. This connects the set operations learned in Chapter~\ref{ch:sets} to the calculus of uncertainty. A model of stochastic spike counts has a different sample space from a model of electrode voltage traces; neither should be silently substituted for the other.
+
+\section{Conditional probability}
+When $P(B)>0$, define $P(A\mid B)=P(A\cap B)/P(B)$. Rearranging gives the multiplication rule $P(A\cap B)=P(A\mid B)P(B)$. If $A$ and $B$ are independent, $P(A\cap B)=P(A)P(B)$. Independence is a model property, not merely a statement that the observed sample correlation vanishes.
+
+The law of total probability for a partition $(B_j)$ is $P(A)=\sum_jP(A\mid B_j)P(B_j)$. Bayes' theorem follows:
+\[P(B_j\mid A)=\frac{P(A\mid B_j)P(B_j)}{\sum_kP(A\mid B_k)P(B_k)}.\]
+In Bayesian analysis, a prior over model parameters and a likelihood for observed data yield a posterior. The posterior is conditional on both the likelihood and the prior; a credible interval and a frequentist confidence interval do not have interchangeable interpretations.
+
+\section{Conditioning changes the question}
+Two neurons can appear correlated because each varies with movement speed. Conditioning on behavior may reduce this apparent association. But conditioning can also introduce new dependencies, as in collider bias. A scientific claim must specify what was conditioned on, why, and whether the variables were measured accurately. The conditional modeling framework for spike jitter makes this especially explicit \cite{Amarasingham2012}.
+
+\begin{workedexample}[A base-rate effect]
+Suppose only 1 percent of candidate events are genuine. A detector identifies 90 percent of genuine events and falsely flags 5 percent of nongenuine events. The probability that a flagged event is genuine is $0.90(0.01)/[0.90(0.01)+0.05(0.99)]\approx0.154$. High sensitivity does not by itself imply high positive predictive value.
+\end{workedexample}
+\begin{exercises}
+\item Derive $P(A\cup B)=P(A)+P(B)-P(A\cap B)$.
+\item Give independent events and dependent events from a six-sided die experiment.
+\item Explain why a detector's posterior event probability depends on prevalence.
+\end{exercises}
