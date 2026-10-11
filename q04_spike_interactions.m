@@ -1,6 +1,6 @@
 %% Q4: magnitude of pairwise Pearson spike-count correlation at 100 ms.
 q00_prepare
-counts=qutil.bins(qctx.spikes,0:.1:qctx.duration);
+counts=spike_bins(qctx.spikes,0:.1:qctx.duration);
 values=cell(3,1); signed=cell(3,1); L=round(qcfg.block_seconds/.1);
 for a=1:3
     units=find(qctx.area==a); v=[]; s=[];
@@ -12,7 +12,7 @@ for a=1:3
     end
     values{a}=v; signed{a}=s;
 end
-q04=qutil.summary(values,qctx.labels,'absolute Pearson r', ...
+q04=summarize_questionnaire(values,qctx.labels,'absolute Pearson r', ...
     '100 ms nonoverlapping counts, mean absolute pair correlation per block; block bootstrap.',qcfg);
 q04.signed_block_mean=signed;
 q04.limitations='Shared rate modulation and task drive can induce correlation; not a synaptic interaction estimate.';

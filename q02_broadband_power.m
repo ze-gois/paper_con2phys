@@ -16,7 +16,7 @@ for a=1:3
     end
     channel_power{a}=p; values{a}=mean(p,2,'omitnan');
 end
-q02=qutil.summary(values,qctx.labels,'original LFP units squared', ...
+q02=summarize_questionnaire(values,qctx.labels,'original LFP units squared', ...
     'Mean channel power per nonoverlapping block; block bootstrap; no rereferencing.',qcfg);
 q02.channel_power=channel_power; q02.unused_tail_seconds=(qctx.n-numel(starts)*L)/qctx.fs;
 q02.provenance=qctx.provenance;

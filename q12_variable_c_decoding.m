@@ -1,13 +1,13 @@
 %% Q12: compare C decoding in three trial segments using identical trial folds.
 q00_prepare
-[t,labels,valid]=qutil.trials(data,qcfg);
+[t,labels,valid]=trial_times(data,qcfg);
 valid=valid & isfinite(labels(:,2)); t=t(valid,:); y=labels(valid,2);
 assert(all(ismember(unique(y),[1 2 3])),'Variable C must be categorical 1-3.');
 score=nan(3,1); ci=nan(3,2); detail=cell(3,1); null=nan(3,100);
 stream=RandStream('mt19937ar','Seed',qcfg.seed);
 for segment=1:3
-    x=qutil.features(qctx.spikes,t(:,segment:segment+1));
-    [score(segment),d]=qutil.decode(x,y,qcfg.seed); detail{segment}=d;
+    x=trial_features(qctx.spikes,t(:,segment:segment+1));
+    [score(segment),d]=decode_trials(x,y,qcfg.seed); detail{segment}=d;
     if ~isfinite(score(segment)), continue; end
     boot=nan(qcfg.bootstrap,1); classes=unique(y);
     for b=1:qcfg.bootstrap
@@ -23,7 +23,7 @@ for segment=1:3
     boot=sort(boot); ci(segment,:)=boot(max(1,ceil([.025 .975]*numel(boot))));
     for b=1:100
         yy=circshift(y,randi(stream,numel(y)-1));
-        null(segment,b)=qutil.decode(x,yy,qcfg.seed);
+        null(segment,b)=decode_trials(x,yy,qcfg.seed);
     end
 end
 q12=struct('summary',table({'Trial start -> Stim';'Stim -> Outcome';'Outcome -> End'}, ...

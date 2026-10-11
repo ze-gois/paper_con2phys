@@ -44,7 +44,7 @@ for a=1:3
     end
     values{a}=rates; events{a}=all_events;
 end
-q03=qutil.summary(values,qctx.labels,'candidate events/min', ...
+q03=summarize_questionnaire(values,qctx.labels,'candidate events/min', ...
     '120-200 Hz envelope, robust z onset 2/peak 5, 25-150 ms; 20 ms channel union; block bootstrap.',qcfg);
 q03.events_seconds=events; q03.exposure_seconds=exposure;
 q03.limitations='Candidate screen only: inspect sharp waves, artifacts, threshold sensitivity and channel-count bias before calling events hippocampal ripples.';
