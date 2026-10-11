@@ -5,7 +5,7 @@
 Este diretório contém funções MATLAB reutilizáveis extraídas das operações
 matemáticas relevantes para métodos publicados em eletrofisiologia. A unidade
 de implementação é **uma função pública por arquivo `.m`** em [Path](Path/).
-O arquivo [METHODS.tsv](METHODS.tsv) registra 76 entradas bibliográficas (incluindo 2 referências excluídas por escopo)
+O arquivo [METHODS.tsv](METHODS.tsv) registra 81 entradas bibliográficas (incluindo 2 referências excluídas por escopo)
 e associa artigos a primitivas, limitações e métodos ainda não reproduzidos.
 
 ## Organização
@@ -14,8 +14,10 @@ e associa artigos a primitivas, limitações e métodos ainda não reproduzidos.
 arsenal/
   README.md
   METHODS.tsv
+  resources.tsv
   references/
     population_geometry.bib
+    large_scale_ephys.bib
   Path/
     welch_psd.m
     multitaper_psd.m
@@ -23,6 +25,7 @@ arsenal/
   tests/
     smoke_arsenal.m
     smoke_population.m
+    smoke_ephys_methods.m
 ```
 
 O diretório `Path/` deve ser adicionado ao MATLAB path **na sessão que executa
@@ -116,6 +119,62 @@ Para resultados publicáveis, selecionar posto, regularização, projeções
 e hiperparâmetros exclusivamente no conjunto de treinamento. A estrutura
 de trials deve ser preservada na validação cruzada para evitar leakage.
 
+## Spike sorting em larga escala e field potentials
+
+Os seis artigos checados nesta rodada estão em
+[large_scale_ephys.bib](references/large_scale_ephys.bib).
+O artigo de Buccino et al. (2026) já constava em METHODS.tsv e foi
+atualizado, não duplicado. Recursos externos e seus estados de manutenção
+constam em [resources.tsv](resources.tsv). Em particular, a antiga biblioteca
+Allen ecephys_spike_sorting é **legada e sem manutenção**. O pipeline atual
+da Allen Neural Dynamics utiliza SpikeInterface/Nextflow e permite Kilosort4.
+
+**Funções novas (13):**
+
+- `spike_refractory_violations`, `spike_presence_ratio`,
+  `spike_sorting_agreement`, `spike_waveform_snr`,
+  `spike_waveform_extraction`, `spike_waveform_average`;
+- `common_median_reference`, `bipolar_reference_lfp`,
+  `spike_field_coherence`, `multitaper_coherence`,
+  `wavelet_coherence`;
+- `field_potential_forward`, `field_potential_inverse_tikhonov`.
+
+Essas funções são **primitivas**, não um sorter profundo, um pipeline
+de Neuropixels ou implementações equivalentes ao Kilosort4 e ao SpikeInterface.
+A comparação de eventos `spike_sorting_agreement` pressupõe que uma unidade
+de referência já esteja pareada a uma unidade predita; não resolve matching
+entre múltiplas unidades. `spike_presence_ratio` depende dos bins e taxa de
+disparo; a fração de violação refratária não é estimativa calibrada de
+contaminação. Para `spike_waveform_extraction`, usar exclusivamente
+sinal **broadband AP** (por exemplo, 30 kHz) e amostras com índice **MATLAB
+iniciado em 1**, nunca LFP CON2PHYS a 500 Hz.
+
+As funções de referência e coerência aceitam recortes finitos por canal.
+`wavelet_coherence` usa suavização temporal apenas, sem suavização entre
+escalas ou tratamento integral do cone de influência; deve permanecer
+exploratória. `field_potential_forward` e
+`field_potential_inverse_tikhonov` exigem matriz de sensibilidade
+física fornecida externamente. A reconstrução por Tikhonov **não recupera
+uma fonte fisiológica única**. Dados de EEG/LFP não permitem deduzir
+excitação/inibição ou neuromodulação diretamente a partir de uma simples
+regressão inversa.
+
+Os frameworks e cursos usados como fontes de comparação:
+[SpikeInterface](https://github.com/SpikeInterface/spikeinterface),
+[Kilosort4](https://github.com/MouseLand/Kilosort),
+[AIND Ephys Pipeline](https://github.com/AllenNeuralDynamics/aind-ephys-pipeline) e
+[iBOTS LFP Analysis](https://learn.ibots-bonn.de/docs/lfp_analysis/).
+
+### Teste complementar
+
+```matlab
+run('arsenal/tests/smoke_ephys_methods.m')
+```
+
+Esse teste gera dados sintéticos e confere contratos básicos. Não substitui
+verificação contra waveforms com ground truth, testes de unidades duplicadas,
+efeitos da geometria laminar ou comparações com código de referência.
+
 ## Contratos e limites
 
 1. Funções usam valores e parâmetros explícitos; não acessam `data` nem
@@ -148,6 +207,7 @@ Alvo: MATLAB R2019a ou superior; várias rotinas dependem da
 ```matlab
 run('arsenal/tests/smoke_arsenal.m')
 run('arsenal/tests/smoke_population.m')
+run('arsenal/tests/smoke_ephys_methods.m')
 ```
 
 O smoke test é sintético; não substitui testes de referência, comparação
