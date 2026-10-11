@@ -68,3 +68,13 @@ online instrument. The initial and final samples need explicit
 transient inspection. Filtering cannot remove volume conduction,
 spike-sorting errors or physiological common inputs.
 \end{example}
+
+\section{Executable MATLAB experiment: two aliased sinusoids}
+The following script constructs a 15\,Hz sinusoid and a 115\,Hz
+sinusoid sampled at 100\,Hz. Their continuous paths are different,
+but their sampled values coincide within floating-point tolerance.
+The code also exports vector PDF and raster PNG figures when run
+on a MATLAB-equipped workstation or self-hosted CI runner.
+The source below is included \emph{directly} from the executable
+file; this book does not keep a separate printed copy.
+\lstinputlisting{../../examples/matlab/aliasing_demo.m}

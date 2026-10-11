@@ -33,3 +33,10 @@ The legacy commands `make -C latex all`, `make -C latex theorems`, and `make -C 
 - [examples/lean](../examples/lean) is reserved for future verified examples.
 
 The original editorial text is preserved in each migrated book. Some historical mentions of `latex/` or provisional method maps remain as provenance, not canonical build paths. 
+
+## Source-language separation
+
+See [EDITORIAL_CONTRACT.md](EDITORIAL_CONTRACT.md). Computational
+Electrophysiology embeds MATLAB files from `examples/matlab/`, while
+Formal Foundations embeds Lean files from `formal/lean/`. A dedicated
+source-boundary check runs before either PDF build.

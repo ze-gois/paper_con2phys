@@ -1,6 +1,17 @@
 \documentclass[11pt,a4paper,oneside]{book}
 \input{preamble/packages}
 \input{preamble/notation}
+\usepackage{listings}
+\lstdefinelanguage{Matlab}{
+  morekeywords={function,end,if,else,elseif,for,while,assert,plot,hold,
+    figure,legend,xlabel,ylabel,title,grid,mkdir,close,exist},
+  sensitive=true,
+  morecomment=[l]\%,
+  morestring=[b]'
+}
+\lstset{language=Matlab,basicstyle=\ttfamily\scriptsize,
+  breaklines=true,columns=fullflexible,keepspaces=true,
+  frame=single,showstringspaces=false}
 \title{Mathematical Foundations of Computational Electrophysiology\\
 \large A theorem-driven companion to CON\textsuperscript{2}PHYS}
 \author{CON\textsuperscript{2}PHYS study notes}
