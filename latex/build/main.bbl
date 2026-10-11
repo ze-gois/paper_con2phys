@@ -1,0 +1,94 @@
+\begin{thebibliography}{10}
+
+\bibitem{aru2015}
+Juhan Aru, Jaan Aru, Viola Priesemann, Michael Wibral, Luiz Lana, Gordon Pipa,
+  Wolf Singer, and Raul Vicente.
+\newblock Untangling cross-frequency coupling in neuroscience.
+\newblock {\em Current Opinion in Neurobiology}, 31:51--61, 2015.
+
+\bibitem{baik2005}
+Jinho Baik, Gerard Ben~Arous, and Sandrine Peche.
+\newblock Phase transition of the largest eigenvalue for nonnull complex sample
+  covariance matrices.
+\newblock {\em Annals of Probability}, 33:1643--1697, 2005.
+
+\bibitem{barnett2009}
+Lionel Barnett, Adam~B. Barrett, and Anil~K. Seth.
+\newblock Granger causality and transfer entropy are equivalent for gaussian
+  variables.
+\newblock {\em Physical Review Letters}, 103:238701, 2009.
+
+\bibitem{bastos2016}
+Andre~M. Bastos and Jan-Mathijs Schoffelen.
+\newblock A tutorial review of functional connectivity analysis methods and
+  their interpretational pitfalls.
+\newblock {\em Frontiers in Systems Neuroscience}, 9:175, 2016.
+
+\bibitem{buzsaki2012}
+Gyorgy Buzsaki, Costas~A. Anastassiou, and Christof Koch.
+\newblock The origin of extracellular fields and currents---{EEG}, {ECoG},
+  {LFP} and spikes.
+\newblock {\em Nature Reviews Neuroscience}, 13:407--420, 2012.
+
+\bibitem{cekic2018}
+Sezen Cekic, Didier Grandjean, and Olivier Renaud.
+\newblock Time, frequency, and time-varying granger-causality measures in
+  neuroscience.
+\newblock {\em Statistics in Medicine}, 37:1910--1931, 2018.
+
+\bibitem{churchland2012}
+Mark~M. Churchland, John~P. Cunningham, Matthew~T. Kaufman, et~al.
+\newblock Neural population dynamics during reaching.
+\newblock {\em Nature}, 487:51--56, 2012.
+
+\bibitem{cohen2018}
+Dror Cohen and Naotsugu Tsuchiya.
+\newblock The effect of common signals on power, coherence and granger
+  causality.
+\newblock {\em Frontiers in Systems Neuroscience}, 12:30, 2018.
+
+\bibitem{cole2019}
+Scott~R. Cole and Bradley Voytek.
+\newblock Cycle-by-cycle analysis of neural oscillations.
+\newblock {\em Journal of Neurophysiology}, 122:849--861, 2019.
+
+\bibitem{donoghue2020}
+Thomas Donoghue, Matar Haller, Erik~J. Peterson, et~al.
+\newblock Parameterizing neural power spectra into periodic and aperiodic
+  components.
+\newblock {\em Nature Neuroscience}, 23:1655--1665, 2020.
+
+\bibitem{einevoll2013}
+Gaute~T. Einevoll, Christoph Kayser, Nikos~K. Logothetis, and Stefano Panzeri.
+\newblock Modelling and analysis of local field potentials for studying the
+  function of cortical circuits.
+\newblock {\em Nature Reviews Neuroscience}, 14:770--785, 2013.
+
+\bibitem{gerster2022}
+Moritz Gerster, Gunnar Waterstraat, Vladimir Litvak, et~al.
+\newblock Separating neural oscillations from aperiodic 1/f activity:
+  Challenges and recommendations.
+\newblock {\em Neuroinformatics}, 20:991--1012, 2022.
+
+\bibitem{goris2014}
+Robbe L.~T. Goris, J.~Anthony Movshon, and Eero~P. Simoncelli.
+\newblock Partitioning neuronal variability.
+\newblock {\em Nature Neuroscience}, 17:858--865, 2014.
+
+\bibitem{hawkes1971}
+Alan~G. Hawkes.
+\newblock Spectra of some self-exciting and mutually exciting point processes.
+\newblock {\em Biometrika}, 58:83--90, 1971.
+
+\bibitem{ledoitwolf2004}
+Olivier Ledoit and Michael Wolf.
+\newblock A well-conditioned estimator for large-dimensional covariance
+  matrices.
+\newblock {\em Journal of Multivariate Analysis}, 88:365--411, 2004.
+
+\bibitem{oppenheim2010}
+Alan~V. Oppenheim and Ronald~W. Schafer.
+\newblock {\em Discrete-Time Signal Processing}.
+\newblock Pearson, 3 edition, 2010.
+
+\end{thebibliography}
