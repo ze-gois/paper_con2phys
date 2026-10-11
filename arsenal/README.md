@@ -61,6 +61,17 @@ rate = firing_rate(t,0,size(data.lfp_3,2)/fs);
 Ao selecionar uma unidade, confira o vínculo entre cluster, brain area e timestamps.
 Não derive duração do registro com `numel` sobre uma matriz multicanal.
 
+## Buscas bibliográficas em avaliação
+
+O arquivo [searches.tsv](searches.tsv) registra as pesquisas externas que
+alimentam a triagem metodológica, separadas dos artigos verificados de
+[METHODS.tsv](METHODS.tsv). Uma busca compartilhada do Consensus
+(`Métodos em eletrofisiologia computacional`) foi registrada em
+2026-10-11 como **pendente de acesso ao conteúdo**: não há artigos, métodos
+ou DOI atribuídos a essa busca sem extração e verificação das referências.
+Exportar resultados em BibTeX/CSV permite deduplicar por DOI e documentar
+quais métodos efetivamente entram no arsenal.
+
 ## Famílias presentes
 
 - **Espectro, oscilações e separação:** Welch, multitaper, Morlet,
