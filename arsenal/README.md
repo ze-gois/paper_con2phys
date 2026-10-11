@@ -5,7 +5,7 @@
 Este diretório contém funções MATLAB reutilizáveis extraídas das operações
 matemáticas relevantes para métodos publicados em eletrofisiologia. A unidade
 de implementação é **uma função pública por arquivo `.m`** em [Path](Path/).
-O arquivo [METHODS.tsv](METHODS.tsv) registra 81 entradas bibliográficas (incluindo 2 referências excluídas por escopo)
+O arquivo [METHODS.tsv](METHODS.tsv) registra 91 entradas bibliográficas (incluindo 2 referências excluídas por escopo)
 e associa artigos a primitivas, limitações e métodos ainda não reproduzidos.
 
 ## Organização
@@ -15,9 +15,14 @@ arsenal/
   README.md
   METHODS.tsv
   resources.tsv
+  searches.tsv
+  research/
+    consensus_methodological_review.md
+    consensus_citation_index.tsv
   references/
     population_geometry.bib
     large_scale_ephys.bib
+    consensus_verified.bib
   Path/
     welch_psd.m
     multitaper_psd.m
@@ -26,6 +31,7 @@ arsenal/
     smoke_arsenal.m
     smoke_population.m
     smoke_ephys_methods.m
+    smoke_consensus_methods.m
 ```
 
 O diretório `Path/` deve ser adicionado ao MATLAB path **na sessão que executa
@@ -66,11 +72,30 @@ Não derive duração do registro com `numel` sobre uma matriz multicanal.
 O arquivo [searches.tsv](searches.tsv) registra as pesquisas externas que
 alimentam a triagem metodológica, separadas dos artigos verificados de
 [METHODS.tsv](METHODS.tsv). Uma busca compartilhada do Consensus
-(`Métodos em eletrofisiologia computacional`) foi registrada em
-2026-10-11 como **pendente de acesso ao conteúdo**: não há artigos, métodos
-ou DOI atribuídos a essa busca sem extração e verificação das referências.
-Exportar resultados em BibTeX/CSV permite deduplicar por DOI e documentar
-quais métodos efetivamente entram no arsenal.
+(`Métodos em eletrofisiologia computacional`) foi recuperada por
+integração com a conta Consensus em 2026-10-11. O relatório original
+com citações preservadas está em [research/consensus_methodological_review.md](research/consensus_methodological_review.md).
+O relatório principal vincula **54 publicações** no índice
+[research/consensus_citation_index.tsv](research/consensus_citation_index.tsv).
+**10 referências** foram triadas individualmente e tiveram seus DOI e dados
+editoriais conferidos, registradas em
+[references/consensus_verified.bib](references/consensus_verified.bib).
+As outras **44 referências** estão em estágio de rastreabilidade, não ainda
+aprovadas para inclusão metodológica individual.
+
+As duas funções adicionais são
+`victor_purpura_distance.m` (métrica de edição para spike trains,
+custo de deslocamento q/s) e `pac_mean_vector_length.m`
+(estimativa de vetor médio fase-amplitude, bruta e normalizada).
+As versões científicas completas de eMI, MRCSA, sliceTCA, PAC multitaper,
+modelos calibrados de contaminação e testes de permutação clusterizados
+permanecem explicitamente pendentes. A coluna status em METHODS.tsv não
+deve ser interpretada como garantia de fidelidade à implementação publicada.
+
+Teste sintético adicional:
+```matlab
+run('arsenal/tests/smoke_consensus_methods.m')
+```
 
 ## Famílias presentes
 
@@ -180,6 +205,7 @@ Os frameworks e cursos usados como fontes de comparação:
 
 ```matlab
 run('arsenal/tests/smoke_ephys_methods.m')
+run('arsenal/tests/smoke_consensus_methods.m')
 ```
 
 Esse teste gera dados sintéticos e confere contratos básicos. Não substitui
