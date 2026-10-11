@@ -80,3 +80,13 @@ Siegle & Steinmetz	2026	Single-spike electrophysiology quality and recording pra
 Meyer et al.	2024	Deep-learning spike sorting survey	spike_threshold_detection; spike_waveform_pca	revisao; modelos deep learning nao implementados	10.1088/1741-2552/ad8b6c
 Pesaran et al.	2018	Field potentials activation communication correlation coding	multitaper_coherence; wavelet_coherence; spike_field_coherence; field_potential_forward; field_potential_inverse_tikhonov; bipolar_reference_lfp	primitivas; inversao indeterminada	10.1038/s41593-018-0171-8
 Martinez-Canada et al.	2021	LFP EEG circuit interaction and neuromodulation inverse models	field_potential_forward; field_potential_inverse_tikhonov; multitaper_coherence	revisao; sem inferencia de E I ou neuromodulacao	10.1186/s40708-021-00148-y
+Victor & Purpura	1997	Spike-train edit metric with shift cost	victor_purpura_distance	primitiva implementada; testar q e ground truth	10.1088/0954-898X/8/2/003
+Gerster et al.	2022	FOOOF versus IRASA benchmark and limitations	aperiodic_slope; irasa_decomposition	comparacao; implementacoes exploratorias	10.1007/s12021-022-09581-8
+Jurkiewicz et al.	2021	Extended modulation index with significance and harmonic controls	modulation_index; pac_mean_vector_length	eMI completo nao implementado	10.1007/s12021-020-09487-3
+Vincent & Economo	2024	Spike sorting contamination model from ISI violations	spike_refractory_violations	apenas ISIv; estimativa FDR nao implementada	10.1523/ENEURO.0554-23.2024
+Cohen & Tsuchiya	2018	Common-reference effects in power coherence and Granger	common_median_reference; bipolar_reference_lfp; coherence_spectrum; granger_causality	controles primitivos; sem remocao garantida	10.3389/fnsys.2018.00030
+Lepage et al.	2021	Multitaper phase-amplitude coupling	multitaper_psd; pac_mean_vector_length	multitaper PAC propriamente dito pendente	10.1088/1741-2552/ac1deb
+Racz et al.	2022	Multiple-resampling cross-spectral analysis	irasa_decomposition; coherence_spectrum	MRCSA bivariado pendente; sem equivalencia	10.3389/fphys.2022.817239
+Sassenhagen & Draschkow	2019	Cluster permutation inference caveats	paired_signflip_test	alerta interpretativo; cluster permutation pendente	10.1111/psyp.13335
+Huelsemann et al.	2019	PAC estimator benchmark MI MVL PLV GLM-CFC	pac_mean_vector_length; modulation_index; phase_locking_value	MVL implementado; GLM-CFC nao	10.3389/fnins.2019.00573
+Pellegrino et al.	2024	Slice tensor component analysis	tensor_cp_als	CP-ALS nao implementa sliceTCA	10.1038/s41593-024-01626-2
