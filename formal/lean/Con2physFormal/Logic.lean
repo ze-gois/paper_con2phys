@@ -20,12 +20,14 @@ theorem contrapositive (P Q : Prop) :
 -- LOGIC-004: the negation of a universal quantifier.
 theorem notForall {α : Type*} (P : α → Prop) :
     (¬ ∀ x, P x) ↔ ∃ x, ¬ P x := by
-  push_neg
+  push Not
+  rfl
 
 -- LOGIC-005: the negation of an existential quantifier.
 theorem notExists {α : Type*} (P : α → Prop) :
     (¬ ∃ x, P x) ↔ ∀ x, ¬ P x := by
-  push_neg
+  push Not
+  rfl
 
 #print axioms deMorganAnd
 #print axioms deMorganOr
