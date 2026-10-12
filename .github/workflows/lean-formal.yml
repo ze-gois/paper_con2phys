@@ -34,6 +34,11 @@ jobs:
         run: |
           lake env lean Con2physFormal/DependencyGraph.lean
           python3 tools/dependency_graph.py
+      - name: Traverse bounded transitive theorem dependencies
+        working-directory: formal/lean
+        run: |
+          lake env lean Con2physFormal/TransitiveGraph.lean
+          python3 tools/transitive_graph.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -42,3 +47,6 @@ jobs:
             mathematics/formal_inventory.json
             formal/lean/build/direct_dependencies.tsv
             formal/lean/build/direct_dependencies.json
+            formal/lean/build/transitive_dependencies.tsv
+            formal/lean/build/transitive_nodes.tsv
+            formal/lean/build/transitive_dependencies.json
