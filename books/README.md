@@ -12,5 +12,6 @@ The migration imports the newer manuscript work from commit
 `feat/lean-formal-inventory-pilot`, not only the older books on main.
 History remains accessible in this repository. Continue editorial changes in neuronal.
 
-The questionnaire scripts, `path/`, `arsenal/`, references and MATLAB tests
-remain here and retain their existing paths and behavior.
+The questionnaire scripts, `path/`, references and questionnaire tests remain
+here. Reusable methods moved from `arsenal/` to `neuronal/matlab/`;
+`a00_startup` loads the sibling neuronal checkout or `NEURONAL_ROOT`.

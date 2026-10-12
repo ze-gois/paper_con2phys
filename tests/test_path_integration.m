@@ -1,7 +1,13 @@
 %% Run in a fresh MATLAB session; no real recordings required.
 root=fileparts(fileparts(mfilename('fullpath')));
 run(fullfile(root,'a00_startup.m'));
-assert(strcmp(which('spike_counts_edges'),fullfile(root,'arsenal','path','spike_counts_edges.m')));
+neuronal_root=getenv('NEURONAL_ROOT');
+if isempty(neuronal_root)
+    neuronal_root=fullfile(fileparts(root),'neuronal');
+end
+% Compare resolved paths (which may normalize relative NEURONAL_ROOT values).
+[found,expected]=fileattrib(fullfile(neuronal_root,'matlab','path','spike_counts_edges.m'));
+assert(found && strcmp(which('spike_counts_edges'),expected.Name));
 assert(strcmp(which('spike_bins'),fullfile(root,'path','spike_bins.m')));
 edges=[0 0.1 0.4 1];
 t=[-1 0 0.1 0.1 0.4 0.99 1 NaN Inf];
