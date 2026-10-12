@@ -133,6 +133,12 @@ theorem inverse_iff_bijective {β : Type*} (f : α → β) :
     apply h.1
     exact hright (f a)
 
+-- BRIDGE-008: pairs of natural indices form a countable type.
+theorem natural_pairs_countable : Countable (ℕ × ℕ) := by
+  infer_instance
+
+#print axioms natural_pairs_countable
+
 #print axioms inverse_iff_bijective
 
 #print axioms image_union_bridge
