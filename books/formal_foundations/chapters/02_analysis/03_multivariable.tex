@@ -18,9 +18,56 @@ The penalty limits parameter magnitude and can improve stability, but also intro
 \section{The manifold idea starts locally}
 A smooth curve in $\mathbb R^3$ may be one-dimensional although it occupies a three-dimensional ambient space. Near a regular point, its variation can be approximated by a tangent direction. General smooth manifolds are spaces locally modeled on $\mathbb R^d$; the ambient dimension and intrinsic dimension need not coincide. PCA identifies a linear subspace, but whether the data genuinely concentrate around a nonlinear manifold is an additional question.
 
+% --- expanded edition (October 2026) ---
+\section{Differentiability in several variables}
+Partial derivatives alone do not make a function well behaved. The function $f(x,y)=xy/(x^2+y^2)$ with $f(0,0)=0$ has both partial derivatives equal to zero at the origin, yet is not even continuous there (along $y=x$ it equals $1/2$). The correct notion is \emph{(Fr\'echet) differentiability}: $f:\mathbb R^n\to\mathbb R$ is differentiable at $x$ if there is a vector $g$ with
+\[
+\lim_{h\to0}\frac{|f(x+h)-f(x)-g^\top h|}{\|h\|}=0,
+\]
+in which case $g=\nabla f(x)$. A useful sufficient condition is that all partial derivatives exist near $x$ and are continuous at $x$. When second partials are continuous, mixed partials commute (Schwarz--Clairaut), so the Hessian is symmetric.
+
+\begin{proposition}[Steepest ascent]
+If $f$ is differentiable at $x$ and $\nabla f(x)\ne0$, then among unit vectors $v$ the directional derivative $D_vf(x)$ is maximized by $v=\nabla f(x)/\|\nabla f(x)\|$, with maximal value $\|\nabla f(x)\|$.
+\end{proposition}
+\begin{proof}
+By the Cauchy--Schwarz inequality, $D_vf=\nabla f^\top v\le\|\nabla f\|\|v\|=\|\nabla f\|$, with equality iff $v$ is a positive multiple of $\nabla f$.
+\end{proof}
+
+\section{Convexity}
+A set $C$ is convex if it contains the segment between any two of its points. A function $f$ on a convex set is \emph{convex} if
+\[
+f(\lambda x+(1-\lambda)y)\le\lambda f(x)+(1-\lambda)f(y)\qquad(0\le\lambda\le1).
+\]
+\begin{theorem}
+Let $f$ be twice continuously differentiable on an open convex set. Then $f$ is convex iff its Hessian is positive semidefinite everywhere. If $f$ is convex and differentiable, every stationary point is a global minimizer.
+\end{theorem}
+\begin{proof}[Proof of the second statement]
+For differentiable convex $f$, the convexity inequality rearranges to $[f(x+\lambda(y-x))-f(x)]/\lambda\le f(y)-f(x)$; letting $\lambda\downarrow0$ gives the \emph{supporting hyperplane inequality} $f(y)\ge f(x)+\nabla f(x)^\top(y-x)$. If $\nabla f(x)=0$, then $f(y)\ge f(x)$ for every $y$.
+\end{proof}
+Convexity is why some fitting problems are reliable and others are not. Least squares, ridge regression, and the Poisson GLM with canonical log link (Chapter~\ref{ch:glm}) have convex negative log-likelihoods, so any local optimizer that converges finds the global optimum. Fitting a mixture model, a neural network, or a tensor decomposition is nonconvex; different initializations may give different answers, and agreement across restarts is evidence, not proof, of a global optimum.
+
+\section{Constrained optimization and Lagrange multipliers}
+\begin{theorem}[Lagrange multipliers, one constraint]
+Let $f,g$ be continuously differentiable and suppose $x^\ast$ is a local extremum of $f$ subject to $g(x)=0$, with $\nabla g(x^\ast)\ne0$. Then $\nabla f(x^\ast)=\lambda\nabla g(x^\ast)$ for some scalar $\lambda$.
+\end{theorem}
+The geometric idea: on the constraint surface, $f$ cannot increase to first order in any tangent direction, so $\nabla f$ has no component tangent to the surface and must be parallel to its normal $\nabla g$. The PCA derivation in Chapter~\ref{ch:pca} is exactly this theorem with $f(v)=v^\top Sv$ and $g(v)=v^\top v-1$. The multiplier has a meaning: it is the rate at which the optimal value changes as the constraint level changes. In PCA it equals the captured variance.
+
+\section{Gradient descent and Newton's method}
+To minimize $f$, \emph{gradient descent} iterates $x_{k+1}=x_k-\eta\nabla f(x_k)$. For the quadratic $f(x)=\tfrac12x^\top Ax$ with $A$ symmetric positive definite and eigenvalues $0<\mu\le\cdots\le L$, the iteration is $x_{k+1}=(I-\eta A)x_k$, which converges iff $0<\eta<2/L$; the best fixed step $\eta=2/(\mu+L)$ contracts errors by the factor $(\kappa-1)/(\kappa+1)$ per step, with condition number $\kappa=L/\mu$. Badly scaled variables (e.g.\ one regressor in volts and another in microvolts) produce large $\kappa$ and slow convergence; standardizing regressors is therefore a numerical as well as a statistical decision.
+
+\emph{Newton's method} uses the quadratic model: $x_{k+1}=x_k-H_f(x_k)^{-1}\nabla f(x_k)$. On a quadratic it converges in one step; near a nondegenerate minimum it converges quadratically (the number of correct digits roughly doubles each step). Its cost is forming and solving with the Hessian. Iteratively reweighted least squares for GLMs is Newton's method applied to the log-likelihood.
+
+\begin{workedexample}[A constrained variance problem]
+Maximize $f(x,y)=3x^2+2xy+3y^2$ on the unit circle $x^2+y^2=1$. Lagrange's condition gives $\begin{pmatrix}3&1\\1&3\end{pmatrix}\begin{pmatrix}x\\y\end{pmatrix}=\lambda\begin{pmatrix}x\\y\end{pmatrix}$, an eigenvalue problem with eigenvalues $4$ (direction $(1,1)/\sqrt2$) and $2$ (direction $(1,-1)/\sqrt2$). The maximum is $4$, the minimum is $2$. If $f$ is the variance of a projected two-channel signal, the first direction is the common-mode component and the second is the differential (bipolar) component.
+\end{workedexample}
 \begin{exercises}
 \item Compute the gradient and Hessian of $f(x,y)=x^2+2y^2$.
 \item Use the chain rule to differentiate $g(t)=\sin(x(t)^2)$.
 \item Compare L2 and L1 penalties conceptually in regression.
 \item Give an example of a curved one-dimensional set in $\mathbb R^2$.
+\item Show that $f(x,y)=xy/(x^2+y^2)$, $f(0,0)=0$, is discontinuous at the origin.
+\item Prove that a sum of convex functions is convex, and that $\|x\|_2^2$ is convex.
+\item Use Lagrange multipliers to minimize $x^2+y^2$ subject to $x+2y=5$.
+\item For $f(x)=\tfrac12(x_1^2+100x_2^2)$, compute the condition number and the best fixed-step gradient-descent contraction factor.
+\item Perform two Newton steps for $f(x)=x^4/4-x$ starting at $x_0=2$.
 \end{exercises}

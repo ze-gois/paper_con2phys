@@ -68,3 +68,117 @@ online instrument. The initial and final samples need explicit
 transient inspection. Filtering cannot remove volume conduction,
 spike-sorting errors or physiological common inputs.
 \end{example}
+
+\section{Executable MATLAB experiment: two aliased sinusoids}
+The following script constructs a 15\,Hz sinusoid and a 115\,Hz
+sinusoid sampled at 100\,Hz. Their continuous paths are different,
+but their sampled values coincide within floating-point tolerance.
+The code also exports vector PDF and raster PNG figures when run
+on a MATLAB-equipped workstation or self-hosted CI runner.
+The source below is included \emph{directly} from the executable
+file; this book does not keep a separate printed copy.
+\lstinputlisting{../../examples/matlab/aliasing_demo.m}
+% --- expanded edition (October 2026) ---
+\section{Linear-phase FIR filters}
+\begin{proposition}
+If a real FIR filter of length $L$ has symmetric coefficients,
+$h[k]=h[L-1-k]$, then $H(e^{i\omega})=e^{-i\omega(L-1)/2}A(\omega)$ with
+$A$ real. Its group delay is the constant $(L-1)/2$ samples wherever
+$A(\omega)\ne0$.
+\end{proposition}
+\begin{proof}
+Pair the terms $k$ and $L-1-k$:
+$h[k](e^{-i\omega k}+e^{-i\omega(L-1-k)})=2h[k]e^{-i\omega(L-1)/2}\cos(\omega((L-1)/2-k))$.
+Summing gives the stated form with real $A$; the phase is linear with
+slope $-(L-1)/2$, except for jumps of $\pi$ where $A$ changes sign.
+\end{proof}
+A constant group delay means every frequency component is delayed by
+the same amount, so waveform shape is preserved up to a shift that can
+be removed exactly by shifting the output by $(L-1)/2$ samples. This
+gives a \emph{causal} alternative to forward--backward filtering for
+offline analysis, with half the computational cost and without squaring
+the magnitude response. The price is that the shifted output depends on
+$(L-1)/2$ future samples, so it is not a real-time estimate.
+
+\section{Butterworth filters and the bilinear transform}
+An analog Butterworth low-pass filter of order $n$ and cutoff
+$\Omega_c$ has $|H_a(i\Omega)|^2=1/(1+(\Omega/\Omega_c)^{2n})$: it is
+maximally flat at $\Omega=0$ and falls by $3$\,dB at the cutoff. Its
+poles lie equally spaced on the left half of the circle
+$|s|=\Omega_c$. A digital filter is obtained by the \emph{bilinear
+transform} $s=\frac2{T}\frac{1-z^{-1}}{1+z^{-1}}$, which maps the left
+half-plane onto the unit disk, so stability is preserved. The map
+compresses the infinite analog frequency axis into $(-\pi,\pi)$
+according to $\Omega=\frac2T\tan(\omega/2)$; cutoffs must be
+\emph{pre-warped} by this relation before design.
+
+Two numerical facts matter in practice. First, high-order IIR filters
+designed in transfer-function form $(b,a)$ have polynomial
+coefficients whose roots are extremely sensitive to rounding, and
+narrow low-frequency band-passes at high sampling rates may become
+unstable or inaccurate; second-order sections (factoring into
+biquads) avoid this. Second, a band-pass Butterworth of design order
+$n$ has $2n$ poles, and forward--backward application doubles the
+effective order and squares the magnitude response, so the $-3$\,dB
+points of the designed filter become $-6$\,dB points of the
+zero-phase result.
+
+\section{Notch filters and line noise}
+A second-order notch at normalized frequency $\omega_0$ places zeros on
+the unit circle at $e^{\pm i\omega_0}$ and poles just inside at
+$re^{\pm i\omega_0}$:
+\[
+H(z)=\frac{1-2\cos\omega_0z^{-1}+z^{-2}}{1-2r\cos\omega_0z^{-1}+r^2z^{-2}}.
+\]
+The closer $r$ is to one, the narrower the notch (bandwidth about
+$(1-r)f_s/\pi$\,Hz) and the longer its impulse response, approximately
+$1/(1-r)$ samples. A very narrow notch rings for a long time after a
+transient, which can produce 50 or 60\,Hz artefacts after each large
+spike or stimulation pulse. Alternatives include regressing out
+line-frequency sinusoids estimated in sliding windows, or spectral
+interpolation, each with its own assumptions.
+
+\section{Causality, latency, and what a filter can know}
+\begin{proposition}
+A stable LTI filter with real impulse response is causal and has zero
+phase at every frequency only if it is a pure gain, $h[n]=c\,\delta[n]$.
+\end{proposition}
+\begin{proof}
+Zero phase with real coefficients means $H(e^{i\omega})$ is real, which
+for a real impulse response is equivalent to $h[n]=h[-n]$. Causality
+requires $h[n]=0$ for $n<0$, hence also for $n>0$.
+\end{proof}
+Every real-time filter therefore introduces delay or phase distortion.
+Closed-loop experiments that trigger stimulation on an oscillatory phase
+must estimate the phase from past samples only, typically by
+autoregressive forward prediction or by causal filters with known group
+delay, and should report the achieved phase accuracy measured offline
+with a zero-phase filter on the same data.
+
+\begin{example}[Group delay of a theta filter]
+A symmetric FIR band-pass for 6--10\,Hz at $f_s=1000$\,Hz with $L=1001$
+taps has group delay $500$\,ms, four theta cycles. A causal
+implementation can only report the theta phase of half a second ago.
+An IIR Butterworth of order 2 has much shorter but frequency-dependent
+group delay, of the order of tens of milliseconds near the passband
+centre and larger at the edges, so phase estimates are biased
+differently for 6\,Hz and 10\,Hz components.
+\end{example}
+
+\section*{Exercises for this chapter}
+\begin{exercise}
+Show that an antisymmetric FIR filter, $h[k]=-h[L-1-k]$, also has
+linear phase, with an extra constant phase of $\pi/2$.
+\end{exercise}
+\begin{exercise}
+Find the pre-warped analog cutoff for a digital low-pass at 100\,Hz with
+$f_s=1000$\,Hz.
+\end{exercise}
+\begin{exercise}
+For a notch with $r=0.99$ at $f_s=1000$\,Hz, estimate the notch
+bandwidth and the ringing duration.
+\end{exercise}
+\begin{exercise}
+Show that the frequency response of a forward--backward filter is
+$|H(e^{i\omega})|^2$.
+\end{exercise}

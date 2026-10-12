@@ -1,0 +1,33 @@
+{"synthetic": false,
+ "schemaVersion": "2025-09-10",
+ "outputs":
+ {"o": ["d77c34f682967edc.olean"],
+  "m": false,
+  "i": "0320ed255f9b746f.ilean",
+  "c": "1303432462d0ffc4.c"},
+ "log":
+ [{"message":
+   ".> LEAN_PATH=/home/gois/Insync/jhenriquetdg@gmail.com/Google Drive/matlab/paper_con2phys/formal/lean/.lake/packages/Cli/.lake/build/lib/lean:/home/gois/Insync/jhenriquetdg@gmail.com/Google Drive/matlab/paper_con2phys/formal/lean/.lake/packages/batteries/.lake/build/lib/lean:/home/gois/Insync/jhenriquetdg@gmail.com/Google Drive/matlab/paper_con2phys/formal/lean/.lake/packages/Qq/.lake/build/lib/lean:/home/gois/Insync/jhenriquetdg@gmail.com/Google Drive/matlab/paper_con2phys/formal/lean/.lake/packages/aesop/.lake/build/lib/lean:/home/gois/Insync/jhenriquetdg@gmail.com/Google Drive/matlab/paper_con2phys/formal/lean/.lake/packages/proofwidgets/.lake/build/lib/lean:/home/gois/Insync/jhenriquetdg@gmail.com/Google Drive/matlab/paper_con2phys/formal/lean/.lake/packages/importGraph/.lake/build/lib/lean:/home/gois/Insync/jhenriquetdg@gmail.com/Google Drive/matlab/paper_con2phys/formal/lean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/home/gois/Insync/jhenriquetdg@gmail.com/Google Drive/matlab/paper_con2phys/formal/lean/.lake/packages/plausible/.lake/build/lib/lean:/home/gois/Insync/jhenriquetdg@gmail.com/Google Drive/matlab/paper_con2phys/formal/lean/.lake/packages/mathlib/.lake/build/lib/lean:/home/gois/Insync/jhenriquetdg@gmail.com/Google Drive/matlab/paper_con2phys/formal/lean/.lake/build/lib/lean /home/gois/.elan/toolchains/leanprover--lean4---v4.34.0/bin/lean /home/gois/Insync/jhenriquetdg@gmail.com/Google Drive/matlab/paper_con2phys/formal/lean/Con2physFormal.lean -o /home/gois/Insync/jhenriquetdg@gmail.com/Google Drive/matlab/paper_con2phys/formal/lean/.lake/build/lib/lean/Con2physFormal.olean -i /home/gois/Insync/jhenriquetdg@gmail.com/Google Drive/matlab/paper_con2phys/formal/lean/.lake/build/lib/lean/Con2physFormal.ilean -c /home/gois/Insync/jhenriquetdg@gmail.com/Google Drive/matlab/paper_con2phys/formal/lean/.lake/build/ir/Con2physFormal.c --setup /home/gois/Insync/jhenriquetdg@gmail.com/Google Drive/matlab/paper_con2phys/formal/lean/.lake/build/ir/Con2physFormal.setup.json --json",
+   "level": "trace"}],
+ "inputs":
+ [["deps",
+   [["con2phys_formal/Con2physFormal:extraDep",
+     [["@con2phys_formal:extraDep", "00000000000006bb"]]],
+    ["imports",
+     [["Con2physFormal.Logic transitive imports (legacy)", "d265958465839d19"],
+      ["Con2physFormal.Logic:importAllArts", "4bf54bdb7c845a16"]]]]],
+  ["libs",
+   [["import dynlibs", "00000000000006bb"],
+    ["package external libraries", "00000000000006bb"],
+    ["module dynlibs", "00000000000006bb"],
+    ["module plugins", "00000000000006bb"]]],
+  ["Lean 4.34.0, commit 293d5d0c0c3f3dded4688b3ccd6a33939ac5102b",
+   "a1c6c7aa3e9abfe7"],
+  ["/home/gois/Insync/jhenriquetdg@gmail.com/Google Drive/matlab/paper_con2phys/formal/lean/Con2physFormal.lean",
+   "a40c6274023bed11"],
+  ["options", "00000000000006bb"],
+  ["isModule: false", "feefd2a0d3a1847e"],
+  ["Module.name: Con2physFormal", "84d57f736a93d352"],
+  ["Package.id?: (some con2phys_formal)", "4ef2dae7fe6c0f92"],
+  ["Module.leanArgs: #[]", "00000000000006bb"]],
+ "depHash": "47779b2639ff4edc"}

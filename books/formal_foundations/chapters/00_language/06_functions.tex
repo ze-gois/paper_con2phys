@@ -17,9 +17,72 @@ A \emph{functional} maps functions to numbers. For example, energy over an inter
 \begin{workedexample}[A map that loses information]
 The square map $q:\mathbb R\to\mathbb R$, $q(x)=x^2$, is not injective: $q(-2)=q(2)=4$. Its inverse relation associates $4$ with both $2$ and $-2$. Restricting the domain to $[0,\infty)$ and codomain to $[0,\infty)$ makes $q$ bijective and its inverse is the nonnegative square root. Signal power similarly discards phase and sign information: it cannot reconstruct the original signal by itself.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{Images and preimages of sets}
+For $f:A\to B$ and $S\subseteq A$, the \emph{image} of $S$ is $f(S)=\{f(a):a\in S\}$; for $T\subseteq B$, the \emph{preimage} is $f^{-1}(T)=\{a\in A:f(a)\in T\}$. The preimage is defined for every function, whether or not $f$ is invertible; the notation $f^{-1}(T)$ does not presuppose an inverse function.
+
+\begin{proposition}[Preimages respect set operations]
+For $f:A\to B$ and subsets $T,T_i\subseteq B$:
+\[
+f^{-1}\Bigl(\bigcup_iT_i\Bigr)=\bigcup_if^{-1}(T_i),\quad
+f^{-1}\Bigl(\bigcap_iT_i\Bigr)=\bigcap_if^{-1}(T_i),\quad
+f^{-1}(B\setminus T)=A\setminus f^{-1}(T).
+\]
+Images respect unions, $f(\bigcup_iS_i)=\bigcup_if(S_i)$, but in general only $f(S_1\cap S_2)\subseteq f(S_1)\cap f(S_2)$.
+\end{proposition}
+\begin{proof}
+$a\in f^{-1}(\bigcap_iT_i)$ iff $f(a)\in T_i$ for every $i$ iff $a\in f^{-1}(T_i)$ for every $i$. The union and complement cases are identical in form. For images and intersections, if $b=f(a)$ with $a\in S_1\cap S_2$ then $b\in f(S_1)$ and $b\in f(S_2)$. Equality can fail: with $f(x)=x^2$, $S_1=\{-1\}$, $S_2=\{1\}$, we have $f(S_1\cap S_2)=\varnothing$ but $f(S_1)\cap f(S_2)=\{1\}$.
+\end{proof}
+This asymmetry explains why measurability (Part~V) is defined through preimages: a function is measurable when preimages of measurable sets are measurable, precisely because preimages commute with all set operations.
+
+\section{Left and right inverses}
+A function $g:B\to A$ is a \emph{left inverse} of $f:A\to B$ if $g\circ f=\mathrm{id}_A$, and a \emph{right inverse} if $f\circ g=\mathrm{id}_B$.
+
+\begin{theorem}
+Let $A$ be nonempty and $f:A\to B$.
+\begin{enumerate}[leftmargin=2em]
+\item $f$ has a left inverse if and only if $f$ is injective.
+\item $f$ has a right inverse if and only if $f$ is surjective (using the axiom of choice for infinite $B$).
+\item If $f$ has both a left inverse $g$ and a right inverse $h$, then $g=h$, and this common function is the unique inverse $f^{-1}$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(1) If $g\circ f=\mathrm{id}$ and $f(a)=f(a')$, then $a=g(f(a))=g(f(a'))=a'$. Conversely, if $f$ is injective, fix $a_0\in A$ and define $g(b)$ to be the unique $a$ with $f(a)=b$ when $b\in f(A)$, and $a_0$ otherwise. (2) If $f\circ h=\mathrm{id}$, every $b=f(h(b))$ lies in the image. Conversely, if $f$ is surjective, each preimage $f^{-1}(\{b\})$ is nonempty; choosing one element from each defines $h$. (3) $g=g\circ\mathrm{id}_B=g\circ(f\circ h)=(g\circ f)\circ h=\mathrm{id}_A\circ h=h$.
+\end{proof}
+
+A left inverse is a \emph{decoder} that recovers the input whenever the output came from the encoder. A right inverse is a \emph{generator} that produces, for each target output, some input achieving it. In neural decoding, a stimulus-to-response map that is not injective (two stimuli evoke the same response) has no perfect decoder; in neural control, a response space larger than the set of achievable responses has no right inverse.
+
+\section{Composition, injectivity, and surjectivity}
+\begin{proposition}
+Let $f:A\to B$ and $g:B\to C$.
+(i) If $f$ and $g$ are injective, so is $g\circ f$.
+(ii) If $f$ and $g$ are surjective, so is $g\circ f$.
+(iii) If $g\circ f$ is injective, then $f$ is injective.
+(iv) If $g\circ f$ is surjective, then $g$ is surjective.
+\end{proposition}
+\begin{proof}
+(i) $g(f(a))=g(f(a'))$ gives $f(a)=f(a')$ and then $a=a'$. (ii) For $c\in C$ choose $b$ with $g(b)=c$, then $a$ with $f(a)=b$. (iii) If $f(a)=f(a')$ then $g(f(a))=g(f(a'))$, so $a=a'$. (iv) Every $c=g(f(a))$ is a value of $g$.
+\end{proof}
+Statement (iii) has an important consequence for processing pipelines: if any early stage $f$ discards information (is not injective), no later stage $g$ can restore it. Rectification, thresholding, binning, and taking power are all non-injective stages.
+
+\section{Cardinality and countability}
+Sets $A$ and $B$ have the \emph{same cardinality}, $|A|=|B|$, if there is a bijection between them. A set is \emph{countable} if it is finite or has the cardinality of $\mathbb N_0$. The integers are countable via $0,1,-1,2,-2,\ldots$, and so are the rationals and every finite product of countable sets.
+
+\begin{theorem}[Cantor]
+For every set $A$ there is no surjection $A\to\mathcal P(A)$. In particular $|A|<|\mathcal P(A)|$.
+\end{theorem}
+\begin{proof}
+Let $f:A\to\mathcal P(A)$ and set $D=\{a\in A:a\notin f(a)\}$. If $D=f(d)$ for some $d$, then $d\in D\iff d\notin f(d)=D$, a contradiction. Hence $D$ is not in the image of $f$.
+\end{proof}
+Applied to $A=\mathbb N_0$, Cantor's theorem shows that the set of infinite binary sequences (equivalently, the set of all possible infinite spike rasters at fixed resolution) is uncountable. This is one reason why statements about ``all possible spike trains'' require measure theory rather than counting.
 \begin{exercises}
 \item Decide whether $f(x)=x^3$ from $\mathbb R$ to $\mathbb R$ is bijective.
 \item State domain and codomain for a histogram of spike counts in 10-ms bins.
 \item Find $f\circ g$ and $g\circ f$ for $f(x)=x+1$ and $g(x)=x^2$.
 \item Explain why a spectrogram generally does not contain sufficient information to uniquely recover a waveform without additional phase assumptions.
+\item Prove that $f(f^{-1}(T))\subseteq T$ with equality when $f$ is surjective, and $S\subseteq f^{-1}(f(S))$ with equality when $f$ is injective.
+\item Give a function with a left inverse but no right inverse, and describe all its left inverses.
+\item Show that $g\circ f$ injective does not imply $g$ injective.
+\item Construct an explicit bijection $\mathbb N_0\to\mathbb Z$.
+\item A spike detector maps a 30\,kHz voltage trace to a list of threshold-crossing times. Identify the domain, codomain, and why the map is not injective.
 \end{exercises}

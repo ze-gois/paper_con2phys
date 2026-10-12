@@ -23,9 +23,52 @@ Suppose 40 of 50 detected units increase firing rate during a task. It is legiti
 \begin{workedexample}[The ambiguity of ``only'']
 Compare ``only neurons in CA1 show a theta rhythm'' with ``neurons in CA1 show only a theta rhythm.'' The first restricts the location of units exhibiting theta; the second restricts the rhythms observed in CA1 units. Write down what observation would contradict each statement. The two claims can disagree even on the same recording.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{Vagueness, ambiguity, and operational definitions}
+Ordinary language tolerates two different kinds of imprecision. A word is \emph{ambiguous} when it has several distinct meanings (``rate'' may mean spikes per second or spikes per trial). A word is \emph{vague} when its meaning has no sharp boundary (``high'' power, ``many'' spikes, ``fast'' ripples). Mathematics removes ambiguity by choosing one meaning, and removes vagueness by choosing a threshold or a comparison. Both choices are decisions, not discoveries.
+
+An \emph{operational definition} replaces a vague predicate by a rule that any analyst could apply to the same data and obtain the same verdict. For example, ``the trial contains a ripple'' may be replaced by: ``the 150--250\,Hz band-passed envelope exceeds the session median by five median absolute deviations for at least 15 consecutive milliseconds.'' This rule is reproducible, but it is not thereby \emph{correct}: other reasonable thresholds yield other sets of ripples. A sound report states the rule and examines how conclusions change when the rule changes.
+
+\begin{remark}
+A precise definition can be scientifically poor. Precision guarantees that two readers agree on what was computed; it does not guarantee that the computed object corresponds to the physiological phenomenon that motivated the word.
+\end{remark}
+
+\section{The logical skeleton of a scientific sentence}
+Most claims in a methods or results section have a recurring skeleton:
+\begin{enumerate}[leftmargin=2em]
+\item a \emph{domain}: the objects being talked about (units, trials, sessions, animals);
+\item a \emph{predicate} applied to those objects (``increased its rate'', ``was phase locked'');
+\item a \emph{quantifier} stating how many objects satisfy the predicate (all, some, most, a fraction);
+\item a \emph{condition} restricting when the claim applies (``during running'', ``after stimulation'');
+\item a \emph{standard of evidence} by which the predicate was judged (a test, a threshold, an estimate with uncertainty).
+\end{enumerate}
+Making each component explicit is the first step toward mathematical form. Consider ``place cells remap in the novel environment.'' Its domain is presumably units classified as place cells by some criterion; its predicate is a change of firing field; its quantifier is unstated (all? most? a significant fraction?); its condition is exposure to a novel arena; and its standard of evidence must specify how two firing maps are compared. A sentence missing any component is not false; it is \emph{incomplete}.
+
+\section{Words that hide quantifiers}
+Several everyday words carry hidden logical structure:
+\begin{itemize}[leftmargin=2em]
+\item ``\emph{any}'' usually means \emph{every} in positive statements (``any unit can be recorded'') but \emph{at least one} in negative or interrogative ones (``no unit showed any change'');
+\item ``\emph{unless}'' means \emph{if not}: ``$P$ unless $Q$'' is $\neg Q\Rightarrow P$;
+\item ``\emph{only if}'' marks a necessary condition: ``$P$ only if $Q$'' is $P\Rightarrow Q$, not $Q\Rightarrow P$;
+\item ``\emph{the}'' presupposes existence and uniqueness: ``the peak frequency'' assumes that exactly one peak exists;
+\item ``\emph{typically}'' and ``\emph{tends to}'' are statistical statements and require a distribution, not a quantifier.
+\end{itemize}
+The definite article deserves special attention. Writing ``let $f^\ast$ be the peak frequency of the spectrum'' is meaningful only after establishing that the maximum exists and is attained at a single point. If two frequencies attain the same maximal power, the phrase ``the peak'' has no referent, and software will silently pick one (often the first index), which is an arbitrary convention rather than a property of the data.
+
+\begin{workedexample}[Rewriting a results sentence]
+Original: ``Interneurons fire before pyramidal cells.'' A careful rewrite fixes each component. Let $I$ be units classified as putative interneurons by waveform width below $0.4$\,ms; let $P$ be the remaining units; for a pair $(i,p)\in I\times P$ let $\delta(i,p)$ be the lag of the peak of the cross-correlogram within $\pm10$\,ms. The quantitative claim might be: ``for 68\% of pairs in $I\times P$, $\delta(i,p)<0$, compared with 50\% expected under a jitter null.'' The rewritten sentence is longer, but now a reader can check it, reproduce it, and disagree with it in a specific way.
+\end{workedexample}
+
+\section{Model statements versus world statements}
+A model statement has the form ``\emph{if} the data were generated by mechanism $M$ with parameters $\theta$, \emph{then} quantity $Q$ would have property $R$.'' It may be proved. A world statement has the form ``quantity $Q$ in this recording has property $R$.'' It is supported or contradicted by observations. Much confusion in quantitative neuroscience comes from presenting a model statement in the grammar of a world statement. ``The spectrum has a 1/$f$ background'' could mean that a fitted power law describes the estimate well over a range, or it could mean that the generative process has a specific scale-free structure. The first is descriptive; the second requires additional argument. Throughout this book we mark which kind of statement is being made.
 \begin{exercises}
 \item Translate ``not every trial contains a ripple'' into a quantified sentence and simplify its negation.
 \item Explain why ``all spikes occur in bursts'' can be vacuously true for an empty spike train.
 \item Identify the observational unit in each claim: neuron, trial, event, animal, and session.
 \item Write one empirically falsifiable claim about coherence and one purely mathematical definition of coherence.
+\item Rewrite ``$P$ unless $Q$'' and ``$P$ only if $Q$'' as implications, and give a neuroscience sentence of each form.
+\item Give an operational definition of ``burst'' for a spike train, and name two alternative definitions that would classify some spikes differently.
+\item Find a sentence in a paper you have read that uses ``the'' for an object whose uniqueness was not established. Rewrite it.
+\item Decompose ``most hippocampal neurons were modulated by speed'' into domain, predicate, quantifier, condition, and standard of evidence.
+\item Classify each of the following as a model statement or a world statement: ``a Poisson process has Fano factor one''; ``these units had Fano factors near one''; ``cortical neurons fire like Poisson processes.''
 \end{exercises}

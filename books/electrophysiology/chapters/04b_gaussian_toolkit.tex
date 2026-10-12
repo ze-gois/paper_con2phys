@@ -77,3 +77,91 @@ Gaussian state--observation vector. Its familiar gain matrix is
 therefore a Schur-complement calculation, not a property of
 all nonlinear or non-Gaussian observation processes.
 \end{example}
+% --- expanded edition (October 2026) ---
+\section{Linear-Gaussian models}
+Most Gaussian computations in this book are instances of one pattern.
+\begin{proposition}[Linear-Gaussian marginal and posterior]
+Let $z\sim\Normal(m,P)$ and $y\mid z\sim\Normal(Hz,R)$ with $P,R\succ0$.
+Then $y\sim\Normal(Hm,HPH^\top+R)$ and
+\[
+z\mid y\sim\Normal\bigl(m+K(y-Hm),\ (I-KH)P\bigr),
+\qquad K=PH^\top(HPH^\top+R)^{-1}.
+\]
+\end{proposition}
+\begin{proof}
+The vector $(z,y)$ is jointly Gaussian with $\Cov(z,y)=PH^\top$ and
+$\Cov(y)=HPH^\top+R$. Apply the conditioning theorem of this chapter.
+\end{proof}
+The Kalman filter (Result 88) applies this proposition once per time
+step; factor analysis applies it with $z$ the latent factors and $y$ the
+population response; Gaussian-process regression applies it with $z$ the
+function values at test points.
+
+\paragraph{Information form.}
+Writing $\Lambda=P^{-1}$ (the precision), the posterior precision is
+$\Lambda+H^\top R^{-1}H$ and the posterior mean solves
+$(\Lambda+H^\top R^{-1}H)\hat z=\Lambda m+H^\top R^{-1}y$. In this form
+independent observations add precision, which explains why combining
+neurons improves a population estimate and why perfectly redundant
+neurons (identical rows of $H$ with correlated noise) add less than
+their number suggests.
+
+\section{Gaussian-process regression of a firing-rate function}
+Let $f\sim\mathcal{GP}(0,k)$ with squared-exponential kernel
+$k(t,t')=s^2\exp(-(t-t')^2/(2\ell^2))$, observed with noise as
+$y_i=f(t_i)+\epsilon_i$, $\epsilon_i\sim\Normal(0,\sigma^2)$. For test
+times $t_\ast$, the proposition gives
+\[
+\E[f_\ast\mid y]=K_{\ast}(K+\sigma^2I)^{-1}y,\qquad
+\Cov(f_\ast\mid y)=K_{\ast\ast}-K_\ast(K+\sigma^2I)^{-1}K_\ast^\top.
+\]
+The length scale $\ell$ plays the role of a smoothing bandwidth, and
+maximizing the marginal likelihood
+$\log p(y)=-\tfrac12y^\top(K+\sigma^2I)^{-1}y-\tfrac12\log\det(K+\sigma^2I)-\tfrac n2\log2\pi$
+chooses it from the data. The Gaussian observation model is only an
+approximation for spike counts; GPFA and related methods apply it to
+square-root or smoothed counts, while point-process GP methods require
+non-conjugate approximations.
+
+\section{Entropy and mutual information of Gaussians}
+A $d$-dimensional Gaussian has differential entropy
+$h=\tfrac12\log\bigl((2\pi e)^d\det\Sigma\bigr)$. For jointly Gaussian
+$(X,Y)$,
+\[
+I(X;Y)=\tfrac12\log\frac{\det\Sigma_{XX}\det\Sigma_{YY}}{\det\Sigma},
+\]
+and in the scalar case $I=-\tfrac12\log(1-\rho^2)$. A correlation of
+$0.1$ carries $0.005$\,nats; $0.9$ carries $0.83$\,nats. For a Gaussian input sent through an additive-noise channel with a
+fixed noise covariance, Gaussian noise minimizes the mutual information.
+Gaussian formulas computed from second-order statistics are therefore a
+lower bound in that additive-noise setting, but not a general bound on
+the information carried by nonlinear or non-Gaussian neural responses.
+
+\begin{example}[Information of a population code under Gaussian noise]
+For $y=s\,u+\epsilon$ with scalar stimulus $s\sim\Normal(0,\sigma_s^2)$,
+tuning vector $u\in\R^N$, and $\epsilon\sim\Normal(0,\Sigma)$,
+\[
+I(s;y)=\tfrac12\log\bigl(1+\sigma_s^2\,u^\top\Sigma^{-1}u\bigr).
+\]
+The quantity $u^\top\Sigma^{-1}u$ is the linear Fisher information of the
+population. Correlations along $u$ reduce it; correlations orthogonal to
+$u$ do not. The formula follows from the matrix determinant lemma
+applied to $\det(\Sigma+\sigma_s^2uu^\top)$.
+\end{example}
+
+\section*{Exercises for this chapter}
+\begin{exercise}
+Derive the information-form posterior from the covariance-form
+posterior using the Woodbury identity.
+\end{exercise}
+\begin{exercise}
+Show that two jointly Gaussian variables are independent iff they are
+uncorrelated, and give a non-Gaussian counterexample.
+\end{exercise}
+\begin{exercise}
+Compute the Gaussian KL divergence between $\Normal(0,1)$ and
+$\Normal(\mu,\sigma^2)$ and examine its behaviour as $\sigma\to0$.
+\end{exercise}
+\begin{exercise}
+Derive $I(s;y)$ in the population-code example.
+\end{exercise}

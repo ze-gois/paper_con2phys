@@ -109,3 +109,138 @@ pattern. \path{current_source_density.m} needs
 spatial geometry and differentiated potentials; references and
 volume conduction remain crucial.
 \end{example}
+% --- expanded edition (October 2026) ---
+\section{The Goldman--Hodgkin--Katz equations}
+The constant-field model assumes that the electric field is uniform
+across a membrane of thickness $d$, that ions cross independently, and
+that the flux of each species obeys the Nernst--Planck equation
+$J=-D(\partial_xc+\frac{zF}{RT}c\,\partial_x\phi)$. With
+$u=zFV/(RT)$ and permeability $P=D\beta/d$ ($\beta$ a partition
+coefficient), integrating across the membrane gives the
+\emph{GHK current equation}
+\[
+I=P z^2\frac{F^2V}{RT}\;\frac{c_{\rm in}-c_{\rm out}e^{-u}}{1-e^{-u}}.
+\]
+The current vanishes at $c_{\rm in}=c_{\rm out}e^{-u}$, i.e.\ at the
+Nernst potential, and is a nonlinear (rectifying) function of $V$ when
+concentrations differ. Setting the \emph{total} current of K$^+$,
+Na$^+$ and Cl$^-$ to zero gives the \emph{GHK voltage equation}
+\[
+V_{\rm rest}=\frac{RT}{F}\log\frac{P_{\rm K}[K]_{\rm o}+P_{\rm Na}[Na]_{\rm o}+P_{\rm Cl}[Cl]_{\rm i}}{P_{\rm K}[K]_{\rm i}+P_{\rm Na}[Na]_{\rm i}+P_{\rm Cl}[Cl]_{\rm o}}.
+\]
+\begin{example}[Resting potential]
+With $[K]_{\rm o}=4$, $[K]_{\rm i}=140$, $[Na]_{\rm o}=145$,
+$[Na]_{\rm i}=12$, $[Cl]_{\rm o}=120$, $[Cl]_{\rm i}=10$\,mM, relative
+permeabilities $1:0.04:0.45$ and $RT/F\approx26.7$\,mV at
+$37^\circ$C, the numerator is $4+5.8+4.5=14.3$ and the denominator
+$140+0.48+54=194.5$, giving $V_{\rm rest}\approx26.7\ln(0.0735)\approx-70$\,mV.
+The potassium Nernst potential is $26.7\ln(4/140)\approx-95$\,mV. The
+rest is depolarized relative to $E_{\rm K}$ because of the sodium and
+chloride terms.
+\end{example}
+The GHK equations are a model, not a law: they fail when channels are
+multiply occupied, when ions interact, or when the field is not uniform.
+Their ratio form also shows that only \emph{relative} permeabilities
+are determined by a reversal potential, so a single measured reversal
+cannot fix three permeabilities.
+
+\section{The Hodgkin--Huxley system}
+The complete space-clamped model is
+\[
+\begin{aligned}
+C_m\dot V&=-\bar g_{\rm Na}m^3h(V-E_{\rm Na})-\bar g_{\rm K}n^4(V-E_{\rm K})-g_L(V-E_L)+I_{\rm ext},\\
+\dot x&=\alpha_x(V)(1-x)-\beta_x(V)x,\qquad x\in\{m,h,n\}.
+\end{aligned}
+\]
+Each gate relaxes to $x_\infty(V)=\alpha_x/(\alpha_x+\beta_x)$ with time
+constant $\tau_x(V)=1/(\alpha_x+\beta_x)$. Sodium activation $m$ is fast,
+inactivation $h$ and potassium activation $n$ are slow. The spike arises
+because $m$ jumps quickly after a depolarization, giving positive
+feedback through $E_{\rm Na}$, while the slower decrease of $h$ and
+increase of $n$ terminate it. Reducing the model by setting
+$m=m_\infty(V)$ and exploiting the approximate relation $h+n\approx0.8$
+yields a two-dimensional system whose phase plane resembles
+FitzHugh--Nagumo; repetitive firing begins at a Hopf bifurcation of
+its equilibrium (Chapter~\ref{ch:oscillator-foundations}).
+
+For extracellular recording the essential output is the sum of
+transmembrane currents per unit area,
+$i_m=C_m\dot V+i_{\rm ion}$. By charge conservation along a neuron, the
+integral of $i_m$ over the whole cell surface is zero at every instant:
+a neuron has no net monopole source, and its far field is at least
+dipolar.
+
+\section{Cable equation: space and time constants}
+With membrane resistance $r_m$ and capacitance $c_m$ per unit length,
+and axial resistance $r_a$ per unit length, the passive cable is
+$\lambda^2\partial_{xx}V-\tau\partial_tV-V=-r_mi_{\rm ext}$ with
+$\lambda=\sqrt{r_m/r_a}$ and $\tau=r_mc_m$. In steady state with a
+current injected at $x=0$ of an infinite cable,
+$V(x)=V(0)e^{-|x|/\lambda}$. A sinusoidal input of angular frequency
+$\omega$ decays with the frequency-dependent length constant
+$\lambda_\omega=\lambda\sqrt{2/(1+\sqrt{1+\omega^2\tau^2})}$, so dendrites
+filter high frequencies more strongly. Distal synaptic inputs therefore
+contribute low-pass-filtered dipoles, one physical reason why the LFP
+spectrum falls with frequency.
+
+\section{The Picard condition and regularization parameter choice}
+Let the discretized forward operator have SVD $G=\sum_j\sigma_ju_jv_j^\top$
+and data $\mathbf v=G\mathbf s_{\rm true}+\boldsymbol\epsilon$. The
+\emph{discrete Picard condition} requires that the coefficients
+$|u_j^\top\mathbf v|$ decay, on average, faster than $\sigma_j$ until they
+reach the noise level. Plotting $\sigma_j$, $|u_j^\top\mathbf v|$ and
+their ratio on a logarithmic scale (a \emph{Picard plot}) shows which
+components are informative: beyond the index where
+$|u_j^\top\mathbf v|$ levels off at the noise floor, the ratio grows
+and those components should be filtered. The Tikhonov estimate has
+filter factors $\sigma_j^2/(\sigma_j^2+\lambda)$; common choices of
+$\lambda$ are:
+\begin{itemize}[leftmargin=2em]
+\item the \emph{discrepancy principle}: choose $\lambda$ so that
+$\|G\hat{\mathbf s}_\lambda-\mathbf v\|\approx\|\boldsymbol\epsilon\|$,
+which requires an estimate of the noise level;
+\item the \emph{L-curve}: plot $\log\|\hat{\mathbf s}_\lambda\|$ against
+$\log\|G\hat{\mathbf s}_\lambda-\mathbf v\|$ and choose the corner;
+\item \emph{generalized cross-validation}, which minimizes
+$\|G\hat{\mathbf s}_\lambda-\mathbf v\|^2/\tr(I-A_\lambda)^2$ with
+influence matrix $A_\lambda=G(G^\top G+\lambda I)^{-1}G^\top$.
+\end{itemize}
+Each criterion is a statistical decision with known failure modes: the
+L-curve can lack a corner, GCV can undersmooth with correlated noise,
+and the discrepancy principle depends on a noise estimate.
+
+\section{Line sources and laminar forward models}
+A neurite segment from $\mathbf r_1$ to $\mathbf r_2$ carrying a
+uniform transmembrane current $I$ contributes
+\[
+\phi(\mathbf r)=\frac{I}{4\pi\sigma\ell}\log\frac{\sqrt{h^2+\rho^2}-h}{\sqrt{l^2+\rho^2}-l},
+\]
+where $\ell$ is the segment length, $\rho$ the perpendicular distance of
+$\mathbf r$ from the segment's line, $h$ the signed distance along the
+line from $\mathbf r$'s projection to $\mathbf r_2$, and $l=h+\ell$. This
+is the integral of the point-source kernel along the segment and is the
+building block of compartmental LFP simulators. It avoids the
+singularity of point sources near the electrode and shows that the
+potential of an elongated source decays logarithmically near it, much
+more slowly than $1/r$.
+
+\section*{Exercises for this chapter}
+\begin{exercise}
+For equal concentrations $c_{\rm in}=c_{\rm out}=c$, simplify the
+GHK current equation, taking the removable limit at $V=0$, and show
+that $I=Pz^2F^2cV/(RT)$. Explain why unequal concentrations
+usually yield a voltage-dependent effective conductance and why a
+local linearization about a reversal potential is not a global Ohmic law.
+\end{exercise}
+\begin{exercise}
+Compute the potassium, sodium and chloride Nernst potentials for the
+example concentrations.
+\end{exercise}
+\begin{exercise}
+For $\tau=20$\,ms, compute $\lambda_\omega/\lambda$ at $1$, $10$ and
+$100$\,Hz.
+\end{exercise}
+\begin{exercise}
+Derive the line-source formula by integrating
+$I\,ds/(4\pi\sigma\ell|\mathbf r-\mathbf r(s)|)$ along the segment.
+\end{exercise}

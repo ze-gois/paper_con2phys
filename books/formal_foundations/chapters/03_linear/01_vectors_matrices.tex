@@ -17,9 +17,71 @@ If $X$ has full column rank, minimizing $\|y-X\beta\|_2^2$ yields the normal equ
 \begin{workedexample}[Which axis contains the data?]
 A matrix of 30 channels and 1,000,000 samples has shape $30\times10^6$. An operation computing covariances among channels should treat the 30 channels as variables, not the million sample positions. A mistaken transpose can yield a million-by-million covariance matrix or an out-of-memory failure. Mathematical notation doubles as a memory-design contract.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{Vector spaces, subspaces, and bases}
+A real \emph{vector space} is a set $V$ with addition and scalar multiplication satisfying the usual axioms (associativity, commutativity, a zero vector, additive inverses, and distributive laws). Examples include $\mathbb R^n$, the $m\times n$ matrices, polynomials of degree at most $d$, and the continuous functions on an interval. A \emph{subspace} is a nonempty subset closed under addition and scalar multiplication; it contains $0$.
+
+Vectors $v_1,\ldots,v_k$ are \emph{linearly independent} if $\sum_jc_jv_j=0$ forces all $c_j=0$. They \emph{span} $V$ if every vector is a linear combination of them, and they form a \emph{basis} if both hold.
+
+\begin{theorem}[Steinitz exchange; invariance of dimension]
+If $v_1,\ldots,v_k$ are linearly independent in $V$ and $w_1,\ldots,w_m$ span $V$, then $k\le m$. Consequently any two finite bases of $V$ have the same number of elements, the \emph{dimension} of $V$.
+\end{theorem}
+\begin{proof}[Sketch]
+Write $v_1=\sum_ia_iw_i$; some $a_i\ne0$ since $v_1\ne0$, so $w_i$ can be replaced by $v_1$ without changing the span. Repeat with $v_2$, which must involve some remaining $w$ (otherwise $v_2$ would be a combination of $v_1$, contradicting independence). After $k$ steps all $v_j$ have entered, so at least $k$ of the $w$'s existed.
+\end{proof}
+Coordinates are only defined relative to a basis. A recording vector in ``channel coordinates'' becomes a different list of numbers after re-referencing (a change of basis), although it represents the same physical potential distribution up to the reference convention.
+
+\section{Linear maps and their matrices}
+A map $T:V\to W$ is \emph{linear} if $T(au+bv)=aT(u)+bT(v)$. Once bases are chosen, $T$ is represented by the matrix whose $j$th column holds the coordinates of $T$ applied to the $j$th basis vector. Composition of linear maps corresponds to matrix multiplication, which is why matrix multiplication is associative but generally not commutative.
+
+\begin{theorem}[Rank--nullity]
+For a linear map $T:V\to W$ with $\dim V=n$, $\dim\ker T+\dim\operatorname{im}T=n$.
+\end{theorem}
+\begin{proof}
+Let $u_1,\ldots,u_k$ be a basis of $\ker T$ and extend it to a basis $u_1,\ldots,u_k,v_1,\ldots,v_r$ of $V$, so $n=k+r$. The vectors $Tv_1,\ldots,Tv_r$ span the image, since $Tu_i=0$. They are independent: if $\sum c_jTv_j=0$, then $\sum c_jv_j\in\ker T$, so it is a combination of the $u_i$, and independence of the full basis forces all $c_j=0$. Thus $\dim\operatorname{im}T=r$.
+\end{proof}
+
+\begin{proposition}
+For a square matrix $A\in\mathbb R^{n\times n}$ the following are equivalent: (i) $A$ is invertible; (ii) $\ker A=\{0\}$; (iii) $\rank A=n$; (iv) the columns of $A$ form a basis; (v) $\det A\ne0$; (vi) $Ax=b$ has exactly one solution for every $b$.
+\end{proposition}
+The equivalence of (ii) and (iii) is rank--nullity; the others follow from it and the definitions. For non-square matrices, injectivity and surjectivity separate: a tall matrix ($m>n$) with full column rank is injective but not surjective, so $Ax=b$ has at most one solution and usually none, which is the setting of least squares.
+
+\section{Row and column spaces; the four fundamental subspaces}
+For $A\in\mathbb R^{m\times n}$, the column space $\operatorname{col}(A)\subseteq\mathbb R^m$ and the null space $\ker A\subseteq\mathbb R^n$ are accompanied by the row space $\operatorname{col}(A^\top)\subseteq\mathbb R^n$ and the left null space $\ker A^\top\subseteq\mathbb R^m$.
+
+\begin{theorem}
+$\ker A$ is the orthogonal complement of $\operatorname{col}(A^\top)$ in $\mathbb R^n$, and $\ker A^\top$ is the orthogonal complement of $\operatorname{col}(A)$ in $\mathbb R^m$. In particular, $\rank A=\rank A^\top$.
+\end{theorem}
+\begin{proof}
+$Ax=0$ iff every row of $A$ has zero inner product with $x$, iff $x$ is orthogonal to the row space. Applying this to $A^\top$ gives the second statement. By rank--nullity, $\rank A=n-\dim\ker A=n-(n-\rank A^\top)=\rank A^\top$.
+\end{proof}
+The left null space has a direct reading for least squares: the residual $y-X\hat\beta$ lies in $\ker X^\top$, i.e.\ it is orthogonal to every regressor. If a nuisance regressor (e.g.\ running speed) is included, the residual is uncorrelated with it in-sample by construction, which is not evidence that the nuisance was ``removed'' from the underlying process.
+
+\section{Norms and condition numbers}
+The operator norm of $A$ is $\|A\|_2=\max_{\|x\|=1}\|Ax\|_2$. For invertible $A$ the \emph{condition number} is $\kappa(A)=\|A\|_2\|A^{-1}\|_2\ge1$.
+
+\begin{proposition}[Sensitivity of linear systems]
+If $Ax=b$ and $A(x+\delta x)=b+\delta b$, then
+\[
+\frac{\|\delta x\|}{\|x\|}\le\kappa(A)\frac{\|\delta b\|}{\|b\|}.
+\]
+\end{proposition}
+\begin{proof}
+$\delta x=A^{-1}\delta b$ gives $\|\delta x\|\le\|A^{-1}\|\|\delta b\|$, and $b=Ax$ gives $\|b\|\le\|A\|\|x\|$. Multiply the two inequalities.
+\end{proof}
+A condition number of $10^8$ means that relative errors of $10^{-16}$ in the data can become relative errors of $10^{-8}$ in the solution, and relative measurement noise of $10^{-3}$ can be amplified to make the solution meaningless. Since $\kappa(X^\top X)=\kappa(X)^2$, forming the normal equations explicitly squares the problem's sensitivity.
+
+\begin{workedexample}[Common-average referencing has a kernel]
+For $C$ channels, common-average referencing applies $R=I-\frac1C\mathbf 1\mathbf 1^\top$. Then $R\mathbf 1=0$, so the constant vector spans $\ker R$; by rank--nullity $\rank R=C-1$. $R$ is the orthogonal projection onto the subspace of zero-sum vectors. Any signal identical on all channels is annihilated, and the referenced data cannot be ``un-referenced'' without knowing that common component. Downstream covariance matrices of referenced data are singular, which must be handled before inverting them (e.g.\ in Mahalanobis distances or beamformers).
+\end{workedexample}
 \begin{exercises}
 \item Verify the projection identities for a unit vector $u$ and $P=uu^\top$.
 \item Find the kernel of $A=\begin{bmatrix}1&1\\2&2\end{bmatrix}$.
 \item Derive the normal equations by differentiating the squared residual norm.
 \item Explain why rank deficiency compromises parameter uniqueness.
+\item Show that the set of $n\times n$ symmetric matrices is a subspace of dimension $n(n+1)/2$.
+\item Verify $R^2=R$ and $R^\top=R$ for the common-average reference matrix.
+\item Compute $\kappa(A)$ for $A=\diag(1,10^{-4})$ and interpret it.
+\item Prove that $\ker(X^\top X)=\ker X$, and conclude that $X^\top X$ is invertible iff $X$ has full column rank.
+\item Show that the residual of least squares is orthogonal to the fitted values.
 \end{exercises}

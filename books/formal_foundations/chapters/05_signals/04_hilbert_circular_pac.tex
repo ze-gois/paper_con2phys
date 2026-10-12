@@ -22,9 +22,53 @@ Consider the following waveform:
 \[x(t)=\cos(2\pi f_0 t)+0.5\cos(4\pi f_0 t).\]
 Its higher-frequency harmonic is phase-determined by the same fundamental oscillator. Filtering separately near $f_0$ and $2f_0$ produces components whose phase relationship is stable. It would be misleading to infer two interacting independent biological oscillators from this constructed example.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{The Hilbert transform in the frequency domain}
+With the convention $\hat x(f)=\int x(t)e^{-2\pi ift}dt$, the Hilbert transform acts as the multiplier
+\[
+\widehat{\mathcal Hx}(f)=-i\operatorname{sgn}(f)\,\hat x(f).
+\]
+It shifts every positive-frequency component by $-\pi/2$ and every negative-frequency component by $+\pi/2$, leaving magnitudes unchanged. Hence $\mathcal H\cos=\sin$ and $\mathcal H\sin=-\cos$, the analytic signal of $\cos(2\pi f_0t)$ is $e^{2\pi if_0t}$, and $\widehat z(f)=2\hat x(f)\mathbf 1_{f>0}+\hat x(0)\mathbf 1_{f=0}$. Because the multiplier has modulus one, $\mathcal H$ preserves energy and $\mathcal H(\mathcal Hx)=-x$ for signals without a DC component.
+
+\section{When is amplitude-phase decomposition meaningful?}
+Any real signal has an analytic representation $a(t)e^{i\phi(t)}$, so the decomposition always exists. The question is whether $a$ and $\phi$ have the intended interpretation as ``envelope'' and ``phase of a rhythm.'' Bedrosian's theorem gives a sufficient condition: if $a(t)$ has spectrum in $[-B,B]$ and the carrier frequency exceeds $B$, then the analytic signal of $a(t)\cos(2\pi f_0t+\theta)$ is $a(t)e^{i(2\pi f_0t+\theta)}$, so the envelope is recovered exactly. In words: the amplitude must vary slowly compared with the oscillation. A theta-band filter of width 4\,Hz centred at 8\,Hz approximately satisfies this; a 1--20\,Hz ``broadband'' filter does not, and its ``phase'' mixes several rhythms.
+
+The \emph{instantaneous frequency} $\frac1{2\pi}\phi'(t)$ is a derivative of phase and inherits noise amplification. When $a(t)$ passes near zero the phase can jump by nearly $\pi$, producing large positive or negative instantaneous frequencies that have no physiological meaning. Such points should be masked using an amplitude threshold.
+
+\section{Distributions on the circle}
+The \emph{von Mises} distribution with mean direction $\mu$ and concentration $\kappa\ge0$ has density
+\[
+p(\theta)=\frac{e^{\kappa\cos(\theta-\mu)}}{2\pi I_0(\kappa)},
+\]
+where $I_0$ is a modified Bessel function. It plays the role of the normal distribution on the circle: $\kappa=0$ is uniform, and large $\kappa$ approximates $\mathcal N(\mu,1/\kappa)$. Its expected resultant length is $A(\kappa)=I_1(\kappa)/I_0(\kappa)$.
+
+\begin{proposition}[Bias of the resultant length]
+If $\phi_1,\ldots,\phi_n$ are iid uniform on the circle, then $\E\bigl[|R|^2\bigr]=1/n$ for $R=\frac1n\sum_je^{i\phi_j}$.
+\end{proposition}
+\begin{proof}
+$|R|^2=\frac1{n^2}\sum_{j,k}e^{i(\phi_j-\phi_k)}$. The $n$ diagonal terms equal $1$; for $j\ne k$, $\E[e^{i(\phi_j-\phi_k)}]=\E[e^{i\phi_j}]\E[e^{-i\phi_k}]=0$.
+\end{proof}
+Hence $|R|\approx1/\sqrt n$ for pure noise: 25 spikes give an expected PLV near $0.2$ without any locking. Comparisons of PLV across conditions with different spike counts are biased. The \emph{pairwise phase consistency} $\mathrm{PPC}=\frac{2}{n(n-1)}\sum_{j<k}\cos(\phi_j-\phi_k)$ removes the diagonal terms and is an unbiased estimator of the squared population resultant length, $\mathrm{PPC}=(n|R|^2-1)/(n-1)$. The Rayleigh test uses $Z=n|R|^2$, which is approximately exponential with mean one under uniformity, so $P(Z>z)\approx e^{-z}$ for large $n$.
+
+\section{Two PAC estimators and their assumptions}
+Let $\phi(t)$ be a low-frequency phase and $A(t)$ a high-frequency amplitude.
+\begin{enumerate}[leftmargin=2em]
+\item The \emph{mean vector length} $\mathrm{MVL}=|\frac1T\sum_tA(t)e^{i\phi(t)}|$ depends on the overall scale of $A$; it is usually normalized by surrogates.
+\item The \emph{modulation index} bins $\phi$ into $J$ bins, computes the mean amplitude $\bar A_j$ in each, normalizes to a distribution $p_j=\bar A_j/\sum_k\bar A_k$, and reports $\mathrm{MI}=D_{\mathrm{KL}}(p\,\|\,u)/\log J$, where $D_{\mathrm{KL}}(p\,\|\,u)=\log J-H(p)$ is the KL divergence from the uniform distribution. It is invariant to scaling $A$ but depends on $J$ and on the number of cycles.
+\end{enumerate}
+Both estimators are positive under the null and grow with recording length differently, so they must be compared with surrogates that preserve the autocorrelation of each signal (e.g.\ cutting $A$ at a random point and swapping the two pieces), not with zero.
+
+\begin{workedexample}[Envelope of two close sinusoids]
+Let $x(t)=\cos(2\pi\cdot 8t)+\cos(2\pi\cdot 9t)=2\cos(\pi t)\cos(2\pi\cdot8.5t)$. Its analytic signal is $e^{2\pi i8t}+e^{2\pi i9t}$, with amplitude $|2\cos(\pi t)|$, a 1\,Hz beat, and phase advancing at 8.5\,Hz but jumping by $\pi$ every second when the amplitude passes through zero. An envelope fluctuation and a ``phase reset'' appear although two perfectly stationary rhythms are present. Amplitude modulation and phase discontinuities in a band-limited signal are therefore not, by themselves, evidence of transient events.
+\end{workedexample}
 \begin{exercises}
 \item Show why the arithmetic mean of angles near $\pm\pi$ is unreliable.
 \item Distinguish PLV from PAC with explicit input variables.
 \item Propose a surrogate method and specify exactly what structure it preserves.
 \item Explain why zero-phase filters cannot be interpreted as real-time causal processing.
+\item Show that $\mathcal H\{\cos(2\pi f_0t)\}=\sin(2\pi f_0t)$ for $f_0>0$ using the frequency-domain multiplier.
+\item Compute the expected PLV for 100 uniformly distributed spike phases, and compare with the value $0.2$ for 25 phases.
+\item Prove the identity $\mathrm{PPC}=(n|R|^2-1)/(n-1)$.
+\item Show that the modulation index is zero exactly when the binned amplitude distribution is uniform.
+\item In the beat example, find the times at which the phase jumps and the size of the jump.
 \end{exercises}

@@ -16,9 +16,58 @@ PCA maximizes sample variance, not class separation, behavioral relevance, tempo
 
 \begin{workedexample}[An effective dimension]
 If $\lambda_1,\ldots,\lambda_N$ are nonnegative variances, the participation ratio $d_{\rm PR}=(\sum_i\lambda_i)^2/\sum_i\lambda_i^2$ equals $N$ when all eigenvalues are equal and equals one when only one is positive. It is a continuous summary of spectral concentration, not an integer count of ``real'' sources.\end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{The spectral theorem}
+\begin{theorem}[Spectral theorem for real symmetric matrices]
+If $A\in\mathbb R^{n\times n}$ is symmetric, then all eigenvalues of $A$ are real, eigenvectors for distinct eigenvalues are orthogonal, and there is an orthogonal $Q$ with $A=Q\Lambda Q^\top$, $\Lambda$ diagonal.
+\end{theorem}
+\begin{proof}[Proof of the first two statements]
+Let $Av=\lambda v$ with $v\in\mathbb C^n$ nonzero. Then $\bar v^\top Av=\lambda\|v\|^2$, and taking conjugate transposes (using $A=A^\top$ real) gives $\bar v^\top Av=\bar\lambda\|v\|^2$. Hence $\lambda=\bar\lambda$. If $Au=\lambda u$ and $Av=\mu v$ with $\lambda\ne\mu$, then $\lambda u^\top v=(Au)^\top v=u^\top Av=\mu u^\top v$, so $u^\top v=0$. The full diagonalization follows by induction on $n$: the orthogonal complement of an eigenvector is invariant under $A$.
+\end{proof}
+
+\begin{definition}
+A symmetric $A$ is \emph{positive semidefinite} (PSD) if $x^\top Ax\ge0$ for all $x$, and \emph{positive definite} (PD) if $x^\top Ax>0$ for $x\ne0$.
+\end{definition}
+By the spectral theorem, $A$ is PSD iff all eigenvalues are nonnegative, and PD iff all are positive. Every sample covariance $S=X_c^\top X_c/(T-1)$ is PSD because $v^\top Sv=\|X_cv\|^2/(T-1)\ge0$. If $T-1<N$ (fewer centered observations than variables), $\rank S\le T-1<N$ and $S$ is singular: at least $N-T+1$ eigenvalues are exactly zero, regardless of the true covariance.
+
+\section{The Rayleigh quotient and Courant--Fischer}
+For symmetric $A$ with eigenvalues $\lambda_1\ge\cdots\ge\lambda_n$ and orthonormal eigenvectors $q_j$,
+\[
+\lambda_1=\max_{x\ne0}\frac{x^\top Ax}{x^\top x},\qquad\lambda_n=\min_{x\ne0}\frac{x^\top Ax}{x^\top x}.
+\]
+\begin{proof}
+Write $x=\sum_jc_jq_j$. Then $x^\top Ax/x^\top x=\sum_j\lambda_jc_j^2/\sum_jc_j^2$, a weighted average of the eigenvalues, which lies between $\lambda_n$ and $\lambda_1$ and attains them at $q_n$ and $q_1$.
+\end{proof}
+More generally, the Courant--Fischer theorem states $\lambda_k=\max_{\dim W=k}\min_{x\in W\setminus\{0\}}x^\top Ax/x^\top x$. A consequence is \emph{Weyl's inequality}: for symmetric $A,E$, $|\lambda_k(A+E)-\lambda_k(A)|\le\|E\|_2$. Eigenvalues are stable under perturbation. Eigenvectors are not: if two eigenvalues are separated by a gap $\delta$, a perturbation of size $\|E\|$ can rotate the corresponding eigenvectors by an angle of order $\|E\|/\delta$ (Davis--Kahan). Principal components with nearly equal variances are therefore poorly determined and should not be interpreted individually.
+
+\section{Proof of the SVD and its geometry}
+\begin{theorem}
+Every $X\in\mathbb R^{T\times N}$ can be written $X=U\Sigma V^\top$ with $U\in\mathbb R^{T\times T}$ and $V\in\mathbb R^{N\times N}$ orthogonal and $\Sigma$ diagonal (rectangular) with entries $\sigma_1\ge\sigma_2\ge\cdots\ge0$.
+\end{theorem}
+\begin{proof}
+$X^\top X$ is symmetric PSD; diagonalize it as $V\Lambda V^\top$ with $\lambda_1\ge\cdots\ge\lambda_N\ge0$. Put $\sigma_j=\sqrt{\lambda_j}$ and, for $\sigma_j>0$, $u_j=Xv_j/\sigma_j$. These $u_j$ are orthonormal, since $u_i^\top u_j=v_i^\top X^\top Xv_j/(\sigma_i\sigma_j)=\lambda_j\delta_{ij}/(\sigma_i\sigma_j)=\delta_{ij}$. Extend them to an orthonormal basis of $\mathbb R^T$. Then $Xv_j=\sigma_ju_j$ for every $j$ (both sides vanish when $\sigma_j=0$ because $\|Xv_j\|^2=\lambda_j$), which is $XV=U\Sigma$.
+\end{proof}
+Geometrically, $X$ maps the unit sphere in $\mathbb R^N$ to an ellipsoid whose semi-axes have lengths $\sigma_j$ along directions $u_j$. The rank is the number of nonzero singular values, $\|X\|_2=\sigma_1$, $\|X\|_F^2=\sum_j\sigma_j^2$, and $\kappa(X)=\sigma_1/\sigma_{\min}$.
+
+\begin{theorem}[Eckart--Young]
+Let $X_k=\sum_{j\le k}\sigma_ju_jv_j^\top$. For every matrix $Y$ of rank at most $k$, $\|X-Y\|_F^2\ge\|X-X_k\|_F^2=\sum_{j>k}\sigma_j^2$.
+\end{theorem}
+The theorem gives PCA a second interpretation: the first $k$ components provide the best rank-$k$ reconstruction of the centered data in squared error. The \emph{fraction of variance explained} by $k$ components is $\sum_{j\le k}\sigma_j^2/\sum_j\sigma_j^2$.
+
+\section{Non-symmetric matrices and dynamics}
+Matrices that describe dynamics, such as $x_{t+1}=Ax_t$, are usually not symmetric. Their eigenvalues may be complex, appearing in conjugate pairs for real $A$, and their eigenvectors need not be orthogonal or even form a basis. A complex pair $re^{\pm i\theta}$ corresponds to rotation by angle $\theta$ per step with growth or decay factor $r$. If $A=V\Lambda V^{-1}$ is diagonalizable then $A^t=V\Lambda^tV^{-1}$ and the solution decays iff all $|\lambda_j|<1$. When $V$ is badly conditioned (``non-normal'' dynamics), $\|A^t\|$ can grow transiently by a large factor before decaying, even though every eigenvalue is inside the unit circle. Transient amplification of this kind has been proposed for motor cortex and is invisible in the eigenvalues alone.
+
+\begin{workedexample}[Spurious structure in pure noise]
+Let $X$ be $T\times N$ with independent standard normal entries, $T=200$, $N=100$. The true covariance is $I$, so every direction has variance $1$. Yet the eigenvalues of $S=X^\top X/T$ spread approximately over $[(1-\sqrt{N/T})^2,(1+\sqrt{N/T})^2]\approx[0.09,2.91]$ (the Marchenko--Pastur law). The leading ``component'' explains about $2.9$ times the average variance, purely by sampling. Comparing an empirical spectrum against such a noise baseline, or against shuffled data, is required before calling a component a population signal.
+\end{workedexample}
 \begin{exercises}
 \item Derive $\lambda_j=\sigma_j^2/(T-1)$ for centered observations.
 \item Compare participation ratios for $(10,0,0)$ and $(4,3,3)$.
 \item Explain why replacing trials by a trial average can remove single-trial fluctuations.
 \item Give a case where the leading principal component tracks recording artifact rather than neural activity.
+\item Show that a symmetric matrix with all eigenvalues positive is positive definite.
+\item Compute the SVD of $\begin{pmatrix}3&0\\4&5\end{pmatrix}$ via the eigen-decomposition of $X^\top X$.
+\item Prove $\|X\|_F^2=\sum_j\sigma_j^2$ using $\|X\|_F^2=\operatorname{tr}(X^\top X)$.
+\item Find the eigenvalues of $\begin{pmatrix}0.9&-0.3\\0.3&0.9\end{pmatrix}$ and describe the trajectory of $x_{t+1}=Ax_t$.
+\item With $T=50$ and $N=200$, how many eigenvalues of the sample covariance are exactly zero?
 \end{exercises}

@@ -84,3 +84,130 @@ biological latent variables is an additional inference problem.
 Coherent noise, trial structure, and preprocessing can dominate
 the covariance eigenspectrum.
 \end{caution}
+% --- expanded edition (October 2026) ---
+\section{Proofs of selected matrix results}
+\begin{proof}[Proof of Result 31 (Gauss--Markov)]
+Let $y=X\beta+\varepsilon$ with $X\in\R^{T\times p}$ of full column rank,
+$\E\varepsilon=0$ and $\Cov\varepsilon=\sigma^2I$. The OLS estimator is
+$\hat\beta=(X^\top X)^{-1}X^\top y$, with $\Cov\hat\beta=\sigma^2(X^\top X)^{-1}$.
+Any linear estimator is $\tilde\beta=Ay$; unbiasedness for every $\beta$
+requires $AX=I$. Write $A=(X^\top X)^{-1}X^\top+D$; then $DX=0$, and
+\[
+\Cov\tilde\beta=\sigma^2AA^\top=\sigma^2(X^\top X)^{-1}+\sigma^2DD^\top,
+\]
+because the cross terms contain $DX=0$. Since $DD^\top\succeq0$,
+$\Cov\tilde\beta-\Cov\hat\beta\succeq0$.
+\end{proof}
+The theorem's hypotheses are restrictive in neural data. Binned spike
+counts are heteroskedastic (their variance grows with their mean) and
+time bins are autocorrelated; under either violation OLS remains
+unbiased but is no longer best, and its textbook standard errors are wrong.
+Weighted or generalized least squares, with $\Cov\varepsilon=\sigma^2\Omega$,
+restores optimality by whitening with $\Omega^{-1/2}$.
+
+\begin{proof}[Proof of Result 32 (Schur complement)]
+Let $M=\begin{psmallmatrix}A&B\\B^\top&C\end{psmallmatrix}$ be symmetric
+with $C\succ0$, and $S=A-BC^{-1}B^\top$. The block factorization
+\[
+M=\begin{pmatrix}I&BC^{-1}\\0&I\end{pmatrix}
+\begin{pmatrix}S&0\\0&C\end{pmatrix}
+\begin{pmatrix}I&0\\C^{-1}B^\top&I\end{pmatrix}
+\]
+is verified by multiplication. The outer factors are invertible and
+transposes of each other, so $M$ is congruent to $\diag(S,C)$.
+Hence $M\succ0$ iff $S\succ0$ (given $C\succ0$), $\det M=\det S\det C$,
+and inverting the three factors gives the block inverse, whose top-left
+block is $S^{-1}$.
+\end{proof}
+In Gaussian conditioning (Chapter~\ref{ch:gaussian-toolkit}), $S$ is
+exactly the conditional covariance. The determinant identity
+$\det M=\det S\det C$ is the chain rule of Gaussian likelihoods:
+$\log p(x,y)=\log p(x\mid y)+\log p(y)$.
+
+\begin{proof}[Proof of Result 35 (Woodbury)]
+Multiply $A+UCV$ by the proposed inverse. The product is
+\[
+I-U(C^{-1}+VA^{-1}U)^{-1}VA^{-1}+UCVA^{-1}-UCVA^{-1}U(C^{-1}+VA^{-1}U)^{-1}VA^{-1}.
+\]
+Collect the terms ending in $(C^{-1}+VA^{-1}U)^{-1}VA^{-1}$:
+their coefficient is $-U-UCVA^{-1}U=-UC(C^{-1}+VA^{-1}U)$. Thus those
+terms equal $-UCVA^{-1}$, which cancels the remaining $+UCVA^{-1}$.
+\end{proof}
+For factor analysis with $\Sigma=\Psi+\Lambda\Lambda^\top$, $\Psi$
+diagonal $N\times N$ and $\Lambda$ of rank $k\ll N$, Woodbury reduces
+$\Sigma^{-1}$ to the inversion of a $k\times k$ matrix:
+$\Sigma^{-1}=\Psi^{-1}-\Psi^{-1}\Lambda(I_k+\Lambda^\top\Psi^{-1}\Lambda)^{-1}\Lambda^\top\Psi^{-1}$.
+For $N=1000$ neurons and $k=10$ factors the cost drops from $O(N^3)$
+to $O(Nk^2)$.
+
+\begin{proof}[Proof of Result 33 (Weyl)]
+By Courant--Fischer (Result 30),
+\[
+\lambda_k(A+E)=\max_{\dim W=k}\ \min_{x\in W,\ \|x\|=1}x^\top(A+E)x.
+\]
+For every unit vector $x$,
+\[
+x^\top Ax-\|E\|_2\le x^\top(A+E)x\le x^\top Ax+\|E\|_2.
+\]
+Taking min over $W$ then max over subspaces preserves the inequalities.
+\end{proof}
+
+\section{Subspace stability in practice}
+Result 34 (Davis--Kahan) has a usable form: if $\hat\Sigma=\Sigma+E$
+and the top-$k$ eigenspace of $\Sigma$ is separated from the rest by
+the gap $\delta=\lambda_k-\lambda_{k+1}>0$, then the principal angles
+$\Theta$ between the true and estimated top-$k$ subspaces satisfy
+\[
+\|\sin\Theta\|_2\le\frac{2\|E\|_2}{\delta}.
+\]
+For a sample covariance of $T$ observations of $N$ roughly Gaussian
+variables, $\|E\|_2$ is of order $\|\Sigma\|_2(\sqrt{N/T}+N/T)$. Two
+consequences follow. First, principal subspaces are well estimated only
+when the eigengap exceeds the sampling fluctuation. Second, individual
+components inside a cluster of nearly equal eigenvalues are not
+estimable, while the subspace spanned by the whole cluster may be.
+
+\begin{example}[Split-half reliability of PCs]
+Split trials into two halves, compute PCA on each, and measure the
+principal angles between the top-$k$ subspaces. Small angles for the
+subspace with large angles for individual PCs indicate rotation within
+a near-degenerate cluster: report the subspace, not the components.
+This is an empirical counterpart of the Davis--Kahan bound.
+\end{example}
+
+\section{Karhunen--Lo\`eve expansions of two standard processes}
+Result 38 states that a mean-square continuous process on $[0,T]$ with
+covariance $K(s,t)$ admits $X(t)=\sum_j\sqrt{\lambda_j}\,\xi_j\,e_j(t)$
+with uncorrelated unit-variance $\xi_j$, where $(\lambda_j,e_j)$ are
+eigenpairs of the covariance operator.
+\begin{example}[Brownian motion]
+For $K(s,t)=\min(s,t)$ on $[0,1]$, the eigenproblem
+$\int_0^1\min(s,t)e(s)\,ds=\lambda e(t)$ differentiates twice into
+$-e''=e/\lambda$ with $e(0)=0$, $e'(1)=0$. Hence
+$e_j(t)=\sqrt2\sin((j-\tfrac12)\pi t)$ and
+$\lambda_j=1/((j-\tfrac12)^2\pi^2)$. The eigenvalues decay as $j^{-2}$:
+most of the variance lies in a few slow components. A random walk
+analysed by PCA across time therefore produces smooth, sinusoid-like
+``components'' that reflect only its covariance, not oscillations.
+\end{example}
+This example explains a well-known pitfall: PCA of smoothly drifting
+population activity yields leading components resembling sines and
+cosines of increasing frequency, which can be mistaken for rotational
+or oscillatory dynamics.
+
+\section*{Exercises for this chapter}
+\begin{exercise}
+Show that the OLS residual $y-X\hat\beta$ satisfies $X^\top(y-X\hat\beta)=0$
+and interpret this as Result 26.
+\end{exercise}
+\begin{exercise}
+Prove the matrix determinant lemma (Result 36) from the Schur complement
+determinant identity applied to $\begin{psmallmatrix}A&-U\\V&C^{-1}\end{psmallmatrix}$.
+\end{exercise}
+\begin{exercise}
+For $\Sigma=\diag(3,2.9,1)$ and a perturbation of norm $0.2$, compare
+the Davis--Kahan bound for the top-one and top-two subspaces.
+\end{exercise}
+\begin{exercise}
+Verify that $e_j(t)=\sqrt2\sin((j-\tfrac12)\pi t)$ are orthonormal on $[0,1]$.
+\end{exercise}

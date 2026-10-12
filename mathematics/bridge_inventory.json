@@ -1,0 +1,320 @@
+{
+  "schema_version": 1,
+  "scope": "Bridges 1–8 kernel-verified; BRIDGE-008 countability certified, manuscript's particular diagonal enumeration not formalized",
+  "entries": [
+    {
+      "id": "BRIDGE-001",
+      "bridge_number": 1,
+      "latex_key": "extensionality",
+      "title": "Set equality is equality of membership",
+      "english_source": "books/formal_foundations/bridges/01_language_relations.tex",
+      "english_label": "bridge:extensionality",
+      "original_statement_summary": "∀ A B : Set α, A = B ↔ A ⊆ B ∧ B ⊆ A",
+      "lean_declaration": "Con2physFormal.Bridges.subset_antisymm_iff",
+      "lean_source": "formal/lean/Con2physFormal/Bridges.lean",
+      "status": "verified",
+      "mathlib_candidates_unverified": [
+        "Set.Subset.antisymm",
+        "Set.Subset.antisymm_iff"
+      ],
+      "math_prerequisites": [
+        "set.membership",
+        "set.subset",
+        "set.extensionality"
+      ],
+      "pedagogical_prerequisites": [
+        "logical.implication",
+        "set.membership",
+        "set.subset"
+      ],
+      "source_license": "CON2PHYS original exposition",
+      "mathlib_license": "Apache-2.0 (reuse must cite actual Mathlib file)",
+      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+      "lean_declarations": [
+        "Con2physFormal.Bridges.subset_antisymm_iff"
+      ],
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38196579118",
+        "checked_repository_commit": "20d1e9b439ec279353e0842e8cf445eb282aa560",
+        "verified_target": "lake build; lake env lean Con2physFormal/Bridges.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      }
+    },
+    {
+      "id": "BRIDGE-002",
+      "bridge_number": 2,
+      "latex_key": "subset-order",
+      "title": "Inclusion is a partial order",
+      "english_source": "books/formal_foundations/bridges/01_language_relations.tex",
+      "english_label": "bridge:subset-order",
+      "original_statement_summary": "⊆ is reflexive, transitive, antisymmetric on Set α",
+      "lean_declaration": "Con2physFormal.Bridges.subset_reflexive",
+      "lean_source": "formal/lean/Con2physFormal/Bridges.lean",
+      "status": "verified",
+      "mathlib_candidates_unverified": [
+        "Set.instPartialOrder"
+      ],
+      "math_prerequisites": [
+        "set.subset",
+        "relation.reflexive",
+        "relation.transitive",
+        "relation.antisymmetric"
+      ],
+      "pedagogical_prerequisites": [
+        "BRIDGE-001",
+        "set.subset",
+        "relation.partial_order"
+      ],
+      "source_license": "CON2PHYS original exposition",
+      "mathlib_license": "Apache-2.0 (reuse must cite actual Mathlib file)",
+      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+      "lean_declarations": [
+        "Con2physFormal.Bridges.subset_reflexive",
+        "Con2physFormal.Bridges.subset_transitive",
+        "Con2physFormal.Bridges.subset_antisymmetric"
+      ],
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38196579118",
+        "checked_repository_commit": "20d1e9b439ec279353e0842e8cf445eb282aa560",
+        "verified_target": "lake build; lake env lean Con2physFormal/Bridges.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      }
+    },
+    {
+      "id": "BRIDGE-003",
+      "bridge_number": 3,
+      "latex_key": "cartesian",
+      "title": "Cartesian products define possible pairs",
+      "english_source": "books/formal_foundations/bridges/01_language_relations.tex",
+      "english_label": "bridge:cartesian",
+      "original_statement_summary": "(a,b) ∈ A ×ˢ B ↔ a ∈ A ∧ b ∈ B; A ×ˢ ∅ = ∅; ∅ ×ˢ B = ∅",
+      "lean_declaration": "Con2physFormal.Bridges.cartesian_membership",
+      "lean_source": "formal/lean/Con2physFormal/Bridges.lean",
+      "status": "verified",
+      "mathlib_candidates_unverified": [
+        "Set.mem_prod",
+        "Set.prod_empty",
+        "Set.empty_prod"
+      ],
+      "math_prerequisites": [
+        "set.product",
+        "set.membership",
+        "set.empty"
+      ],
+      "pedagogical_prerequisites": [
+        "set.membership",
+        "set.ordered_pairs",
+        "set.empty"
+      ],
+      "source_license": "CON2PHYS original exposition",
+      "mathlib_license": "Apache-2.0 (reuse must cite actual Mathlib file)",
+      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+      "lean_declarations": [
+        "Con2physFormal.Bridges.cartesian_membership",
+        "Con2physFormal.Bridges.cartesian_empty_left",
+        "Con2physFormal.Bridges.cartesian_empty_right"
+      ],
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38197994825",
+        "checked_repository_commit": "fd40ced15b6e2e4f49dfed71a147f707d9817fcc",
+        "verified_target": "lake build and lake env lean Con2physFormal/Bridges.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      }
+    },
+    {
+      "id": "BRIDGE-004",
+      "bridge_number": 4,
+      "latex_key": "relation-composition",
+      "title": "Composition of relations is associative",
+      "english_source": "books/formal_foundations/bridges/01_language_relations.tex",
+      "english_label": "bridge:relation-composition",
+      "original_statement_summary": "(T ○ S) ○ R = T ○ (S ○ R) for composable typed relations",
+      "lean_declaration": "Con2physFormal.Bridges.relation_composition_associative",
+      "lean_source": "formal/lean/Con2physFormal/Bridges.lean",
+      "status": "verified",
+      "mathlib_candidates_unverified": [
+        "Relation.Comp.assoc",
+        "Rel.comp_assoc"
+      ],
+      "math_prerequisites": [
+        "relation.composition",
+        "logical.exists",
+        "set.extensionality"
+      ],
+      "pedagogical_prerequisites": [
+        "BRIDGE-001",
+        "relation.composition",
+        "logical.exists"
+      ],
+      "source_license": "CON2PHYS original exposition",
+      "mathlib_license": "Apache-2.0 (reuse must cite actual Mathlib file)",
+      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+      "lean_declarations": [
+        "Con2physFormal.Bridges.relation_composition_associative"
+      ],
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38197994825",
+        "checked_repository_commit": "fd40ced15b6e2e4f49dfed71a147f707d9817fcc",
+        "verified_target": "lake build and lake env lean Con2physFormal/Bridges.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      }
+    },
+    {
+      "id": "BRIDGE-005",
+      "bridge_number": 5,
+      "latex_key": "equivalence-partition",
+      "title": "Equivalence classes form a partition",
+      "english_source": "books/formal_foundations/bridges/01_language_relations.tex",
+      "english_label": "bridge:equivalence-partition",
+      "original_statement_summary": "An equivalence relation on A produces covering classes, pairwise equal or disjoint",
+      "lean_declaration": "Con2physFormal.Bridges.equivalence_class_cover",
+      "lean_source": "formal/lean/Con2physFormal/Bridges.lean",
+      "status": "verified",
+      "mathlib_candidates_unverified": [
+        "Setoid"
+      ],
+      "math_prerequisites": [
+        "relation.equivalence",
+        "set.partition",
+        "set.disjoint"
+      ],
+      "pedagogical_prerequisites": [
+        "relation.equivalence",
+        "set.partition"
+      ],
+      "source_license": "CON2PHYS original exposition",
+      "mathlib_license": "Apache-2.0 (reuse must cite actual Mathlib file)",
+      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+      "lean_declarations": [
+        "Con2physFormal.Bridges.equivalence_class_cover",
+        "Con2physFormal.Bridges.equivalence_classes_equal_of_overlap"
+      ],
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38292203923",
+        "checked_repository_commit": "4c44f7521878538e63d3caf93a61306605b71f05",
+        "verified_target": "lake build; lake env lean Con2physFormal/Bridges.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      }
+    },
+    {
+      "id": "BRIDGE-006",
+      "bridge_number": 6,
+      "latex_key": "image-preimage",
+      "title": "Images preserve unions; preimages preserve unions and intersections",
+      "english_source": "books/formal_foundations/bridges/01_language_relations.tex",
+      "english_label": "bridge:image-preimage",
+      "original_statement_summary": "f '' (E ∪ F) = f '' E ∪ f '' F; f ⁻¹' (C ∩ D) = f ⁻¹' C ∩ f ⁻¹' D; f ⁻¹' (C ∪ D) = f ⁻¹' C ∪ f ⁻¹' D",
+      "lean_declaration": "Con2physFormal.Bridges.image_union_bridge",
+      "lean_source": "formal/lean/Con2physFormal/Bridges.lean",
+      "status": "verified",
+      "mathlib_candidates_unverified": [
+        "Set.image_union",
+        "Set.preimage_inter",
+        "Set.preimage_union"
+      ],
+      "math_prerequisites": [
+        "function.image",
+        "function.preimage",
+        "set.union",
+        "set.intersection"
+      ],
+      "pedagogical_prerequisites": [
+        "set.union",
+        "set.intersection",
+        "function.image",
+        "function.preimage"
+      ],
+      "source_license": "CON2PHYS original exposition",
+      "mathlib_license": "Apache-2.0 (reuse must cite actual Mathlib file)",
+      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+      "lean_declarations": [
+        "Con2physFormal.Bridges.image_union_bridge",
+        "Con2physFormal.Bridges.preimage_inter_bridge",
+        "Con2physFormal.Bridges.preimage_union_bridge"
+      ],
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38298184274",
+        "checked_repository_commit": "8397aa7b78fd7185711a621b34ae594a0d468f37",
+        "verified_target": "lake build; lake env lean Con2physFormal/Bridges.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      }
+    },
+    {
+      "id": "BRIDGE-007",
+      "bridge_number": 7,
+      "latex_key": "inverse-functions",
+      "title": "A two-sided inverse is equivalent to bijectivity",
+      "english_source": "books/formal_foundations/bridges/01_language_relations.tex",
+      "english_label": "bridge:inverse-functions",
+      "original_statement_summary": "(∃ g : B → A, Function.LeftInverse g f ∧ Function.RightInverse g f) ↔ Function.Bijective f",
+      "lean_declaration": "Con2physFormal.Bridges.inverse_iff_bijective",
+      "lean_source": "formal/lean/Con2physFormal/Bridges.lean",
+      "status": "verified",
+      "mathlib_candidates_unverified": [
+        "Function.bijective_iff_has_inverse",
+        "Equiv.ofBijective"
+      ],
+      "math_prerequisites": [
+        "function.injective",
+        "function.surjective",
+        "function.inverse",
+        "function.bijective"
+      ],
+      "pedagogical_prerequisites": [
+        "function.injective",
+        "function.surjective",
+        "function.inverse"
+      ],
+      "source_license": "CON2PHYS original exposition",
+      "mathlib_license": "Apache-2.0 (reuse must cite actual Mathlib file)",
+      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+      "lean_declarations": [
+        "Con2physFormal.Bridges.inverse_iff_bijective"
+      ],
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38299195953",
+        "checked_repository_commit": "60d01cf05130e054d23aa66e9e46b27e75f381f5",
+        "verified_target": "lake build and lake env lean Con2physFormal/Bridges.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      }
+    },
+    {
+      "id": "BRIDGE-008",
+      "bridge_number": 8,
+      "latex_key": "countable-pairs",
+      "title": "Pairs of natural indices can be enumerated",
+      "english_source": "books/formal_foundations/bridges/01_language_relations.tex",
+      "english_label": "bridge:countable-pairs",
+      "original_statement_summary": "Countable (ℕ × ℕ)",
+      "lean_declaration": "Con2physFormal.Bridges.natural_pairs_countable",
+      "lean_source": "formal/lean/Con2physFormal/Bridges.lean",
+      "status": "verified",
+      "mathlib_candidates_unverified": [
+        "instCountableProd",
+        "Countable.prod"
+      ],
+      "math_prerequisites": [
+        "natural.numbers",
+        "set.countable",
+        "product.type"
+      ],
+      "pedagogical_prerequisites": [
+        "natural.numbers",
+        "set.countable",
+        "diagonal.enumeration"
+      ],
+      "source_license": "CON2PHYS original exposition",
+      "mathlib_license": "Apache-2.0 (reuse must cite actual Mathlib file)",
+      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+      "lean_declarations": [
+        "Con2physFormal.Bridges.natural_pairs_countable"
+      ],
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38299195953",
+        "checked_repository_commit": "60d01cf05130e054d23aa66e9e46b27e75f381f5",
+        "verified_target": "lake build and lake env lean Con2physFormal/Bridges.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      }
+    }
+  ]
+}

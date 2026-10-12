@@ -89,3 +89,97 @@ a covariance eigenspectrum. Neither establishes BBP significance,
 latent-factor uniqueness, or a well-identified inter-area
 communication subspace without additional modeling and tests.
 \end{example}
+% --- expanded edition (October 2026) ---
+\section{Canonical correlation analysis as an SVD}
+Let $X\in\R^{T\times p}$ and $Y\in\R^{T\times q}$ be centered, with
+covariance blocks $\Sigma_{XX},\Sigma_{YY}\succ0$ and $\Sigma_{XY}$.
+CCA seeks $a,b$ maximizing $\operatorname{corr}(Xa,Yb)$.
+\begin{proposition}
+The canonical correlations are the singular values of the whitened
+cross-covariance $K=\Sigma_{XX}^{-1/2}\Sigma_{XY}\Sigma_{YY}^{-1/2}$, and the
+canonical directions are $a=\Sigma_{XX}^{-1/2}u$, $b=\Sigma_{YY}^{-1/2}v$ for
+the corresponding singular vector pairs $(u,v)$.
+\end{proposition}
+\begin{proof}
+Substitute $a=\Sigma_{XX}^{-1/2}u$ and $b=\Sigma_{YY}^{-1/2}v$. The
+correlation becomes $u^\top Kv/(\|u\|\|v\|)$, which by the variational
+characterization of singular values is maximized by the top singular
+pair with value $\sigma_1$. Subsequent pairs maximize subject to
+orthogonality, giving the remaining singular values.
+\end{proof}
+When $p$ or $q$ approaches $T$, the sample covariances are
+ill-conditioned and the leading sample canonical correlations approach
+one even for independent data. Regularized CCA replaces
+$\Sigma_{XX}$ by $\Sigma_{XX}+\kappa I$, and canonical correlations must be
+assessed on held-out data. Two brain areas with ``canonical correlation
+0.9'' in-sample may share almost nothing out of sample.
+
+\section{Reduced-rank regression}
+For $Y\approx XB$ with $\rank B\le r$, minimizing
+$\|Y-XB\|_F^2$ has a closed form. Let $\hat B_{\rm OLS}=(X^\top X)^{-1}X^\top Y$
+and let $V_r$ hold the top $r$ right singular vectors of the fitted values
+$X\hat B_{\rm OLS}$. Then $\hat B_r=\hat B_{\rm OLS}V_rV_r^\top$.
+\begin{proof}[Proof sketch]
+$\|Y-XB\|_F^2=\|Y-X\hat B_{\rm OLS}\|_F^2+\|X\hat B_{\rm OLS}-XB\|_F^2$ by
+orthogonality of the OLS residual to $\operatorname{col}(X)$. The second
+term is minimized over rank-$r$ matrices $XB$ by Eckart--Young
+(Result 29) applied to $X\hat B_{\rm OLS}$; the minimizer is its
+projection onto $V_r$, which is $X\hat B_{\rm OLS}V_rV_r^\top$.
+\end{proof}
+The row space of $\hat B_r$ (spanned by $V_r$) is the \emph{predictive
+subspace} of the target area. Its dimension, chosen by cross-validation,
+is the ``communication subspace'' dimension in inter-areal studies. It
+measures how many linear combinations of the target are predictable from
+the source; it does not say that the source causes those combinations.
+
+\section{Centered kernel alignment and RSA}
+For representations $X\in\R^{n\times p}$, $Y\in\R^{n\times q}$ of the same
+$n$ stimuli (columns centered), linear CKA is
+\[
+\mathrm{CKA}(X,Y)=\frac{\|Y^\top X\|_F^2}{\|X^\top X\|_F\,\|Y^\top Y\|_F}.
+\]
+It is invariant to orthogonal transformations and isotropic scaling of
+either representation, but not to arbitrary invertible linear maps
+(unlike CCA, which is invariant to them). This intermediate invariance
+is often what one wants when comparing neural populations whose
+individual neurons have no correspondence but whose relative variance
+across directions is meaningful. RSA compares the $n\times n$
+dissimilarity matrices of the two representations with a rank
+correlation; it is invariant to any transformation preserving the chosen
+dissimilarity ordering. Both methods require the same stimuli in the
+same order, and both are biased by noise in the dissimilarity
+estimates: cross-validated (split-half) distances remove the positive
+bias that noise adds to every Euclidean distance.
+
+\begin{example}[A spiked model below and above threshold]
+With $N=200$ neurons, $T=400$ samples ($\gamma=0.5$) and a planted
+rank-one spike of strength $\theta$, the BBP threshold is
+$\sqrt{0.5}\approx0.71$. A spike with $\theta=0.5$ (variance $1.5$ in its
+direction, versus $1$ elsewhere) is undetectable by the top eigenvalue:
+that eigenvalue sits near the noise edge $(1+\sqrt{0.5})^2\approx2.91$.
+With $\theta=2$, the top eigenvalue converges to
+$(1+2)(1+0.25)=3.75$, clearly above the edge, and the squared alignment
+of the sample eigenvector with the planted direction is
+$(1-\gamma/\theta^2)/(1+\gamma/\theta)=0.875/1.25=0.7$. Detectability and
+direction recovery both depend on $\theta$ \emph{relative to} $\sqrt\gamma$,
+so doubling the number of samples can turn an invisible component into a
+reliable one.
+\end{example}
+
+\section*{Exercises for this chapter}
+\begin{exercise}
+Show that canonical correlations are invariant to invertible linear
+transformations of $X$ and of $Y$.
+\end{exercise}
+\begin{exercise}
+Show that linear CKA is invariant to $X\mapsto cXQ$ for orthogonal $Q$
+and $c\ne0$, and give a linear map that changes it.
+\end{exercise}
+\begin{exercise}
+In the spiked example, find the smallest $T$ for which a spike of
+strength $\theta=0.5$ becomes detectable with $N=200$.
+\end{exercise}
+\begin{exercise}
+Derive the Procrustes solution when reflections are not allowed
+($\det Q=1$).
+\end{exercise}

@@ -17,8 +17,69 @@ The interval $[a,b]$ includes endpoints, whereas $(a,b)$ excludes them. An exper
 \begin{workedexample}[The value of completeness]
 Take a sequence of rational approximations $1,1.4,1.41,1.414,\ldots$ to $\sqrt2$. Each term can be rational while its limit is not. A space of numbers meant to support convergence of such sequences must contain the limiting value. The same idea underlies convergence of numerical algorithms for signal processing.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{Consequences of completeness}
+The least-upper-bound property is a single axiom, but nearly every existence theorem in analysis rests on it. We record the first consequences.
+
+\begin{proposition}[Approximation property of the supremum]
+Let $A\subseteq\mathbb R$ be nonempty and bounded above, and $s=\sup A$. For every $\varepsilon>0$ there is $a\in A$ with $s-\varepsilon<a\le s$.
+\end{proposition}
+\begin{proof}
+If no such $a$ existed, then $a\le s-\varepsilon$ for every $a\in A$, so $s-\varepsilon$ would be an upper bound smaller than the least upper bound $s$.
+\end{proof}
+
+\begin{theorem}[Archimedean property of $\mathbb R$]
+For every real $x$ there is a natural number $n>x$. Equivalently, for every $\varepsilon>0$ there is $n$ with $1/n<\varepsilon$.
+\end{theorem}
+\begin{proof}
+If not, $\mathbb N_+$ is bounded above by $x$, so it has a supremum $s$. By the approximation property with $\varepsilon=1$ there is $n$ with $s-1<n$, whence $n+1>s$, contradicting that $s$ bounds $\mathbb N_+$.
+\end{proof}
+
+\begin{theorem}[Density of the rationals]
+Between any two reals $x<y$ there is a rational number.
+\end{theorem}
+\begin{proof}
+By the Archimedean property choose $n$ with $1/n<y-x$. Let $m$ be the smallest integer with $m>nx$ (it exists by well ordering, applied after shifting). Then $m-1\le nx$, so $m\le nx+1<ny$. Hence $x<m/n<y$.
+\end{proof}
+Density justifies approximating any real parameter by a finite-precision number to arbitrary accuracy. It does \emph{not} imply that every real is rational, and indeed the irrationals are also dense: if $x<y$, there is a rational $q$ with $x/\sqrt2<q<y/\sqrt2$ (for $q\ne0$), and then $q\sqrt2$ is irrational and lies between $x$ and $y$.
+
+\section{Existence of square roots}
+\begin{theorem}
+There is a unique positive real $s$ with $s^2=2$.
+\end{theorem}
+\begin{proof}
+Let $A=\{x\ge0:x^2<2\}$, which is nonempty ($1\in A$) and bounded above by $2$. Let $s=\sup A$. Suppose $s^2<2$. For $0<h<1$, $(s+h)^2\le s^2+h(2s+1)$, which is less than $2$ once $h<(2-s^2)/(2s+1)$; then $s+h\in A$, contradicting that $s$ is an upper bound. Suppose $s^2>2$. For $0<h<s$, $(s-h)^2\ge s^2-2sh>2$ once $h<(s^2-2)/(2s)$; then $s-h$ is an upper bound of $A$ smaller than $s$, a contradiction. Hence $s^2=2$. Uniqueness: if $s,t>0$ and $s^2=t^2$ then $(s-t)(s+t)=0$ with $s+t>0$, so $s=t$.
+\end{proof}
+The argument is a template: guess the object as a supremum, then rule out the two strict inequalities using small perturbations. The same template proves the intermediate value theorem in Chapter~\ref{ch:calculus}.
+
+\section{Nested intervals and uncountability}
+\begin{theorem}[Nested interval property]
+If $[a_1,b_1]\supseteq[a_2,b_2]\supseteq\cdots$ is a decreasing sequence of nonempty closed bounded intervals, then $\bigcap_n[a_n,b_n]\ne\varnothing$. If moreover $b_n-a_n\to0$, the intersection is a single point.
+\end{theorem}
+\begin{proof}
+The left endpoints are nondecreasing and bounded above by every $b_m$, so $a=\sup_na_n$ exists and $a_n\le a\le b_m$ for all $n,m$. Thus $a$ belongs to every interval. If two points $a<a'$ belonged to all intervals then $b_n-a_n\ge a'-a>0$ for every $n$.
+\end{proof}
+
+\begin{theorem}[Cantor]
+The interval $[0,1]$ is uncountable.
+\end{theorem}
+\begin{proof}
+Let $x_1,x_2,\ldots$ be any sequence in $[0,1]$. Divide $[0,1]$ into three closed thirds; at least one does not contain $x_1$; call it $I_1$. Divide $I_1$ into thirds and pick one, $I_2$, not containing $x_2$. Continuing, we obtain nested closed intervals of length $3^{-n}$ with $x_n\notin I_n$. Their intersection contains a point $x$ that differs from every $x_n$. Thus no sequence lists all of $[0,1]$.
+\end{proof}
+
+\section{Floating-point numbers are not real numbers}
+A double-precision floating-point number is a rational of the form $\pm m\cdot2^{e}$ with a 53-bit integer significand $m$ and a bounded exponent $e$. The set of such numbers is finite. It is not closed under addition (results are rounded), addition is not associative, and the distance between consecutive representable numbers grows with magnitude. The \emph{machine epsilon} $\epsilon_{\rm mach}=2^{-52}\approx2.2\times10^{-16}$ is the gap between $1$ and the next larger double. Every real $x$ in the normal range is rounded to a double $\mathrm{fl}(x)$ with relative error $|\mathrm{fl}(x)-x|/|x|\le\epsilon_{\rm mach}/2$.
+
+\begin{workedexample}[Timestamps in long recordings]
+A 24-hour recording at 30\,kHz has about $2.6\times10^9$ samples. Storing timestamps in seconds as doubles gives an absolute resolution near $t=86400$\,s of about $86400\cdot2.2\times10^{-16}\approx1.9\times10^{-11}$\,s, ample for spike timing. Storing them as single-precision floats ($\epsilon\approx1.2\times10^{-7}$) gives about $10$\,ms resolution near the end of the day, which would destroy millisecond spike timing. Storing sample indices as 64-bit integers avoids the issue entirely. Completeness of $\mathbb R$ is a property of the mathematical model, not of the stored numbers.
+\end{workedexample}
 \begin{exercises}
 \item Find the supremum, infimum, minimum, and maximum, when defined, for $A=(0,1]$.
 \item Prove the reverse triangle inequality $\big||x|-|y|\big|\le |x-y|$.
 \item Explain why a bounded measurement record does not imply its generating stochastic process has bounded support.
+\item Prove that $\inf A=-\sup(-A)$ for a nonempty bounded set $A$.
+\item Show that $\sup\{1-1/n:n\in\mathbb N_+\}=1$ using the Archimedean property.
+\item Show that the nested interval property fails for open intervals $(0,1/n)$.
+\item Adapt the square-root proof to show that every positive real has a unique positive cube root.
+\item Find the largest timestamp, in seconds, at which single precision still resolves $1/30000$\,s.
 \end{exercises}

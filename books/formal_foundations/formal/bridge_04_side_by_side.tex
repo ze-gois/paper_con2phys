@@ -1,0 +1,13 @@
+\section{Lean 4 verification: relational composition}
+\label{sec:lean-bridge-04}
+For typed relations $R\subseteq X\times Y$, $S\subseteq Y\times Z$
+and $T\subseteq Z\times W$, we define \emph{composition} with the
+same order as function composition: $\operatorname{relComp}(S,R)$
+relates $x$ to $z$ when some $y$ satisfies $xRy$ and $ySz$.
+The witnesses for either association are precisely the same $y,z$,
+so composition is associative.
+
+\lstinputlisting[language=LeanFour,basicstyle=\ttfamily\footnotesize,
+breaklines=true,columns=fullflexible,keepspaces=true,frame=single,
+firstline=51,lastline=73]
+{../../formal/lean/Con2physFormal/Bridges.lean}

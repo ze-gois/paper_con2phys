@@ -22,12 +22,84 @@ For a finite dataset, verifying a universal claim requires checking all included
 \section{Necessary and sufficient conditions}
 If $P\Rightarrow Q$, then $P$ is \emph{sufficient} for $Q$, while $Q$ is \emph{necessary} for $P$. An example: if a matrix $A$ is invertible, its columns are linearly independent. In the square finite-dimensional case, the converse also holds; the statements are equivalent. Contrast this with ``if the signal is a sinusoid, it has a spectral peak,'' whose converse may fail for many reasons. Whenever an algorithm claims to ``detect oscillations,'' ask whether its acceptance rule is necessary, sufficient, both, or neither for the physiological interpretation.
 
+\input{formal/logic_side_by_side}
+
 \begin{workedexample}[A null hypothesis in plain language]
 Suppose $H_0$ states that the temporal positions of spikes inside specified jitter windows carry no additional information beyond their counts. Rejecting $H_0$ is evidence against this particular conditional model. It does \emph{not} establish that a synapse connects the neurons, or that all alternative null models would also be rejected. Compare \cite{Amarasingham2012}.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{Tautologies, contradictions, and valid arguments}
+A compound formula is a \emph{tautology} if it is true under every assignment of truth values to its atomic letters, and a \emph{contradiction} if it is false under every assignment. The law of excluded middle $P\lor\neg P$ is a tautology; $P\land\neg P$ is a contradiction. Two formulas $\varphi$ and $\psi$ are \emph{logically equivalent}, written $\varphi\equiv\psi$, when $\varphi\Leftrightarrow\psi$ is a tautology.
+
+An \emph{argument} consists of premises $\varphi_1,\ldots,\varphi_k$ and a conclusion $\psi$. It is \emph{valid} when every assignment making all premises true also makes $\psi$ true; equivalently, when $(\varphi_1\land\cdots\land\varphi_k)\Rightarrow\psi$ is a tautology. Validity concerns form, not content: a valid argument with a false premise can have a false conclusion, and an invalid argument can happen to have a true conclusion.
+
+\begin{proposition}[Four standard inference rules]
+The following argument forms are valid:
+\begin{enumerate}[leftmargin=2em]
+\item \emph{modus ponens}: from $P$ and $P\Rightarrow Q$, infer $Q$;
+\item \emph{modus tollens}: from $\neg Q$ and $P\Rightarrow Q$, infer $\neg P$;
+\item \emph{hypothetical syllogism}: from $P\Rightarrow Q$ and $Q\Rightarrow R$, infer $P\Rightarrow R$;
+\item \emph{disjunctive syllogism}: from $P\lor Q$ and $\neg P$, infer $Q$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+We check (2); the others are similar. Suppose $\neg Q$ and $P\Rightarrow Q$ are both true. If $P$ were true, then by the truth table of the conditional $Q$ would be true, contradicting $\neg Q$. Hence $P$ is false, i.e.\ $\neg P$ is true. For (3), suppose both premises are true and $P$ is true; then $Q$ is true by the first premise and $R$ by the second, so $P\Rightarrow R$ cannot be falsified. For (4), if $P\lor Q$ is true and $P$ is false, the only remaining way for the disjunction to hold is that $Q$ is true.
+\end{proof}
+
+Two \emph{invalid} forms are so common that they have names. \emph{Affirming the consequent} infers $P$ from $Q$ and $P\Rightarrow Q$; \emph{denying the antecedent} infers $\neg Q$ from $\neg P$ and $P\Rightarrow Q$. In both cases the assignment $P=F$, $Q=T$ makes the premises true and the conclusion false. A frequent scientific instance: ``if the region generates gamma oscillations, the LFP shows a gamma peak; the LFP shows a gamma peak; therefore the region generates gamma.'' Volume conduction from another region, or a harmonic of a lower rhythm, also produces the peak.
+
+\section{Useful equivalences}
+The following equivalences can each be verified with a four- or eight-row truth table and will be used without comment later.
+\[
+\begin{array}{rcl@{\qquad}l}
+P\Rightarrow Q&\equiv&\neg P\lor Q & \text{(material implication)}\\
+P\Rightarrow Q&\equiv&\neg Q\Rightarrow\neg P & \text{(contraposition)}\\
+\neg(P\Rightarrow Q)&\equiv&P\land\neg Q & \text{(negated conditional)}\\
+P\land(Q\lor R)&\equiv&(P\land Q)\lor(P\land R) & \text{(distributivity)}\\
+(P\land Q)\Rightarrow R&\equiv&P\Rightarrow(Q\Rightarrow R) & \text{(exportation)}\\
+P\Leftrightarrow Q&\equiv&(P\Rightarrow Q)\land(Q\Rightarrow P) & \text{(biconditional)}
+\end{array}
+\]
+The negated conditional is the most practically useful: to show that ``$P$ implies $Q$'' fails, one must exhibit a case where $P$ holds and $Q$ does not. A case where $P$ fails is irrelevant.
+
+\begin{proposition}
+For any propositions, $\neg(P\Rightarrow Q)\equiv P\land\neg Q$.
+\end{proposition}
+\begin{proof}
+By material implication, $\neg(P\Rightarrow Q)\equiv\neg(\neg P\lor Q)$. By De Morgan's rule this is $\neg\neg P\land\neg Q$, and double negation gives $P\land\neg Q$.
+\end{proof}
+
+\section{Nested quantifiers and their negations}
+Many definitions in analysis have three or more alternating quantifiers. The definition of a limit, met in Chapter~\ref{ch:limits}, reads
+\[
+\forall\varepsilon>0\ \exists N\ \forall n\ge N:\ |x_n-L|<\varepsilon.
+\]
+Its negation is obtained mechanically by moving $\neg$ inward one quantifier at a time, swapping $\forall$ and $\exists$:
+\[
+\exists\varepsilon>0\ \forall N\ \exists n\ge N:\ |x_n-L|\ge\varepsilon.
+\]
+In words: there is a fixed tolerance that infinitely late terms keep violating. Note that the bounded quantifiers $\forall\varepsilon>0$ and $\exists n\ge N$ keep their bounds under negation; only the quantifier type and the inner predicate change.
+
+The \emph{uniqueness quantifier} $\exists!x\,P(x)$ (``there is exactly one $x$ with $P$'') abbreviates
+\[
+\exists x\,\bigl(P(x)\land\forall y\,(P(y)\Rightarrow y=x)\bigr).
+\]
+Existence and uniqueness are proved separately: one exhibits an $x$, then shows that any two such objects coincide.
+
+\begin{workedexample}[Negating a selectivity criterion]
+Suppose a unit is called ``direction selective'' if there is a direction $d^\ast$ such that for every other tested direction $d$, the mean rate at $d^\ast$ exceeds the rate at $d$ by at least 5 spikes/s. Symbolically, $\exists d^\ast\,\forall d\ne d^\ast:\ r(d^\ast)-r(d)\ge5$. Its negation, ``not direction selective'', is $\forall d^\ast\,\exists d\ne d^\ast:\ r(d^\ast)-r(d)<5$: every candidate preferred direction has at least one competitor within 5 spikes/s. This is a much weaker statement than ``the unit responds equally to all directions,'' and the two must not be conflated in a results section.
+\end{workedexample}
+
+\section{Logic and uncertainty}
+Classical logic assigns each proposition exactly one of two truth values. Empirical claims usually come with uncertainty, and it is tempting to treat a $p$-value or posterior probability as a ``degree of truth.'' This is a category mistake. A probability is assigned by a model to an event; the proposition ``this event occurred'' remains true or false. Probability theory (Part~V) extends logic by attaching numbers to sets of outcomes, but every probabilistic statement is itself a classical proposition about those numbers, and proofs about probabilities use exactly the rules of this chapter.
 \begin{exercises}
 \item Construct a complete truth table for $(P\Rightarrow Q)\Leftrightarrow(\neg Q\Rightarrow\neg P)$.
 \item Negate ``for every frequency there exists a channel with nonzero power.''
 \item Give a counterexample to the inference from $P\Rightarrow Q$ and $Q$ to $P$.
 \item Explain why statistical dependence is not equivalent to causal influence.
+\item Use a truth table to show that $(P\Rightarrow Q)\land(Q\Rightarrow R)\Rightarrow(P\Rightarrow R)$ is a tautology.
+\item Show that affirming the consequent is invalid by exhibiting a falsifying truth assignment.
+\item Negate $\forall\varepsilon>0\ \exists\delta>0\ \forall x\ (|x-a|<\delta\Rightarrow|f(x)-f(a)|<\varepsilon)$ and state the result in words.
+\item Write ``exactly one channel exceeds the artifact threshold'' using $\exists!$ and then without it.
+\item Prove the exportation law $(P\land Q)\Rightarrow R\equiv P\Rightarrow(Q\Rightarrow R)$.
 \end{exercises}

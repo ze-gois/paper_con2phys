@@ -17,9 +17,90 @@ A continuous-time model $x(t)$ does not mean its actual neuronal source changes 
 \begin{workedexample}[Finite-difference derivatives]
 For a smooth $x(t)$, the quantity $[x(t+h)-x(t)]/h$ may approach a derivative as $h\to0$. In recorded data, however, taking ever smaller $h$ may amplify measurement noise. Convergence of an ideal mathematical expression and consistency of a noisy numerical estimator are separate questions.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{Algebra of limits}
+Proofs from the $\varepsilon$--$N$ definition become routine once a few general rules are established.
+
+\begin{proposition}[Uniqueness and boundedness]
+A convergent sequence has exactly one limit and is bounded.
+\end{proposition}
+\begin{proof}
+If $x_n\to L$ and $x_n\to L'$ with $L\ne L'$, take $\varepsilon=|L-L'|/2$. For large $n$ both $|x_n-L|<\varepsilon$ and $|x_n-L'|<\varepsilon$, so $|L-L'|<2\varepsilon=|L-L'|$, a contradiction. For boundedness, choose $N$ with $|x_n-L|<1$ for $n\ge N$; then $|x_n|\le\max\{|x_1|,\ldots,|x_{N-1}|,|L|+1\}$ for all $n$.
+\end{proof}
+
+\begin{theorem}[Limit laws]
+If $x_n\to a$ and $y_n\to b$, then $x_n+y_n\to a+b$, $x_ny_n\to ab$, and, if $b\ne0$, $x_n/y_n\to a/b$ (for $n$ large enough that $y_n\ne0$).
+\end{theorem}
+\begin{proof}
+Sum: given $\varepsilon$, choose $N$ so that $|x_n-a|<\varepsilon/2$ and $|y_n-b|<\varepsilon/2$ for $n\ge N$, and use the triangle inequality. Product: write
+\[
+x_ny_n-ab=x_n(y_n-b)+b(x_n-a).
+\]
+Since $(x_n)$ is bounded by some $M$, $|x_ny_n-ab|\le M|y_n-b|+|b||x_n-a|$, which can be made smaller than $\varepsilon$. Quotient: it suffices to show $1/y_n\to1/b$. For large $n$, $|y_n|>|b|/2$, so $|1/y_n-1/b|=|b-y_n|/(|y_n||b|)\le2|y_n-b|/|b|^2\to0$.
+\end{proof}
+
+\begin{proposition}[Squeeze]
+If $x_n\le y_n\le z_n$ for all large $n$ and $x_n\to L$, $z_n\to L$, then $y_n\to L$.
+\end{proposition}
+\begin{proof}
+For large $n$, $L-\varepsilon<x_n\le y_n\le z_n<L+\varepsilon$.
+\end{proof}
+
+\section{Monotone sequences and the Bolzano--Weierstrass theorem}
+\begin{theorem}[Monotone convergence]
+A nondecreasing sequence that is bounded above converges to its supremum.
+\end{theorem}
+\begin{proof}
+Let $s=\sup_nx_n$, which exists by completeness. Given $\varepsilon>0$, the approximation property gives $N$ with $x_N>s-\varepsilon$. For $n\ge N$, monotonicity gives $s-\varepsilon<x_N\le x_n\le s$.
+\end{proof}
+
+\begin{theorem}[Bolzano--Weierstrass]
+Every bounded real sequence has a convergent subsequence.
+\end{theorem}
+\begin{proof}
+Call an index $m$ a \emph{peak} if $x_m\ge x_n$ for all $n>m$. If there are infinitely many peaks $m_1<m_2<\cdots$, then $x_{m_1}\ge x_{m_2}\ge\cdots$ is a bounded nonincreasing subsequence. Otherwise, after the last peak every index $n_1$ has a later $n_2$ with $x_{n_2}>x_{n_1}$, and repeating yields an increasing subsequence. In both cases, monotone convergence applies.
+\end{proof}
+
+\begin{theorem}[Cauchy criterion]
+A real sequence converges if and only if it is Cauchy.
+\end{theorem}
+\begin{proof}
+If $x_n\to L$, then $|x_m-x_n|\le|x_m-L|+|L-x_n|<\varepsilon$ for large $m,n$. Conversely, a Cauchy sequence is bounded (as in the boundedness proof), so by Bolzano--Weierstrass a subsequence converges to some $L$. Given $\varepsilon$, choose $N$ with $|x_m-x_n|<\varepsilon/2$ for $m,n\ge N$ and a subsequence index $n_k\ge N$ with $|x_{n_k}-L|<\varepsilon/2$; then $|x_n-L|<\varepsilon$ for $n\ge N$.
+\end{proof}
+The Cauchy criterion is what iterative numerical methods actually check: a stopping rule such as ``stop when successive iterates differ by less than $10^{-8}$'' is a finite surrogate of the Cauchy condition. It is only a surrogate. The harmonic partial sums $H_n=\sum_{k\le n}1/k$ have successive differences $1/n\to0$ but diverge, so small steps alone do not prove convergence.
+
+\section{Series}
+A series $\sum_{k=1}^\infty a_k$ converges if its partial sums $S_n=\sum_{k\le n}a_k$ converge. The geometric series $\sum_{k\ge0}r^k$ converges to $1/(1-r)$ iff $|r|<1$, since $S_n=(1-r^{n+1})/(1-r)$. A series converges \emph{absolutely} if $\sum|a_k|<\infty$; absolute convergence implies convergence (by the Cauchy criterion and the triangle inequality) and allows rearrangement without changing the sum. The alternating harmonic series $\sum(-1)^{k+1}/k$ converges, but not absolutely, and can be rearranged to converge to any prescribed real number. The comparison test states that $0\le a_k\le b_k$ and $\sum b_k<\infty$ imply $\sum a_k<\infty$.
+
+Absolute summability is the stability condition for discrete filters (Chapter~\ref{ch:fourier}): if $\sum_k|h_k|<\infty$ and $|x_n|\le M$, then $|\sum_kh_kx_{n-k}|\le M\sum_k|h_k|$.
+
+\section{Continuity on closed intervals}
+\begin{theorem}[Intermediate value theorem]
+If $f:[a,b]\to\mathbb R$ is continuous and $f(a)<c<f(b)$, there is $x\in(a,b)$ with $f(x)=c$.
+\end{theorem}
+\begin{proof}
+Let $x=\sup\{t\in[a,b]:f(t)<c\}$. If $f(x)<c$, continuity keeps $f<c$ slightly to the right of $x$, contradicting the supremum; $x<b$ because $f(b)>c$. If $f(x)>c$, continuity keeps $f>c$ on an interval $(x-\delta,x]$, so $x-\delta$ is a smaller upper bound, a contradiction. Hence $f(x)=c$.
+\end{proof}
+
+\begin{theorem}[Extreme value theorem]
+A continuous function on a closed bounded interval is bounded and attains its maximum and minimum.
+\end{theorem}
+\begin{proof}
+If $f$ were unbounded, there would be $x_n$ with $|f(x_n)|>n$. A subsequence converges to some $x\in[a,b]$, and continuity forces $f(x_{n_k})\to f(x)$, contradicting unboundedness. Let $M=\sup f$; choose $x_n$ with $f(x_n)>M-1/n$, extract a convergent subsequence with limit $x^\ast$, and conclude $f(x^\ast)=M$ by continuity.
+\end{proof}
+Both theorems fail on open intervals or for discontinuous functions: $f(x)=1/x$ on $(0,1]$ is unbounded, and a step function skips intermediate values. A threshold-crossing detector implicitly relies on the intermediate value theorem for the underlying continuous signal; on samples, the crossing time must be interpolated.
+
+\begin{workedexample}[Bisection as a constructive proof]
+To find a zero of a continuous $f$ with $f(a)<0<f(b)$, evaluate $f$ at the midpoint and keep the half-interval on which the sign changes. After $n$ steps the interval has length $(b-a)2^{-n}$ and, by the nested interval property, the endpoints converge to a zero. To locate a threshold crossing between two samples to $1\,\mu$s when the samples are $33\,\mu$s apart requires $\lceil\log_2 33\rceil=6$ bisection steps on an interpolated signal. The accuracy refers to the interpolant, not to the unobserved voltage.
+\end{workedexample}
 \begin{exercises}
 \item Prove $2/n\to0$ from the definition.
 \item Give a sequence that is bounded but does not converge.
 \item Determine whether the step function $f(x)=0$ for $x<0$, $f(x)=1$ for $x\ge0$ is continuous at zero.
 \item Explain the conceptual difference between a limit as $n\to\infty$ and a sample size $n$ that remains finite.
+\item Prove from the definition that $(n+1)/(2n+3)\to1/2$.
+\item Show that $x_n=(1+1/n)^n$ is increasing and bounded above by $3$, and conclude that it converges.
+\item Prove that $\sum_{k\ge1}1/k^2$ converges by comparison with $\sum 1/(k(k-1))$ for $k\ge2$.
+\item Show that a polynomial of odd degree has a real root.
+\item Give a continuous function on $(0,1)$ that is bounded but does not attain its supremum.
 \end{exercises}

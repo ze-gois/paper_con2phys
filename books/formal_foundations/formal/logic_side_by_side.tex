@@ -1,0 +1,55 @@
+\section{Formal proof laboratory: propositional and quantified logic}
+\label{sec:lean-logic-pilot}
+The five mathematical statements below are shown alongside their
+Lean 4 implementations. A successful Lean build means the kernel
+accepts the propositions \emph{as typed}; it does not establish
+the scientific interpretation of a null hypothesis.
+
+\begingroup
+\setlength{\columnsep}{0.05\textwidth}
+\noindent\begin{minipage}[t]{0.45\textwidth}
+\textbf{English mathematics}
+
+\textbf{LOGIC-001.} De Morgan's conjunction law:
+for arbitrary propositions $P,Q$,
+$\neg(P\land Q)\iff\neg P\lor\neg Q$.
+If not both criteria hold, at least one fails. \emph{Proof:} by excluded middle, either $P$ is false, or $P$ holds, in which case $Q$ must be false. Conversely, either negated conjunct contradicts $P\land Q$.
+
+\medskip\textbf{LOGIC-002.} De Morgan's disjunction law:
+$\neg(P\lor Q)\iff\neg P\land\neg Q$.
+To fail either-of-two inclusion rules is to fail both. \emph{Proof:} $\neg(P\lor Q)$ separately contradicts each disjunct. Conversely, $\neg P\land\neg Q$ refutes every proposed witness for $P\lor Q$.
+
+\medskip\textbf{LOGIC-003.} Contraposition:
+$(P\Rightarrow Q)\iff(\neg Q\Rightarrow\neg P)$.
+The backward direction is classical: assuming
+$\neg Q\Rightarrow\neg P$, if $P$ held but $Q$ did not,
+one would obtain $\neg P$, a contradiction; by excluded middle, $Q$ must hold. The forward implication follows constructively: from $P\Rightarrow Q$ and $\neg Q$, assuming $P$ would contradict $\neg Q$.
+
+\medskip\textbf{LOGIC-004.} Quantifier negation:
+$\neg(\forall x\,R(x))\iff\exists x\,\neg R(x)$.
+A counterexample disproves a universal claim. \emph{Proof:} a failing witness contradicts the universal assertion. Conversely, if no witness failed, classical double-negation elimination would give $R(x)$ for every $x$, contradicting $\neg\forall x\,R(x)$.
+
+\medskip\textbf{LOGIC-005.} Existential negation:
+$\neg(\exists x\,R(x))\iff\forall x\,\neg R(x)$. \emph{Proof:} if a witness existed, it would contradict the assumption that none exists. Conversely, if every candidate fails, an assumed witness immediately yields a contradiction.
+
+\medskip\textbf{Proof strategy.} The statements about negating
+conjunction, contraposition and negating a universal
+quantifier use classical reasoning. The Lean proof
+invokes Mathlib tactics that elaborate these elementary
+steps; the file prints their axiom dependencies.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.50\textwidth}
+\textbf{Lean 4 / Mathlib}
+
+\lstinputlisting[language=LeanFour,basicstyle=\ttfamily\tiny,
+breaklines=true,columns=fullflexible,keepspaces=true,
+frame=single]{../../formal/lean/Con2physFormal/Logic.lean}
+
+\textit{Correspondence and provenance:}
+each Lean declaration has the same quantification
+over propositions or predicates as the adjacent English
+statement. Mathlib provides the underlying logic and tactics.
+See the pinned dependency in
+\texttt{\detokenize{formal/lean/lakefile.lean}}.
+\end{minipage}
+\endgroup

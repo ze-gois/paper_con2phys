@@ -21,9 +21,68 @@ Many preprocessing operations change the set of data included in analysis. If $U
 \begin{workedexample}[Counting selections]
 Suppose four electrodes pass quality control. A subset represents the electrodes chosen for a multichannel analysis; there are $2^4=16$ possible subsets, including the empty selection. Requiring at least one electrode yields 15. Requiring exactly two yields $\binom42=6$. This distinction prepares us for combinatorics and multiple-comparison correction.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{Algebra of sets}
+The operations of the previous sections obey identities that parallel the logical equivalences of Chapter~\ref{ch:logic}. This parallel is not accidental: $x\in A\cap B$ means $x\in A\land x\in B$, $x\in A\cup B$ means $x\in A\lor x\in B$, and $x\in A^c$ means $\neg(x\in A)$. Every set identity can therefore be proved by translating to a logical equivalence about membership.
+
+\begin{proposition}[Laws of the algebra of sets]
+For subsets $A,B,C$ of a universe $U$:
+\begin{enumerate}[leftmargin=2em]
+\item commutativity: $A\cup B=B\cup A$ and $A\cap B=B\cap A$;
+\item associativity: $(A\cup B)\cup C=A\cup(B\cup C)$, and similarly for $\cap$;
+\item distributivity: $A\cap(B\cup C)=(A\cap B)\cup(A\cap C)$ and $A\cup(B\cap C)=(A\cup B)\cap(A\cup C)$;
+\item identity and absorption: $A\cup\varnothing=A$, $A\cap U=A$, $A\cup(A\cap B)=A$;
+\item complement: $A\cup A^c=U$, $A\cap A^c=\varnothing$, $(A^c)^c=A$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+We prove the second distributive law; the others follow the same pattern. Let $x\in U$. Then $x\in A\cup(B\cap C)$ iff $x\in A\lor(x\in B\land x\in C)$. By the logical distributive law this is equivalent to $(x\in A\lor x\in B)\land(x\in A\lor x\in C)$, i.e.\ $x\in(A\cup B)\cap(A\cup C)$. Since the two sets have the same members, they are equal.
+\end{proof}
+
+\begin{proposition}[De Morgan for families]
+For any indexed family $(A_i)_{i\in I}$ of subsets of $U$,
+\[
+\Bigl(\bigcup_{i\in I}A_i\Bigr)^c=\bigcap_{i\in I}A_i^c,\qquad
+\Bigl(\bigcap_{i\in I}A_i\Bigr)^c=\bigcup_{i\in I}A_i^c.
+\]
+\end{proposition}
+\begin{proof}
+For the first identity, $x\notin\bigcup_iA_i$ iff $\neg\exists i\,(x\in A_i)$ iff $\forall i\,(x\notin A_i)$ iff $x\in\bigcap_iA_i^c$. The second follows by applying the first to the family $(A_i^c)$ and taking complements.
+\end{proof}
+
+\section{Symmetric difference and indicator functions}
+The \emph{symmetric difference} $A\,\triangle\,B=(A\setminus B)\cup(B\setminus A)$ contains the elements in exactly one of the two sets. It measures disagreement between two classifications: if $A$ and $B$ are the spikes assigned to a unit by two sorting algorithms, $|A\triangle B|$ counts the spikes on which they disagree.
+
+The \emph{indicator function} of $A\subseteq U$ is $\mathbf 1_A:U\to\{0,1\}$, with $\mathbf 1_A(x)=1$ if $x\in A$ and $0$ otherwise. Indicators turn set operations into arithmetic:
+\[
+\mathbf 1_{A\cap B}=\mathbf 1_A\mathbf 1_B,\qquad
+\mathbf 1_{A^c}=1-\mathbf 1_A,\qquad
+\mathbf 1_{A\cup B}=\mathbf 1_A+\mathbf 1_B-\mathbf 1_A\mathbf 1_B,\qquad
+\mathbf 1_{A\triangle B}=|\mathbf 1_A-\mathbf 1_B|.
+\]
+Summing the union identity over a finite universe gives the \emph{inclusion--exclusion principle} $|A\cup B|=|A|+|B|-|A\cap B|$. Logical masks in numerical software are exactly indicator functions stored as arrays; an element-wise product of two masks is an intersection.
+
+\section{Partitions}
+A \emph{partition} of a set $U$ is a family of nonempty, pairwise disjoint subsets whose union is $U$. Trials partitioned by stimulus condition, spikes partitioned by unit identity, and time partitioned into bins are all partitions. If $\{B_1,\ldots,B_k\}$ partitions a finite $U$, then for any $A\subseteq U$,
+\[
+|A|=\sum_{j=1}^k|A\cap B_j|,
+\]
+because the sets $A\cap B_j$ are disjoint and their union is $A$. This additivity, generalized from counting to probability and integration, is the root of the law of total probability (Chapter~\ref{ch:probability}).
+
+\section{Russell's paradox in detail}
+Suppose there were a set $R$ whose members are exactly the sets that are not members of themselves: $x\in R\Leftrightarrow x\notin x$. Taking $x=R$ yields $R\in R\Leftrightarrow R\notin R$, a contradiction. Hence no such set exists. The \emph{axiom of separation} avoids the paradox by allowing $\{x\in A:P(x)\}$ only for an already given set $A$. Applied to any set $A$, the same argument shows that $\{x\in A:x\notin x\}$ is not a member of $A$; consequently, there is no set of all sets. In applied work this matters less as a danger than as a habit: every set in an analysis should be carved out of a specified universe.
+
+\begin{workedexample}[Masks and exclusion rules]
+A session has 400 trials. Let $M$ be trials with movement artifacts (37 trials), $L$ trials with lick contamination (52 trials), and suppose 15 trials have both. The excluded set is $M\cup L$, with $|M\cup L|=37+52-15=74$ trials, leaving $|(M\cup L)^c|=326$. Reporting ``37 and 52 trials were excluded'' would suggest 89 exclusions; inclusion--exclusion gives the correct count.
+\end{workedexample}
 \begin{exercises}
 \item Prove $A\cap(B\cup C)=(A\cap B)\cup(A\cap C)$ from element membership.
 \item Determine whether $\varnothing\in\{\varnothing\}$ and whether $\varnothing\subseteq\{\varnothing\}$.
 \item Describe the difference between a population of neurons and its sampled subset.
 \item Given three data-exclusion rules, express the accepted trials with set operations.
+\item Prove $A\setminus(B\cup C)=(A\setminus B)\cap(A\setminus C)$.
+\item Show that $A\triangle B=\varnothing$ if and only if $A=B$, and that $\triangle$ is associative.
+\item Derive inclusion--exclusion for three sets from the indicator identity.
+\item Show that $\{x\in A:x\notin x\}\notin A$ for every set $A$.
+\item Two sorters assign 1200 and 1100 spikes to a unit and agree on 1000. Compute $|A\triangle B|$ and a normalized disagreement $|A\triangle B|/|A\cup B|$.
 \end{exercises}

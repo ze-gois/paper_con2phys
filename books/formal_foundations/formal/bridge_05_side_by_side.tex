@@ -1,0 +1,18 @@
+\section{Lean 4: equivalence classes form a partition}
+\label{sec:lean-bridge-05}
+Let $r$ be a reflexive, symmetric, and transitive relation on a
+type $\alpha$. We define the class of $a$ by
+$[a]=\{b:r(b,a)\}$. Reflexivity proves that every $a$ lies
+in its own class, so the classes cover the carrier.
+
+If $x$ lies in both $[a]$ and $[b]$, symmetry followed by
+transitivity gives $a\,r\,b$. Consequently every element of
+$[a]$ lies in $[b]$, and conversely. Thus intersecting
+classes are equal. This establishes the two characteristic
+partition properties without assuming that the relation is
+equality.
+
+\lstinputlisting[language=LeanFour,basicstyle=\ttfamily\footnotesize,
+breaklines=true,columns=fullflexible,keepspaces=true,frame=single,
+firstline=73,lastline=97]
+{../../formal/lean/Con2physFormal/Bridges.lean}

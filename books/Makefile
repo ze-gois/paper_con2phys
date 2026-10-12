@@ -4,6 +4,7 @@ TEX := pdflatex
 all: electrophysiology formal_foundations
 check:
 	python3 tools/check_sources.py
+	python3 tools/check_language_boundaries.py
 
 matlab: electrophysiology
 lean: formal_foundations

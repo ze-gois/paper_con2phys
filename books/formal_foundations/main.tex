@@ -4,9 +4,41 @@
 \usepackage[english]{babel}
 \usepackage{lmodern,amsmath,amssymb,amsthm,mathtools,bm}
 \usepackage{booktabs,longtable,geometry,graphicx,microtype,enumitem}
-\usepackage{hyperref,xcolor,fancyhdr}
+\usepackage{hyperref,xcolor,fancyhdr,listings}
 \geometry{margin=2.55cm,headheight=14pt}
 \hypersetup{colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black,urlcolor=blue!55!black,pdftitle={From Ordinary Language to Computational Neuroscience},pdfauthor={CON2EPHYS research notebook}}
+\lstdefinelanguage{LeanFour}{
+  morekeywords={import,namespace,end,theorem,lemma,def,by,variable,open,
+    where,fun,have,show,exact,intro,apply,example},
+  sensitive=true,
+  morecomment=[l]--,
+  morestring=[b]"
+}
+\lstset{
+  literate={¬}{{$\neg$}}1
+           {∧}{{$\land$}}1
+           {∨}{{$\lor$}}1
+           {↔}{{$\leftrightarrow$}}1
+           {→}{{$\to$}}1
+           {∀}{{$\forall$}}1
+           {∃}{{$\exists$}}1
+           {α}{{$\alpha$}}1
+           {ℕ}{{$\mathbb{N}$}}1
+           {×}{{$\times$}}1
+           {⊆}{{$\subseteq$}}1
+           {⟨}{{$\langle$}}1
+           {⟩}{{$\rangle$}}1
+           {·}{{$\cdot$}}1
+           {β}{{$\beta$}}1
+           {₁}{{$_1$}}1
+           {₂}{{$_2$}}1
+           {⁻}{{$^{-}$}}1
+           {¹}{{$^{1}$}}1
+           {∩}{{$\cap$}}1
+           {∪}{{$\cup$}}1
+           {∈}{{$\in$}}1
+           {∅}{{$\varnothing$}}1
+}
 \numberwithin{equation}{chapter}
 \newtheorem{definition}{Definition}[chapter]
 \newtheorem{proposition}[definition]{Proposition}

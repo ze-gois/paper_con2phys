@@ -18,8 +18,52 @@ Integers inherit addition, multiplication, and a total order. Negative numbers p
 \section{A neuroscience example}
 Spike-count differences $D=N_{\rm post}-N_{\rm pre}$ may be negative although each count is nonnegative. However, raw subtraction is sensitive to the lengths of the counting intervals. If the intervals differ, compare normalized rates $N/T$ rather than interpreting the count difference uncritically. Mathematical legitimacy does not guarantee scientific comparability.
 
+% --- expanded edition (October 2026) ---
+\section{Proving that the operations are well defined}
+\begin{proposition}
+Integer addition and multiplication defined on classes do not depend on the chosen representatives.
+\end{proposition}
+\begin{proof}
+Suppose $(a,b)\sim(a',b')$ and $(c,d)\sim(c',d')$, so $a+b'=b+a'$ and $c+d'=d+c'$. For addition we need $(a+c,b+d)\sim(a'+c',b'+d')$, i.e.\ $a+c+b'+d'=b+d+a'+c'$, which is the sum of the two hypotheses. For multiplication we need
+\[
+ac+bd+a'd'+b'c'=ad+bc+a'c'+b'd'.
+\]
+It suffices to change one representative at a time. Replacing $(a,b)$ by $(a',b')$ with $c,d$ fixed, the required identity $ac+bd+a'd+b'c=ad+bc+a'c+b'd$ rearranges to $c(a+b')+d(b+a')=c(b+a')+d(a+b')$, which holds because $a+b'=b+a'$. The second representative is handled symmetrically.
+\end{proof}
+
+The map $n\mapsto[(n,0)]$ embeds $\mathbb N_0$ into $\mathbb Z$ injectively and preserves addition and multiplication. Every class $[(a,b)]$ equals either $[(n,0)]$ or $[(0,n)]$ for a unique $n$, which we write $n$ or $-n$. In this sense $\mathbb Z$ \emph{contains} $\mathbb N_0$, even though, strictly, the new numbers are sets of pairs.
+
+\section{The ring axioms}
+With these operations, $\mathbb Z$ is a \emph{commutative ring with identity}: addition is associative and commutative with identity $0$ and additive inverses; multiplication is associative and commutative with identity $1$; and multiplication distributes over addition. The ring has no zero divisors: $ab=0$ implies $a=0$ or $b=0$. Consequently cancellation holds: if $ac=bc$ and $c\ne0$, then $a=b$.
+
+\begin{proposition}
+In any ring, $0\cdot a=0$ and $(-1)a=-a$. Hence $(-a)(-b)=ab$.
+\end{proposition}
+\begin{proof}
+$0\cdot a=(0+0)a=0\cdot a+0\cdot a$; adding $-(0\cdot a)$ to both sides gives $0=0\cdot a$. Next $a+(-1)a=(1+(-1))a=0\cdot a=0$, so $(-1)a$ is the additive inverse of $a$. Finally $(-a)(-b)=(-1)(-1)ab$, and $(-1)(-1)=-(-1)=1$.
+\end{proof}
+The rule ``a negative times a negative is positive'' is therefore not a convention but a consequence of distributivity. Any arithmetic in which distributivity holds must satisfy it.
+
+\section{Divisibility and the greatest common divisor}
+For integers $a,b$ not both zero, $\gcd(a,b)$ is the largest nonnegative common divisor (equivalently, the positive generator of the ideal $a\\mathbb Z+b\\mathbb Z$).
+
+\begin{theorem}[B\'ezout]
+For integers $a,b$ not both zero there exist integers $x,y$ with $ax+by=\gcd(a,b)$.
+\end{theorem}
+\begin{proof}
+Let $I=\{ax+by:x,y\in\mathbb Z\}$, and let $g$ be its smallest positive element (by well ordering). Divide $a$ by $g$: $a=qg+r$ with $0\le r<g$. Then $r=a-qg\in I$, so minimality forces $r=0$; thus $g\mid a$, and likewise $g\mid b$. Any common divisor of $a$ and $b$ divides every element of $I$, in particular $g$. Hence $g=\gcd(a,b)$.
+\end{proof}
+The Euclidean algorithm computes the gcd by repeated division, using $\gcd(a,b)=\gcd(b,a\bmod b)$. Gcds arise when combining signals with different sampling rates: resampling from 30\,kHz to 1.25\,kHz uses the rational factor $1250/30000=1/24$, and polyphase resampling routines reduce such ratios by their gcd.
+
+\begin{workedexample}[Signed lags]
+In a cross-correlogram between spike trains $u$ and $v$, the lag $\tau=t_v-t_u$ takes integer values in units of bins. Negative lags mean $v$ preceded $u$. The set of lags in a window $\{-K,\ldots,K\}$ has $2K+1$ elements, and reversing the roles of $u$ and $v$ maps lag $\tau$ to $-\tau$. A peak at negative lag is thus not a different phenomenon from a peak at positive lag with the neurons swapped; the sign records a convention of which train is the reference.
+\end{workedexample}
 \begin{exercises}
 \item Verify symmetry and transitivity of the equivalence relation on ordered pairs.
 \item Show that $[(a,b)]+[(b,a)]$ is the integer zero.
 \item Explain why subtraction of two nonnegative power estimates need not be nonnegative.
+\item Prove that $\mathbb Z$ has no zero divisors, assuming the corresponding fact for $\mathbb N_0$.
+\item Use the Euclidean algorithm to compute $\gcd(30000,1250)$ and find B\'ezout coefficients.
+\item Prove that if $c\ne0$ and $ac=bc$ in $\mathbb Z$, then $a=b$.
+\item Define $\le$ on $\mathbb Z$ by $[(a,b)]\le[(c,d)]$ iff $a+d\le b+c$, and prove that it is well defined.
 \end{exercises}

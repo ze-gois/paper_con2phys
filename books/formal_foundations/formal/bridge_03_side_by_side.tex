@@ -1,0 +1,12 @@
+\section{Lean 4 verification: Cartesian products}
+\label{sec:lean-bridge-03}
+For types $\alpha$ and $\beta$, and sets $A\subseteq\alpha$ and
+$B\subseteq\beta$, an ordered pair $(a,b)$ belongs to $A\times B$
+precisely when $a\in A$ and $b\in B$. If either set is empty,
+the product has no members. These are three distinct Lean theorems,
+representing the full statement of Bridge~\ref{bridge:cartesian}.
+
+\lstinputlisting[language=LeanFour,basicstyle=\ttfamily\footnotesize,
+breaklines=true,columns=fullflexible,keepspaces=true,frame=single,
+firstline=31,lastline=51]
+{../../formal/lean/Con2physFormal/Bridges.lean}

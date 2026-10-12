@@ -19,9 +19,62 @@ For a weakly stationary process, the autocovariance $C_{xx}[\ell]=E[(X_n-\mu)(X_
 \begin{workedexample}[Moving-average low-pass filter]
 Take $y[n]=(x[n]+x[n-1])/2$. Its frequency response is $H(e^{i\omega})=\tfrac12(1+e^{-i\omega})=e^{-i\omega/2}\cos(\omega/2)$. Thus magnitude attenuation and phase delay both emerge from an apparently simple average. At Nyquist ($\omega=\pi$), the response is zero.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{Proof of DFT inversion and Parseval}
+\begin{theorem}
+With $X[k]=\sum_{n=0}^{N-1}x[n]\omega^{-kn}$ and $\omega=e^{2\pi i/N}$, we have $x[n]=\frac1N\sum_kX[k]\omega^{kn}$ and $\sum_n|x[n]|^2=\frac1N\sum_k|X[k]|^2$.
+\end{theorem}
+\begin{proof}
+Substitute the definition:
+\[
+\frac1N\sum_kX[k]\omega^{kn}=\frac1N\sum_mx[m]\sum_k\omega^{k(n-m)}=x[n],
+\]
+by the orthogonality of roots of unity (Chapter~\ref{ch:complex}): the inner sum is $N$ when $m=n$ and $0$ otherwise. For Parseval, expand $\sum_k|X[k]|^2=\sum_k\sum_{m,n}x[m]\overline{x[n]}\omega^{-k(m-n)}$ and apply the same identity.
+\end{proof}
+Equivalently, the vectors $e_k[n]=\omega^{kn}/\sqrt N$ form an orthonormal basis of $\mathbb C^N$, and the DFT, suitably scaled, is a unitary change of basis. Energy is preserved; it is merely redistributed among coordinates.
+
+\section{Symmetry and the meaning of negative frequencies}
+For real $x$, $X[N-k]=\overline{X[k]}$. Hence $|X[k]|$ is symmetric about $N/2$ and the bins $k>N/2$ carry no new information; they represent negative frequencies $-(N-k)f_s/N$. A real cosine at frequency $f_0$ appears as two lines of equal height at $\pm f_0$, each with half of its amplitude. A one-sided spectrum folds the negative-frequency energy onto the positive side, which is the origin of the factor of two for non-DC, non-Nyquist bins.
+
+\section{Circular convolution}
+\begin{theorem}[DFT convolution theorem]
+If $y[n]=\sum_{m=0}^{N-1}h[m]x[(n-m)\bmod N]$, then $Y[k]=H[k]X[k]$.
+\end{theorem}
+\begin{proof}
+$Y[k]=\sum_n\sum_mh[m]x[(n-m)\bmod N]\omega^{-kn}$. Substitute $n'=(n-m)\bmod N$ and use $\omega^{-kn}=\omega^{-km}\omega^{-kn'}$ (valid modulo $N$ because $\omega^N=1$). The double sum factors into $H[k]X[k]$.
+\end{proof}
+The theorem concerns \emph{circular} convolution: the signal is treated as periodic, and the end of the record wraps around to its start. Filtering by multiplying FFTs therefore contaminates the first samples with the last ones unless the signal is zero-padded to at least $N+L-1$ samples for a filter of length $L$, after which circular and linear convolution agree on the samples of interest.
+
+\section{Leakage and windows}
+A finite record is the product of an infinite signal and a rectangular window $w[n]=\mathbf 1_{0\le n<N}$. Multiplication in time is (circular) convolution in frequency, so the observed spectrum is the true spectrum smeared by the window's transform, the \emph{Dirichlet kernel}
+\[
+W(\theta)=\sum_{n=0}^{N-1}e^{-i\theta n}=e^{-i\theta(N-1)/2}\frac{\sin(N\theta/2)}{\sin(\theta/2)}.
+\]
+Its main lobe has width $4\pi/N$ (in angular frequency) and its highest sidelobe is only about $13$\,dB below the peak. A sinusoid between DFT bins therefore leaks power into distant bins, which can hide a weak component near a strong one. Tapered windows (Hann, Hamming, Slepian) trade a wider main lobe for much lower sidelobes; the Hann window's first sidelobe is about $31$\,dB down. No window removes the trade-off, which is a finite-$N$ instance of the uncertainty principle.
+
+\section{The uncertainty principle}
+\begin{theorem}[Heisenberg--Gabor inequality]
+For $x\in L^2(\mathbb R)$ with $\|x\|_2=1$ and sufficient decay, define $\sigma_t^2=\int t^2|x(t)|^2dt$ and $\sigma_f^2=\int f^2|\hat x(f)|^2df$ (centered at zero). Then $\sigma_t\sigma_f\ge1/(4\pi)$, with equality exactly for Gaussians.
+\end{theorem}
+\begin{proof}[Sketch]
+Integrate by parts: $1=\int|x|^2dt=-2\Re\int t\,x(t)\overline{x'(t)}\,dt$. By Cauchy--Schwarz, $1\le2\|tx\|_2\|x'\|_2$, and by Plancherel $\|x'\|_2=2\pi\|f\hat x\|_2$. Equality in Cauchy--Schwarz requires $x'\propto tx$, which forces a Gaussian.
+\end{proof}
+No analysis method can produce a representation that is simultaneously arbitrarily sharp in time and in frequency. Wavelets and multitapers choose different compromises; they do not escape the bound.
+
+\section{Filter design specifications}
+A practical band-pass filter is specified by passband edges, stopband edges, passband ripple, and stopband attenuation. The transition width $\Delta f$ largely determines the required FIR length: for a windowed-sinc design, $L\approx A f_s/(22\Delta f)$ for $A$ decibels of attenuation (a rule of thumb due to Kaiser and Harris). A theta filter ($4$--$12$\,Hz) at $f_s=1000$\,Hz with $2$\,Hz transitions and $60$\,dB attenuation thus needs roughly $1400$ taps, $1.4$\,s of impulse response. Narrow bands at low frequencies imply long filters, and long filters smear events in time: a filter's impulse response is the shortest event it can resolve.
+
+\begin{workedexample}[A filter that rings]
+Pass a single brief transient, approximately an impulse, through a narrow 8\,Hz band-pass filter. The output is the filter's impulse response: a windowed 8\,Hz oscillation lasting several cycles. A Hilbert phase estimate of this output is perfectly ``rhythmic'' although the input contained no rhythm at all. Any event-triggered analysis built on narrow-band filtering must therefore compare against the response to non-oscillatory transients, or examine the unfiltered waveform.
+\end{workedexample}
 \begin{exercises}
 \item Calculate the DFT of a constant sequence and identify its DC term.
 \item Derive the moving-average frequency response for three samples.
 \item Explain the difference between a Fourier coefficient and a PSD estimate.
 \item Design a simulation exposing a filter-induced false oscillatory event.
+\item Prove that $X[N-k]=\overline{X[k]}$ for real $x$.
+\item Compute the DFT of $x[n]=\cos(2\pi k_0n/N)$ for integer $0<k_0<N/2$.
+\item Show that zero-padding a length-$N$ signal to length $2N$ produces DFT values that interpolate the original ones.
+\item Estimate the FIR length for a 150--250\,Hz ripple filter at $f_s=1250$\,Hz with 20\,Hz transitions and 50\,dB attenuation.
+\item Verify the uncertainty bound with equality for $x(t)=(2a)^{1/4}e^{-\pi at^2}$.
 \end{exercises}

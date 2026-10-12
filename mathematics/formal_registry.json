@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "pinned": {
+    "lean": "leanprover/lean4:v4.34.0",
+    "mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+    "mathlib_ref": "v4.34.0",
+    "mathlib_license": "Apache-2.0"
+  },
+  "scope": "pilot five kernel-verified logic results; all other manuscripts results await formal mapping",
+  "results": [
+    {
+      "id": "LOGIC-001",
+      "name": "De Morgan conjunction",
+      "english_source": "books/formal_foundations/chapters/00_language/02_logic.tex",
+      "lean_source": "formal/lean/Con2physFormal/Logic.lean",
+      "lean_declaration": "Con2physFormal.Logic.deMorganAnd",
+      "status": "verified",
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38179132288",
+        "checked_repository_commit": "efd3d26eca266703e27156d067e2f72406ce36b0",
+        "verified_target": "lake build and lake env lean Con2physFormal/Logic.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      },
+      "direct_dependencies": [
+        "Mathlib import",
+        "tauto tactic"
+      ],
+      "axiom_audit": "Lean #print axioms in source",
+      "formal_statement": "¬ (P ∧ Q) ↔ ¬ P ∨ ¬ Q",
+      "axiomatic_dependencies": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "english_source_fingerprint": "6b2fd5e6",
+      "english_panel": "books/formal_foundations/formal/logic_side_by_side.tex",
+      "english_panel_fingerprint": "69b1c19b",
+      "lean_source_fingerprint": "13796c72"
+    },
+    {
+      "id": "LOGIC-002",
+      "name": "De Morgan disjunction",
+      "english_source": "books/formal_foundations/chapters/00_language/02_logic.tex",
+      "lean_source": "formal/lean/Con2physFormal/Logic.lean",
+      "lean_declaration": "Con2physFormal.Logic.deMorganOr",
+      "status": "verified",
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38179132288",
+        "checked_repository_commit": "efd3d26eca266703e27156d067e2f72406ce36b0",
+        "verified_target": "lake build and lake env lean Con2physFormal/Logic.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      },
+      "direct_dependencies": [
+        "Mathlib import",
+        "tauto tactic"
+      ],
+      "axiom_audit": "Lean #print axioms in source",
+      "formal_statement": "¬ (P ∨ Q) ↔ ¬ P ∧ ¬ Q",
+      "axiomatic_dependencies": [],
+      "english_source_fingerprint": "6b2fd5e6",
+      "english_panel": "books/formal_foundations/formal/logic_side_by_side.tex",
+      "english_panel_fingerprint": "69b1c19b",
+      "lean_source_fingerprint": "13796c72"
+    },
+    {
+      "id": "LOGIC-003",
+      "name": "Classical contraposition",
+      "english_source": "books/formal_foundations/chapters/00_language/02_logic.tex",
+      "lean_source": "formal/lean/Con2physFormal/Logic.lean",
+      "lean_declaration": "Con2physFormal.Logic.contrapositive",
+      "status": "verified",
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38179132288",
+        "checked_repository_commit": "efd3d26eca266703e27156d067e2f72406ce36b0",
+        "verified_target": "lake build and lake env lean Con2physFormal/Logic.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      },
+      "direct_dependencies": [
+        "Mathlib import",
+        "tauto tactic"
+      ],
+      "axiom_audit": "Lean #print axioms in source",
+      "formal_statement": "(P → Q) ↔ (¬ Q → ¬ P)",
+      "axiomatic_dependencies": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "english_source_fingerprint": "6b2fd5e6",
+      "english_panel": "books/formal_foundations/formal/logic_side_by_side.tex",
+      "english_panel_fingerprint": "69b1c19b",
+      "lean_source_fingerprint": "13796c72"
+    },
+    {
+      "id": "LOGIC-004",
+      "name": "Negated universal",
+      "english_source": "books/formal_foundations/chapters/00_language/02_logic.tex",
+      "lean_source": "formal/lean/Con2physFormal/Logic.lean",
+      "lean_declaration": "Con2physFormal.Logic.notForall",
+      "status": "verified",
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38179132288",
+        "checked_repository_commit": "efd3d26eca266703e27156d067e2f72406ce36b0",
+        "verified_target": "lake build and lake env lean Con2physFormal/Logic.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      },
+      "direct_dependencies": [
+        "Mathlib import",
+        "push_neg tactic"
+      ],
+      "axiom_audit": "Lean #print axioms in source",
+      "formal_statement": "(¬ ∀ x, P x) ↔ ∃ x, ¬ P x",
+      "axiomatic_dependencies": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "english_source_fingerprint": "6b2fd5e6",
+      "english_panel": "books/formal_foundations/formal/logic_side_by_side.tex",
+      "english_panel_fingerprint": "69b1c19b",
+      "lean_source_fingerprint": "13796c72"
+    },
+    {
+      "id": "LOGIC-005",
+      "name": "Negated existential",
+      "english_source": "books/formal_foundations/chapters/00_language/02_logic.tex",
+      "lean_source": "formal/lean/Con2physFormal/Logic.lean",
+      "lean_declaration": "Con2physFormal.Logic.notExists",
+      "status": "verified",
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38179132288",
+        "checked_repository_commit": "efd3d26eca266703e27156d067e2f72406ce36b0",
+        "verified_target": "lake build and lake env lean Con2physFormal/Logic.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      },
+      "direct_dependencies": [
+        "Mathlib import",
+        "push_neg tactic"
+      ],
+      "axiom_audit": "Lean #print axioms in source",
+      "formal_statement": "(¬ ∃ x, P x) ↔ ∀ x, ¬ P x",
+      "axiomatic_dependencies": [
+        "propext"
+      ],
+      "english_source_fingerprint": "6b2fd5e6",
+      "english_panel": "books/formal_foundations/formal/logic_side_by_side.tex",
+      "english_panel_fingerprint": "69b1c19b",
+      "lean_source_fingerprint": "13796c72"
+    }
+  ]
+}

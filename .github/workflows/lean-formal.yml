@@ -1,0 +1,59 @@
+name: Formal Lean
+on:
+  push:
+    branches: [main, feat/lean-formal-inventory-pilot]
+    paths: ["formal/lean/**", "books/formal_foundations/**", "mathematics/**", ".github/workflows/lean-formal.yml"]
+  pull_request:
+    paths: ["formal/lean/**", "books/formal_foundations/**", "mathematics/**", ".github/workflows/lean-formal.yml"]
+jobs:
+  lean:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit English mathematics and Lean links
+        run: |
+          python3 mathematics/audit_formal.py --write
+          python3 mathematics/audit_formal.py --check
+          python3 mathematics/build_concept_graphs.py --check
+          python3 mathematics/check_bridge_inventory.py
+          python3 mathematics/build_concept_graphs.py --write
+      - name: Install elan using the pinned toolchain
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Resolve pinned Mathlib and download proof cache
+        working-directory: formal/lean
+        run: |
+          lake update
+          lake exe cache get
+      - name: Kernel-check Lean project
+        working-directory: formal/lean
+        run: |
+          lake build
+          lake env lean Con2physFormal/Logic.lean
+          lake env lean Con2physFormal/Bridges.lean
+          lake env lean Con2physFormal/BridgesNumbers.lean
+      - name: Export and validate direct proof dependency graph
+        working-directory: formal/lean
+        run: |
+          lake env lean Con2physFormal/DependencyGraph.lean
+          python3 tools/dependency_graph.py
+      - name: Traverse bounded transitive theorem dependencies
+        working-directory: formal/lean
+        run: |
+          lake env lean Con2physFormal/TransitiveGraph.lean
+          python3 tools/transitive_graph.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mathematical-inventory
+          path: |
+            mathematics/formal_inventory.json
+            mathematics/mathematical_graph.json
+            mathematics/pedagogical_graph.json
+            formal/lean/build/direct_dependencies.tsv
+            formal/lean/build/direct_dependencies.json
+            formal/lean/build/transitive_dependencies.tsv
+            formal/lean/build/transitive_nodes.tsv
+            formal/lean/build/transitive_dependencies.json

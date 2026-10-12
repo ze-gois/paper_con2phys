@@ -19,9 +19,69 @@ Two finite sets have the same cardinality if there exists a bijection between th
 \begin{workedexample}[Discrete time windows]
 A recording sampled at $f_s=1000$ samples/s for 10 seconds has $N=f_sT=10000$ samples if we choose the index set $\{0,\ldots,9999\}$. The sample at index $n$ corresponds to $t_n=n/f_s$, so the last recorded time is $9.999$ s, not 10 s. Distinguish the \emph{duration of acquisition} from the \emph{timestamp of its final sample}.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{Proving the arithmetic laws from the definitions}
+The recursive definitions of addition and multiplication say nothing explicit about commutativity or associativity. These must be proved by induction, and the proofs show how a small set of rules generates all of school arithmetic.
+
+\begin{proposition}[Associativity of addition]
+For all $k,m,n\in\mathbb N_0$, $(k+m)+n=k+(m+n)$.
+\end{proposition}
+\begin{proof}
+Fix $k$ and $m$, and induct on $n$. For $n=0$, both sides equal $k+m$ by the rule $x+0=x$. Suppose the identity holds for $n$. Then
+\[
+(k+m)+S(n)=S\bigl((k+m)+n\bigr)=S\bigl(k+(m+n)\bigr)=k+S(m+n)=k+\bigl(m+S(n)\bigr),
+\]
+where the first and third equalities use the recursive rule $x+S(y)=S(x+y)$, the second uses the induction hypothesis, and the last uses the recursive rule once more.
+\end{proof}
+
+\begin{proposition}[Commutativity of addition]
+For all $m,n\in\mathbb N_0$, $m+n=n+m$.
+\end{proposition}
+\begin{proof}
+We first prove two lemmas by induction on $n$: (a) $0+n=n$, and (b) $S(m)+n=S(m+n)$. For (a), $0+0=0$, and $0+S(n)=S(0+n)=S(n)$. For (b), $S(m)+0=S(m)=S(m+0)$, and $S(m)+S(n)=S(S(m)+n)=S(S(m+n))=S(m+S(n))$. Now induct on $n$ in the main claim. The case $n=0$ is $m+0=m=0+m$ by (a). If $m+n=n+m$, then $m+S(n)=S(m+n)=S(n+m)=S(n)+m$ by (b).
+\end{proof}
+Analogous inductions establish associativity and commutativity of multiplication and the distributive law $k(m+n)=km+kn$. The order relation is then \emph{defined} by $m\le n$ iff $n=m+p$ for some $p\in\mathbb N_0$, and one proves that it is a total order compatible with addition and multiplication.
+
+\section{Recursion as a way to define sequences}
+The \emph{recursion theorem} states that, given a set $X$, an element $x_0\in X$, and a function $g:X\to X$, there is exactly one sequence $x:\mathbb N_0\to X$ with $x(0)=x_0$ and $x(S(n))=g(x(n))$. It is the justification for every iterative definition: factorials, powers, and numerical algorithms such as Newton's method. Uniqueness follows from induction on $n$; existence requires a construction (the intersection of all relations with the right closure properties) which we omit.
+
+\begin{workedexample}[A recursive filter is a recursive definition]
+The exponential smoother $y_0=x_0$, $y_{n}=\alpha y_{n-1}+(1-\alpha)x_n$ for $0<\alpha<1$ is defined by recursion. Unrolling by induction gives
+\[
+y_n=\alpha^nx_0+(1-\alpha)\sum_{k=1}^{n}\alpha^{n-k}x_k,
+\]
+which can be verified by checking $n=0$ and the step $n\to n+1$. The recursion is computationally cheap; the closed form shows the geometric weighting of past samples. This is the simplest infinite-impulse-response filter, revisited in Chapter~\ref{ch:fourier}.
+\end{workedexample}
+
+\section{Divisibility, remainders, and modular indices}
+\begin{theorem}[Division with remainder]
+For $n\in\mathbb N_0$ and $d\in\mathbb N_+$ there are unique $q,r\in\mathbb N_0$ with $n=qd+r$ and $0\le r<d$.
+\end{theorem}
+\begin{proof}
+Existence: the set $\{n-qd:q\in\mathbb N_0,\ qd\le n\}$ is a nonempty subset of $\mathbb N_0$ (it contains $n$), so by well ordering it has a least element $r=n-qd$. If $r\ge d$, then $n-(q+1)d=r-d\ge0$ is a smaller element, a contradiction. Uniqueness: if $qd+r=q'd+r'$ with $0\le r,r'<d$, then $|r-r'|<d$ is a multiple of $d$, hence $0$, and then $q=q'$.
+\end{proof}
+Remainders appear constantly in indexing. Converting a linear sample index $n$ into (trial, within-trial sample) for trials of length $L$ is $n=qL+r$; circular buffers use $r=n\bmod L$; and the discrete Fourier transform treats its indices modulo $N$. Off-by-one errors are often confusions between the ranges $\{0,\ldots,L-1\}$ and $\{1,\ldots,L\}$.
+
+\section{Counting principles}
+Three counting rules recur:
+\begin{enumerate}[leftmargin=2em]
+\item \emph{Sum rule}: if a finite set is a disjoint union $A\cup B$, then $|A\cup B|=|A|+|B|$.
+\item \emph{Product rule}: $|A\times B|=|A|\,|B|$.
+\item \emph{Ordered selections}: the number of injective functions from a $k$-set to an $n$-set is $n(n-1)\cdots(n-k+1)=n!/(n-k)!$.
+\end{enumerate}
+Each unordered $k$-subset corresponds to exactly $k!$ ordered selections, which gives $\binom nk=n!/[k!(n-k)!]$. Pascal's rule $\binom nk=\binom{n-1}{k-1}+\binom{n-1}{k}$ follows by splitting subsets according to whether they contain a fixed element, and induction with Pascal's rule proves the binomial theorem
+\[
+(a+b)^n=\sum_{k=0}^n\binom nk a^kb^{n-k}.
+\]
+With $a=p$ and $b=1-p$, the terms are the binomial probabilities of observing $k$ spikes in $n$ independent bins, and the identity says they sum to one.
 \begin{exercises}
 \item Prove by induction that $1+3+\cdots+(2n-1)=n^2$.
 \item Count unordered neuron pairs from $N=80$ recorded units.
 \item Show that a finite sequence of $N$ entries is a function on $\{0,\ldots,N-1\}$.
 \item Explain why mathematical induction and statistical generalization from trials are different operations.
+\item Prove by induction that $n\cdot1=n$ and $1\cdot n=n$ from the recursive definition of multiplication.
+\item Use the recursion of the exponential smoother to prove its closed form by induction.
+\item Compute $q$ and $r$ for $n=123457$ samples and trial length $L=2500$; interpret them.
+\item Prove Pascal's rule by a counting argument.
+\item How many ordered sequences of 3 distinct stimuli can be chosen from 8? How many unordered sets?
 \end{exercises}

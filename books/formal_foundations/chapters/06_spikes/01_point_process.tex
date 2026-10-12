@@ -16,9 +16,56 @@ Dividing time into bins of width $\Delta$ creates counts $n_k=N((k+1)\Delta)-N(k
 \begin{workedexample}[Poisson probability of a silent window]
 A 10-spikes/s homogeneous Poisson process has expected count $\lambda\Delta=0.1$ in 10 ms. The chance of observing zero spikes is $e^{-0.1}\approx0.905$. Frequent silent bins are compatible with a nonzero underlying intensity.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{Constructing the homogeneous Poisson process}
+Three descriptions of the homogeneous Poisson process with rate $\lambda$ are equivalent.
+\begin{enumerate}[leftmargin=2em]
+\item \emph{Counting description}: $N(0)=0$; counts in disjoint intervals are independent; $N(t+s)-N(t)\sim\mathrm{Poisson}(\lambda s)$.
+\item \emph{Interval description}: inter-event intervals $\tau_1,\tau_2,\ldots$ are iid exponential with mean $1/\lambda$, and $t_k=\tau_1+\cdots+\tau_k$.
+\item \emph{Infinitesimal description}: $P(N(t+h)-N(t)=1)=\lambda h+o(h)$ and $P(N(t+h)-N(t)\ge2)=o(h)$, with independent increments.
+\end{enumerate}
+\begin{proposition}
+Under the counting description, the first event time is exponential with rate $\lambda$.
+\end{proposition}
+\begin{proof}
+$P(t_1>t)=P(N(t)=0)=e^{-\lambda t}$.
+\end{proof}
+The interval description gives the simplest simulation: draw $\tau_k=-\log(U_k)/\lambda$ for iid uniform $U_k$ and accumulate. The \emph{conditional uniformity} property is also useful: given $N(T)=n$, the $n$ event times are distributed as the order statistics of $n$ iid uniform points on $[0,T]$. This property underlies spike-time randomization nulls; it holds for homogeneous Poisson processes and fails for any process with refractoriness or bursting.
+
+\section{Inhomogeneous processes, thinning, and time rescaling}
+For an inhomogeneous Poisson process with intensity $\lambda(t)$, define the cumulative intensity $\Lambda(t)=\int_0^t\lambda(s)\,ds$. Counts in disjoint intervals are independent and $N(b)-N(a)\sim\mathrm{Poisson}(\Lambda(b)-\Lambda(a))$.
+
+\begin{theorem}[Time rescaling for Poisson processes]
+If $t_1<t_2<\cdots$ are the events of an inhomogeneous Poisson process with continuous positive intensity, then $\Lambda(t_1),\Lambda(t_2),\ldots$ are the events of a homogeneous Poisson process with rate one. Equivalently, the rescaled intervals $\Lambda(t_k)-\Lambda(t_{k-1})$ are iid exponential with mean one.
+\end{theorem}
+\begin{proof}
+The map $t\mapsto\Lambda(t)$ is continuous and strictly increasing. The number of rescaled events in $(\Lambda(a),\Lambda(b)]$ equals $N(b)-N(a)$, which is Poisson with mean $\Lambda(b)-\Lambda(a)$, the length of the rescaled interval; independence over disjoint intervals is preserved.
+\end{proof}
+The general theorem replaces $\lambda(t)$ by the conditional intensity, so that any correctly specified history-dependent model also maps spikes to a unit-rate Poisson process. Testing whether the rescaled intervals look exponential (via $u_k=1-e^{-(\Lambda(t_k)-\Lambda(t_{k-1}))}$, which should be uniform) is the basis of KS plots for spike-train models.
+
+\emph{Thinning} simulates an inhomogeneous process: generate a homogeneous process at rate $\lambda_{\max}\ge\sup_t\lambda(t)$ and keep each event at time $t$ independently with probability $\lambda(t)/\lambda_{\max}$. The kept events form a Poisson process of intensity $\lambda(t)$.
+
+\section{Renewal processes and interval statistics}
+A \emph{renewal process} has iid inter-event intervals with a general distribution on $(0,\infty)$. It can express refractoriness (a gap near zero) and regularity, but not dependence between successive intervals. Two summary statistics are standard:
+\begin{itemize}[leftmargin=2em]
+\item the \emph{coefficient of variation} $\mathrm{CV}=\mathrm{sd}(\tau)/\E(\tau)$, equal to $1$ for the Poisson process, below $1$ for regular firing, and above $1$ for bursty firing;
+\item the \emph{Fano factor} $F(T)=\Var N(T)/\E N(T)$ of counts in windows of length $T$.
+\end{itemize}
+For a stationary renewal process, $F(T)\to\mathrm{CV}^2$ as $T\to\infty$. For finite $T$, both are biased by rate fluctuations across a session, so the local measure $\mathrm{CV}_2=\frac{2|\tau_{k+1}-\tau_k|}{\tau_{k+1}+\tau_k}$, averaged over $k$, is often preferred: it compares adjacent intervals and is insensitive to slow rate drift. A gamma-distributed renewal process with shape $\kappa$ has $\mathrm{CV}=1/\sqrt\kappa$.
+
+\section{Second-order statistics: autocorrelograms and the Bartlett spectrum}
+For a stationary point process with rate $\lambda$, the \emph{conditional intensity given an event at $0$}, $\lambda\,g(\tau)$, describes how likely another event is at lag $\tau$. Its histogram estimate is the autocorrelogram. For a homogeneous Poisson process, $g\equiv1$: the autocorrelogram is flat. A dip near zero reflects refractoriness; a peak at $\pm125$\,ms reflects 8\,Hz rhythmicity. The Fourier transform of the covariance density gives the point-process spectrum (Bartlett spectrum), which tends to $\lambda$ at high frequencies for any simple process; a spike train is therefore never ``white'' or ``band-limited'' in the way a continuous signal can be.
+
+\begin{workedexample}[Refractoriness changes the counts]
+A neuron firing at 20\,spikes/s with an absolute refractory period of $d=3$\,ms can be modeled as a dead-time-modified Poisson process: intervals are $d+$Exponential$(\mu)$ with $d+1/\mu=50$\,ms. Then $\mathrm{CV}=(1/\mu)/(d+1/\mu)=47/50=0.94$, and the long-window Fano factor is $0.94^2\approx0.88$. Refractoriness alone makes counts sub-Poisson, so a measured Fano factor slightly below one is not evidence of a precise temporal code.
+\end{workedexample}
 \begin{exercises}
 \item Derive the probability of at least one spike in a window under a homogeneous Poisson model.
 \item Explain why spike sorting uncertainty can affect autocorrelograms.
 \item Distinguish an observed spike count from conditional intensity.
 \item Give a point-process model that excludes spikes for a fixed period after each event.
+\item Show that the sum of two independent Poisson processes with rates $\lambda_1,\lambda_2$ is a Poisson process with rate $\lambda_1+\lambda_2$.
+\item Prove that thinning a homogeneous process with constant retention probability $p$ gives a Poisson process with rate $p\lambda$.
+\item Compute $\mathrm{CV}$ for a gamma renewal process with shape $\kappa=4$.
+\item Explain why the time-rescaling theorem requires the intensity model to use only past information.
 \end{exercises}

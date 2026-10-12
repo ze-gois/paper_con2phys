@@ -109,3 +109,98 @@ make the multi-factor objective convex or guarantee global
 optimality. The exploratory \path{tensor_cp_als.m}
 includes ridge terms and does not track a monotonic objective;
 a monotonicity claim for that code must be tested, not assumed.
+% --- expanded edition (October 2026) ---
+\section{Deviance, model comparison, and overdispersion}
+The Poisson \emph{deviance} compares a fitted model with the saturated
+model $\hat\mu_i=y_i$:
+\[
+D=2\sum_i\Bigl[y_i\log\frac{y_i}{\hat\mu_i}-(y_i-\hat\mu_i)\Bigr],
+\]
+with the convention $0\log0=0$. For nested models the deviance
+difference is twice the log-likelihood ratio, approximately $\chi^2$
+with degrees of freedom equal to the difference in parameters
+(Result 52). Penalized comparisons use $\mathrm{AIC}=-2\ell+2p$ or
+$\mathrm{BIC}=-2\ell+p\log n$; for spike trains, the effective $n$ in
+BIC is ambiguous (bins? spikes? trials?), and cross-validated
+log-likelihood is usually more defensible.
+
+If the data are overdispersed relative to Poisson, the MLE of $\beta$
+remains consistent when the mean model is correct, but its standard
+errors from $(X^\top WX)^{-1}$ are too small. A quasi-Poisson correction
+multiplies the covariance by the dispersion estimate
+$\hat\phi=\frac{1}{n-p}\sum_i(y_i-\hat\mu_i)^2/\hat\mu_i$; the
+sandwich estimator $(X^\top WX)^{-1}(X^\top\hat\Omega X)(X^\top WX)^{-1}$,
+with $\hat\Omega=\diag((y_i-\hat\mu_i)^2)$, is robust to any variance
+misspecification but not to temporal correlation of residuals, which
+calls for block-based variants.
+
+\section{Bernoulli GLMs and the logistic link}
+In fine bins where at most one spike can occur, $y_i\in\{0,1\}$ and a
+Bernoulli model with $\Prob(y_i=1)=\sigma(x_i^\top\beta)$,
+$\sigma(u)=1/(1+e^{-u})$, is natural. The log-likelihood
+$\sum_i[y_ix_i^\top\beta-\log(1+e^{x_i^\top\beta})]$ is concave with
+Hessian $-X^\top\diag(p_i(1-p_i))X$. For small probabilities
+$\sigma(u)\approx e^u$ and the model reduces to the Poisson GLM with
+log link. The \emph{complementary log-log} link
+$\Prob(y_i=1)=1-\exp(-\Delta e^{x_i^\top\beta})$ is exactly the probability
+of at least one event in a bin for a Poisson process with rate
+$e^{x_i^\top\beta}$, and is therefore the most faithful bin-level model
+of an underlying continuous-time intensity.
+
+\section{Sparse penalties and soft thresholding}
+For orthonormal design ($X^\top X=I$) and squared loss, the lasso
+problem $\min_\beta\frac12\|y-X\beta\|^2+\lambda\|\beta\|_1$ separates
+into scalar problems with solution
+\[
+\hat\beta_j=\operatorname{sign}(z_j)\max(|z_j|-\lambda,0),\qquad z=X^\top y.
+\]
+\begin{proof}
+For one coordinate minimize $\frac12(\beta-z)^2+\lambda|\beta|$. The
+subgradient condition $0\in\beta-z+\lambda\,\partial|\beta|$ gives
+$\beta=z-\lambda$ if $z>\lambda$, $\beta=z+\lambda$ if $z<-\lambda$, and
+$\beta=0$ when $|z|\le\lambda$, since then $0\in-z+\lambda[-1,1]$.
+\end{proof}
+For general designs, coordinate descent cycles this update with partial
+residuals; for GLMs it is applied inside each IRLS step. Lasso coupling
+filters are attractive because they return exact zeros, but which
+coupling coefficients are zero depends on correlations among regressors:
+among two strongly correlated presynaptic neurons, the lasso tends to
+select one arbitrarily. Zero coefficients are a property of the
+estimator, not evidence of absent connections.
+
+\section{An EM algorithm in closed form}
+Suppose each trial's count is drawn from one of two Poisson rates,
+$y_i\sim\pi\Poisson(\lambda_1)+(1-\pi)\Poisson(\lambda_2)$, for example
+from an up and a down state. With responsibilities
+\[
+r_i=\frac{\pi\,p(y_i\mid\lambda_1)}{\pi\,p(y_i\mid\lambda_1)+(1-\pi)\,p(y_i\mid\lambda_2)}
+\]
+(E-step), the M-step maximizes the expected complete-data log-likelihood
+and gives
+\[
+\pi=\frac1n\sum_ir_i,\qquad\lambda_1=\frac{\sum_ir_iy_i}{\sum_ir_i},\qquad
+\lambda_2=\frac{\sum_i(1-r_i)y_i}{\sum_i(1-r_i)}.
+\]
+Each iteration does not decrease the observed-data likelihood (the ELBO
+argument of this chapter), but the likelihood has a symmetric copy under
+label swapping and may have degenerate maxima where one component
+collapses onto a single observation. Several initializations and a
+check that the fitted components are separated are required before
+interpreting them as ``states''.
+
+\section*{Exercises for this chapter}
+\begin{exercise}
+Show that the Poisson deviance is nonnegative and zero only for a
+perfect fit.
+\end{exercise}
+\begin{exercise}
+Derive the Hessian of the Bernoulli log-likelihood and show it is
+negative semidefinite.
+\end{exercise}
+\begin{exercise}
+Show that for small $\Delta e^{u}$ the complementary log-log
+probability is approximately $\Delta e^u$.
+\end{exercise}
+\begin{exercise}
+Derive the M-step formulas for the two-component Poisson mixture.
+\end{exercise}

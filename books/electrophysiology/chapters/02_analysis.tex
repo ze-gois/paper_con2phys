@@ -75,3 +75,112 @@ The derivative of an estimated signal can amplify measurement noise.
 A valid derivative theorem for a smooth function does not prove that a
 finite-difference estimate of noisy LFP samples is accurate.
 \end{caution}
+% --- expanded edition (October 2026) ---
+\section{Proofs of selected inequalities}
+\begin{lemma}[Young's inequality]
+For $a,b\ge0$ and $p,q>1$ with $1/p+1/q=1$, $ab\le a^p/p+b^q/q$.
+\end{lemma}
+\begin{proof}
+If $ab=0$ there is nothing to prove. Otherwise, by concavity of the
+logarithm,
+$\log(a^p/p+b^q/q)\ge\frac1p\log a^p+\frac1q\log b^q=\log(ab)$.
+\end{proof}
+\begin{proof}[Proof of Result 13 (H\"older)]
+If $\|f\|_p=0$ or $\|g\|_q=0$ the product vanishes almost everywhere.
+Otherwise set $F=|f|/\|f\|_p$ and $G=|g|/\|g\|_q$. Young's inequality
+gives $FG\le F^p/p+G^q/q$ pointwise; integrating yields
+$\int FG\le1/p+1/q=1$, which is the claim after rescaling.
+\end{proof}
+\begin{proof}[Proof of Result 14 (Minkowski)]
+For $p=1$ use the pointwise triangle inequality. For $p>1$,
+$|f+g|^p\le|f||f+g|^{p-1}+|g||f+g|^{p-1}$. Apply H\"older with
+exponents $p$ and $q=p/(p-1)$ to each term:
+$\|f+g\|_p^p\le(\|f\|_p+\|g\|_p)\,\|f+g\|_p^{p-1}$, and divide.
+\end{proof}
+H\"older with $p=q=2$ is Cauchy--Schwarz. On a probability space,
+H\"older applied to $|X|^r\cdot1$ with exponent $s/r$ gives
+\emph{Lyapunov's inequality} $(\E|X|^r)^{1/r}\le(\E|X|^s)^{1/s}$ for
+$0<r<s$. In particular a finite fourth moment guarantees finite second
+and third moments, which is the hypothesis needed before reporting
+skewness and kurtosis of envelope amplitudes.
+
+\section{Contractions and fixed points}
+\begin{proof}[Proof of Result 24 (Banach)]
+Let $T$ satisfy $d(Tx,Ty)\le c\,d(x,y)$ with $0\le c<1$ on a
+complete metric space. For any $x_0$, the iterates $x_{n+1}=Tx_n$
+satisfy $d(x_{n+1},x_n)\le c^nd(x_1,x_0)$, so for $m>n$,
+\[
+d(x_m,x_n)\le\sum_{k=n}^{m-1}c^kd(x_1,x_0)\le\frac{c^n}{1-c}d(x_1,x_0).
+\]
+The sequence is Cauchy and converges to some $x^\ast$; continuity
+of $T$ gives $Tx^\ast=x^\ast$. If $Ty=y$ as well, then
+$d(x^\ast,y)\le c\,d(x^\ast,y)$ forces $y=x^\ast$.
+\end{proof}
+The proof yields an a-priori error bound $d(x_n,x^\ast)\le c^n d(x_1,x_0)/(1-c)$,
+which is a usable stopping rule when $c$ is known. Fixed-point iterations
+in spike-sorting template matching, in self-consistent mean-field rate
+models, and in the existence proof for ODE solutions (Result 81) all
+rely on this theorem.
+
+\begin{example}[Mean-field firing rate]
+In a recurrent population with rate $r=\phi(wr+I)$ and a transfer
+function with Lipschitz constant $L_\phi$, the map
+$T(r)=\phi(wr+I)$ is a contraction when $|w|L_\phi<1$. A unique
+self-consistent rate then exists and the iteration $r_{n+1}=T(r_n)$
+finds it. When $|w|L_\phi\ge1$ multiple fixed points (bistability)
+or no stable fixed point can occur; the theorem is silent in that regime.
+\end{example}
+
+\section{Likelihoods are Radon--Nikodym derivatives}
+Result 23 is what makes ``the likelihood'' a well-defined object across
+discrete, continuous, and point-process data. A family of probability
+measures $P_\theta$ is \emph{dominated} by a reference measure $\nu$ if
+every $P_\theta\ll\nu$; the likelihood is then $L(\theta;x)=\frac{dP_\theta}{d\nu}(x)$.
+Counting measure gives probability mass functions, Lebesgue measure
+gives densities, and for spike trains on $[0,T]$ the reference is the
+law of a unit-rate Poisson process, which yields
+\[
+\frac{dP_\lambda}{dP_1}(t_1,\ldots,t_n)
+=\exp\Bigl(\sum_{i=1}^n\log\lambda(t_i)-\int_0^T(\lambda(t)-1)\,dt\Bigr),
+\]
+matching Result 76 up to a parameter-free factor. Changing the reference
+measure multiplies every likelihood by the same function of the data,
+so likelihood ratios and maximum-likelihood estimates are unaffected.
+
+\section{Exchanging limits, sums, and integrals in practice}
+Three standard tools justify most interchanges in this book:
+\begin{enumerate}[leftmargin=2em]
+\item \emph{Monotone convergence} for nonnegative increasing integrands;
+\item \emph{Dominated convergence} with an integrable bound;
+\item \emph{Fubini--Tonelli} for iterated integrals and sums, with
+absolute integrability or nonnegativity.
+\end{enumerate}
+\begin{example}[Differentiating under the integral]
+Let $\ell(\theta)=\int\log p_\theta(x)\,dP(x)$. If
+$|\partial_\theta\log p_\theta(x)|\le g(x)$ for $\theta$ near
+$\theta_0$ with $\int g\,dP<\infty$, the mean value theorem and
+dominated convergence give
+\[
+\ell'(\theta_0)=\int\partial_\theta\log p_{\theta}(x)\big|_{\theta=\theta_0}\,dP(x).
+\]
+This is the step behind ``the expected score is zero'' in the proof
+of the Cram\'er--Rao inequality (Result 50).
+\end{example}
+
+\section*{Exercises for this chapter}
+\begin{exercise}
+Show that equality holds in H\"older's inequality iff $|f|^p$ and
+$|g|^q$ are proportional almost everywhere.
+\end{exercise}
+\begin{exercise}
+Find the contraction constant of $T(x)=\cos x$ on $[0,1]$ and the
+number of iterations needed to approximate its fixed point to $10^{-6}$
+using the a-priori bound.
+\end{exercise}
+\begin{exercise}
+Give an example in which Fatou's inequality is strict.
+\end{exercise}
+\begin{exercise}
+Derive the Poisson-process likelihood ratio above from the binned
+Bernoulli likelihood by letting the bin width tend to zero.
+\end{exercise}

@@ -71,3 +71,116 @@ Membership ($x\in A$), inclusion ($A\subseteq B$), and association
 under a binary relation ($xRy$) are distinct concepts. An observed
 cross-correlation is not evidence that a causal or anatomical edge exists.
 \end{caution}
+% --- expanded edition (October 2026) ---
+\section{Proofs of selected foundational results}
+The catalogue entries above state results compactly. This section proves
+those whose arguments are short enough to be reproduced by hand and
+whose structure reappears later in the book.
+
+\begin{proof}[Proof of Result 1 for sets]
+Let $U$ be the ambient set and $x\in U$. Then $x\in(A\cup B)^c$
+iff $\neg(x\in A\lor x\in B)$ iff $(x\notin A)\land(x\notin B)$
+by the propositional De Morgan law, iff $x\in A^c\cap B^c$.
+Since the two sets have the same members they are equal. The
+propositional law itself is verified by its four-row truth table.
+\end{proof}
+
+\begin{proposition}[Result 6 implies Result 3]
+The well-ordering principle implies the principle of induction.
+\end{proposition}
+\begin{proof}
+Assume $P(0)$ and $P(n)\Rightarrow P(n+1)$ for all $n$, and suppose
+the set $F=\{n\in\N:\neg P(n)\}$ is nonempty. Let $m$ be its least
+element. Then $m\ne0$ because $P(0)$ holds, so $m-1\in\N$ and
+$m-1\notin F$, i.e.\ $P(m-1)$ holds. The induction step gives $P(m)$,
+contradicting $m\in F$.
+\end{proof}
+
+\begin{proof}[Proof of Result 8]
+Suppose $g:\N\to(0,1)$ is surjective and write each $g(n)$ by its
+decimal expansion $0.d_{n1}d_{n2}\ldots$, choosing the expansion that
+does not end in repeated $9$'s. Define $y=0.e_1e_2\ldots$ with
+$e_n=5$ if $d_{nn}\ne5$ and $e_n=4$ if $d_{nn}=5$. Then $y\in(0,1)$,
+its expansion is of the chosen kind, and it differs from $g(n)$ in the
+$n$th digit for every $n$. Hence $y$ is not in the image of $g$.
+\end{proof}
+
+\begin{proof}[Proof sketch of Result 7]
+Let $f:A\to B$ and $g:B\to A$ be injective. Call $a\in A$ an
+\emph{$A$-stopper} if, tracing preimages
+$a,\;g^{-1}(a),\;f^{-1}(g^{-1}(a)),\ldots$ as far as they exist,
+the chain terminates in $A\setminus g(B)$. Define $h(a)=f(a)$ for
+$A$-stoppers and $h(a)=g^{-1}(a)$ otherwise. One checks that every
+non-stopper lies in $g(B)$, that $h$ is injective on each of the two
+pieces, and that the two images partition $B$. Thus $h$ is a bijection.
+\end{proof}
+Result 7 is used implicitly whenever one argues that two index sets
+``have the same size'' by exhibiting encodings in each direction, for
+example that finite spike rasters over a countable set of bins can be
+enumerated.
+
+\section{Relations as data structures}
+Most data objects in an electrophysiology pipeline are relations or
+functions whose properties should be checked rather than assumed.
+\begin{itemize}[leftmargin=2em]
+\item A spike table with columns (unit, time) is a relation
+$R\subseteq U\times\R$. It is the graph of a function $U\to\R$ only
+if each unit fires exactly once.
+\item A channel map is a function from channel indices to physical
+positions. It must be injective (no two channels at the same place)
+for current-source density estimates to make sense.
+\item A trial table is a function from trial indices to
+(condition, onset) pairs. If it is not injective in onset, two trials
+share a time window and their data are not independent.
+\item A cluster assignment is a function from detected waveforms to
+labels, equivalently a partition (Result 5). A \emph{merge} of two
+clusters replaces the partition by a coarser one; a \emph{split}
+replaces it by a finer one.
+\end{itemize}
+
+\begin{proposition}[Agreement between two sortings]
+Let $\mathcal P$ and $\mathcal Q$ be two partitions of the same finite
+set of detected spikes $S$. The meet
+$\mathcal P\wedge\mathcal Q=\{P\cap Q:P\in\mathcal P,\ Q\in\mathcal Q,\ P\cap Q\ne\varnothing\}$
+is a partition of $S$ that refines both.
+\end{proposition}
+\begin{proof}
+Each $s\in S$ lies in exactly one $P$ and one $Q$, hence in exactly one
+$P\cap Q$. Blocks are nonempty by construction and pairwise disjoint
+because distinct pairs $(P,Q)$ differ in at least one coordinate, whose
+blocks are disjoint. Each $P\cap Q$ is contained in $P$ and in $Q$.
+\end{proof}
+The confusion matrix $M_{PQ}=|P\cap Q|$ used to compare sorters is
+the table of block sizes of the meet. Agreement indices such as the
+adjusted Rand index are functions of this table and answer the
+question ``how similar are these two partitions?'', not ``which
+partition corresponds to neurons?''.
+
+\begin{example}[Bins as equivalence classes, continued]
+For the binning relation $s\sim t\iff\lfloor s/\Delta\rfloor=\lfloor t/\Delta\rfloor$,
+the quotient map $t\mapsto\lfloor t/\Delta\rfloor$ is a function from
+times to integers. It is not injective, so binning cannot be undone.
+Two spikes of different units in the same bin are \emph{coincident at
+resolution $\Delta$}; the same pair may be non-coincident at resolution
+$\Delta/2$. Coincidence is therefore a relation that depends on a
+parameter, and every synchrony claim must state that parameter.
+\end{example}
+
+\section*{Exercises for this chapter}
+\begin{exercise}
+Prove the set form of De Morgan's law for an arbitrary indexed family
+$(A_i)_{i\in I}$.
+\end{exercise}
+\begin{exercise}
+Show that the induction principle implies the well-ordering principle,
+completing the equivalence of Results 3 and 6.
+\end{exercise}
+\begin{exercise}
+Prove that the set of finite subsets of $\N$ is countable, and that
+the set of all subsets of $\N$ is not.
+\end{exercise}
+\begin{exercise}
+Two sorters produce partitions of 10{,}000 spikes into 12 and 15
+clusters. What is the largest and the smallest possible number of
+blocks in their meet?
+\end{exercise}

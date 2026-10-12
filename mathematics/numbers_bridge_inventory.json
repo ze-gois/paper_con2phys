@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "scope": "BRIDGE-009 verified; BRIDGE-010 to 016 pending",
+  "entries": [
+    {
+      "id": "BRIDGE-009",
+      "bridge_number": 9,
+      "latex_key": "addition-induction",
+      "title": "Associativity of addition from recursion",
+      "english_source": "books/formal_foundations/bridges/02_numbers.tex",
+      "english_label": "bridge:addition-induction",
+      "original_statement_summary": "∀ a b c : ℕ, (a+b)+c=a+(b+c), by induction on c",
+      "lean_source": "formal/lean/Con2physFormal/BridgesNumbers.lean",
+      "lean_declaration": "Con2physFormal.BridgesNumbers.add_assoc_induction",
+      "status": "verified",
+      "lean_candidates": [
+        "Con2physFormal.BridgesNumbers.add_assoc_induction"
+      ],
+      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+      "math_prerequisites": [
+        "natural.recursion",
+        "natural.induction",
+        "natural.addition"
+      ],
+      "pedagogical_prerequisites": [
+        "natural.successor",
+        "natural.induction",
+        "natural.addition"
+      ],
+      "lean_declarations": [
+        "Con2physFormal.BridgesNumbers.add_assoc_induction"
+      ],
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38300314559",
+        "checked_repository_commit": "486c58534985cec08bf96a8a5d73d3696a3cb1ba",
+        "verified_target": "lake build and lake env lean Con2physFormal/BridgesNumbers.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      }
+    },
+    {
+      "id": "BRIDGE-010",
+      "bridge_number": 10,
+      "latex_key": "integer-pairs",
+      "title": "Constructing integers from pairs of naturals",
+      "english_source": "books/formal_foundations/bridges/02_numbers.tex",
+      "english_label": "bridge:integer-pairs",
+      "original_statement_summary": "Relation (a,b)~(c,d) iff a+d=b+c is an equivalence relation; componentwise addition respects it",
+      "lean_source": null,
+      "lean_declaration": null,
+      "status": "pending_kernel_verification",
+      "lean_candidates": [
+        "Con2physFormal.BridgesNumbers.integerPairRel_equivalence",
+        "Con2physFormal.BridgesNumbers.integerPairAdd_respects"
+      ],
+      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+      "math_prerequisites": [
+        "BRIDGE-005",
+        "BRIDGE-009",
+        "natural.addition",
+        "relation.equivalence"
+      ],
+      "pedagogical_prerequisites": [
+        "BRIDGE-005",
+        "BRIDGE-009",
+        "integer.signed_difference"
+      ]
+    }
+  ]
+}

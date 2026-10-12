@@ -1,0 +1,30 @@
+\section{Lean 4 verification: the first two bridges}
+\label{sec:lean-bridges-01-02}
+\noindent\begin{minipage}[t]{0.44\textwidth}
+\textbf{English: BRIDGE-001}
+
+For any sets $A,B$ of elements of a common type, equality is equivalent
+to mutual inclusion:
+\[A=B\iff(A\subseteq B\land B\subseteq A).\]
+If $A=B$, both inclusions follow. Conversely, two-way membership gives
+equality by set extensionality.
+
+\medskip\textbf{English: BRIDGE-002}
+
+Set inclusion is reflexive ($A\subseteq A$), transitive
+($A\subseteq B\subseteq C\Rightarrow A\subseteq C$), and
+antisymmetric ($A\subseteq B\land B\subseteq A\Rightarrow A=B$).
+For the final property, reuse BRIDGE-001.
+
+\medskip\textit{Formal correspondence:} \texttt{Set $\alpha$} represents
+sets whose members belong to an arbitrary type $\alpha$.
+The three order laws are stated explicitly in Lean.
+The code is checked separately by the pinned Lean toolchain.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.53\textwidth}
+\textbf{Lean 4 / Mathlib}
+
+\lstinputlisting[language=LeanFour,basicstyle=\ttfamily\tiny,
+breaklines=true,columns=fullflexible,keepspaces=true,frame=single]
+{../../formal/lean/Con2physFormal/Bridges.lean}
+\end{minipage}

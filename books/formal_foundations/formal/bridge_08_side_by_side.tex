@@ -1,0 +1,14 @@
+\section{Lean 4: countability of natural-number pairs}
+\label{sec:lean-bridge-08}
+A pair $(m,n)\in\mathbb{N}\times\mathbb{N}$ can be enumerated
+by visiting finite diagonals with fixed $m+n$.
+Lean expresses this conclusion as a \texttt{Countable} instance
+for the product type. The following proof asks Mathlib to supply
+the product instance from the countability of its factors.
+This certifies the countability claim, but does not formalize
+the manuscript's particular diagonal enumeration algorithm.
+
+\lstinputlisting[language=LeanFour,basicstyle=\ttfamily\footnotesize,
+breaklines=true,columns=fullflexible,keepspaces=true,frame=single,
+firstline=136,lastline=140]
+{../../formal/lean/Con2physFormal/Bridges.lean}
