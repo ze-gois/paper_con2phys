@@ -9,7 +9,7 @@ Run `a01_probing` to load one animal, then any question script. Each question
 calls the **script** `q00_prepare` and leaves a result named `q01`, …, `q15`.
 No question reloads or modifies `data`, generates a figure, or writes files.
 Scripts call public functions in `path/` and methodological primitives in
-`arsenal/path/`; each function file has one public entry point matching its name.
+`neuronal/matlab/path/`; each function file has one public entry point matching its name.
 Private local helpers and nested GUI callbacks remain inside their owning function.
 MATLAB R2019a or newer and Signal Processing Toolbox are required. No Statistics
 and Machine Learning Toolbox is required.
@@ -239,12 +239,12 @@ on MATLAB or tested on CON²PHYS recordings.
 
 ## Estrutura de funcoes
 
-- `a00_startup` adiciona `path/` e `arsenal/path/` na sessao, usando a localizacao
+- `a00_startup` adiciona `path/` e `neuronal/matlab/path/` na sessao, usando a localizacao
   do proprio script. Nao altera `pwd` nem executa `savepath`.
 - Os scripts de carregamento, inspecao e preparacao chamam essa inicializacao.
 - `path/` contem carregamento, interfaces graficas e auxiliares do questionario.
   Os scripts permanecem na raiz, com parametros e resultados no workspace.
-- `arsenal/path/` contem as primitivas independentes do dataset. O nome usa
+- `neuronal/matlab/path/` contem as primitivas independentes do dataset. O nome usa
   minusculas tambem no Linux. Documentacao e testes ficam fora dessas pastas.
 - Q08 usa `pairwise_phase_consistency`; o binning do questionario usa
   `spike_counts_edges`, que aceita bordas irregulares e unidades silenciosas.
@@ -260,18 +260,22 @@ disponivel no ambiente de autoria; a execucao numerica permanece pendente.
 
 ## Books and formal mathematics
 
-The publishing sources live in [books/](books/), with two independently
-buildable manuscripts:
+The books have moved to [neuronal](https://github.com/ze-gois/neuronal/tree/main/books),
+along with their examples, Lean proofs, theorem registries and publishing CI.
+See the [migration notice](books/README.md). Run `make -C books all` inside
+the neuronal checkout. The questionnaire analyses remain here; reusable MATLAB methods live in neuronal/matlab/.
 
-- [Computational Electrophysiology](books/electrophysiology/README.md) —
-  MATLAB-oriented methods and theorems; executable textbook examples are
-  planned under [examples/matlab/](examples/matlab/).
-- [Formal Foundations](books/formal_foundations/README.md) —
-  elementary-to-advanced mathematics. The planned Lean 4/Mathlib proofs
-  will live under [formal/lean/](formal/lean/); they are not yet implemented.
+## Dependência MATLAB: neuronal
 
-Run `make -C books all` to compile both PDFs. Existing
-`make -C latex all` commands still work as compatibility aliases.
-[Shared theorem IDs](mathematics/theorems.yml) connect future mathematical
-proofs and computation. The existing MATLAB scripts and their relative
-paths are unchanged.
+`arsenal/` foi movido integralmente para
+[neuronal/matlab](https://github.com/ze-gois/neuronal/tree/main/matlab).
+Mantenha os checkouts `paper_con2phys/` e `neuronal/` lado a lado.
+Para outro local, configure antes de executar as análises:
+
+```matlab
+setenv('NEURONAL_ROOT','/caminho/absoluto/neuronal');
+a00_startup
+```
+
+`a00_startup` verifica a dependência e adiciona `neuronal/matlab/path` e
+o `path/` local à sessão, sem alterar o diretório de trabalho ou usar `savepath`.
