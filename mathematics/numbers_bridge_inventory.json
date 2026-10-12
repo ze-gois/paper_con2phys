@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "scope": "Natural-number bridges 9–16, initially only bridge 9 inventoried",
+  "scope": "BRIDGE-009 verified; BRIDGE-010 to 016 pending",
   "entries": [
     {
       "id": "BRIDGE-009",
@@ -10,9 +10,9 @@
       "english_source": "books/formal_foundations/bridges/02_numbers.tex",
       "english_label": "bridge:addition-induction",
       "original_statement_summary": "∀ a b c : ℕ, (a+b)+c=a+(b+c), by induction on c",
-      "lean_source": null,
-      "lean_declaration": null,
-      "status": "pending_kernel_verification",
+      "lean_source": "formal/lean/Con2physFormal/BridgesNumbers.lean",
+      "lean_declaration": "Con2physFormal.BridgesNumbers.add_assoc_induction",
+      "status": "verified",
       "lean_candidates": [
         "Con2physFormal.BridgesNumbers.add_assoc_induction"
       ],
@@ -26,7 +26,16 @@
         "natural.successor",
         "natural.induction",
         "natural.addition"
-      ]
+      ],
+      "lean_declarations": [
+        "Con2physFormal.BridgesNumbers.add_assoc_induction"
+      ],
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38300314559",
+        "checked_repository_commit": "486c58534985cec08bf96a8a5d73d3696a3cb1ba",
+        "verified_target": "lake build and lake env lean Con2physFormal/BridgesNumbers.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      }
     }
   ]
 }
