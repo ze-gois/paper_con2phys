@@ -39,12 +39,38 @@ theorem cartesian_membership {β : Type v} (A : Set α) (B : Set β)
 theorem cartesian_empty_left {β : Type v} (B : Set β) :
     Set.prod (∅ : Set α) B = ∅ := by
   ext p
+  change (p.1 ∈ (∅ : Set α) ∧ p.2 ∈ B) ↔ False
   simp
 
 theorem cartesian_empty_right {β : Type v} (A : Set α) :
     Set.prod A (∅ : Set β) = ∅ := by
   ext p
+  change (p.1 ∈ A ∧ p.2 ∈ (∅ : Set β)) ↔ False
   simp
+
+-- BRIDGE-004: associativity of composition of typed relations.
+-- relComp S R means R first, then S (as in function composition).
+def relComp {X Y Z : Type*}
+    (S : Y → Z → Prop) (R : X → Y → Prop) : X → Z → Prop :=
+  fun x z => ∃ y, R x y ∧ S y z
+
+theorem relation_composition_associative
+    {X Y Z W : Type*}
+    (R : X → Y → Prop) (S : Y → Z → Prop)
+    (T : Z → W → Prop) :
+    relComp (relComp T S) R = relComp T (relComp S R) := by
+  funext x w
+  apply propext
+  change
+    (∃ y, R x y ∧ (∃ z, S y z ∧ T z w)) ↔
+    (∃ z, (∃ y, R x y ∧ S y z) ∧ T z w)
+  constructor
+  · rintro ⟨y, hxy, z, hyz, hzw⟩
+    exact ⟨z, ⟨y, hxy, hyz⟩, hzw⟩
+  · rintro ⟨z, ⟨y, hxy, hyz⟩, hzw⟩
+    exact ⟨y, hxy, z, hyz, hzw⟩
+
+#print axioms relation_composition_associative
 
 #print axioms cartesian_membership
 #print axioms cartesian_empty_left
