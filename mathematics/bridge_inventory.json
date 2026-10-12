@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "scope": "Bridges 1–2 kernel-verified; bridges 3–8 inventoried and pending",
+  "scope": "BRIDGE-001 through BRIDGE-004 kernel-verified; 005–008 pending",
   "entries": [
     {
       "id": "BRIDGE-001",
@@ -88,10 +88,9 @@
       "english_source": "books/formal_foundations/bridges/01_language_relations.tex",
       "english_label": "bridge:cartesian",
       "original_statement_summary": "(a,b) ∈ A ×ˢ B ↔ a ∈ A ∧ b ∈ B; A ×ˢ ∅ = ∅; ∅ ×ˢ B = ∅",
-      "lean_declaration": null,
-      "lean_source": null,
-      "status": "pending_mathlib_lookup",
-      "reason": "Candidate Mathlib names are search hints only; no version-pinned declaration/type equivalence check has been executed",
+      "lean_declaration": "Con2physFormal.Bridges.cartesian_membership",
+      "lean_source": "formal/lean/Con2physFormal/Bridges.lean",
+      "status": "verified",
       "mathlib_candidates_unverified": [
         "Set.mem_prod",
         "Set.prod_empty",
@@ -109,7 +108,18 @@
       ],
       "source_license": "CON2PHYS original exposition",
       "mathlib_license": "Apache-2.0 (reuse must cite actual Mathlib file)",
-      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+      "lean_declarations": [
+        "Con2physFormal.Bridges.cartesian_membership",
+        "Con2physFormal.Bridges.cartesian_empty_left",
+        "Con2physFormal.Bridges.cartesian_empty_right"
+      ],
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38197994825",
+        "checked_repository_commit": "fd40ced15b6e2e4f49dfed71a147f707d9817fcc",
+        "verified_target": "lake build and lake env lean Con2physFormal/Bridges.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      }
     },
     {
       "id": "BRIDGE-004",
@@ -119,10 +129,9 @@
       "english_source": "books/formal_foundations/bridges/01_language_relations.tex",
       "english_label": "bridge:relation-composition",
       "original_statement_summary": "(T ○ S) ○ R = T ○ (S ○ R) for composable typed relations",
-      "lean_declaration": null,
-      "lean_source": null,
-      "status": "pending_mathlib_lookup",
-      "reason": "Candidate Mathlib names are search hints only; no version-pinned declaration/type equivalence check has been executed",
+      "lean_declaration": "Con2physFormal.Bridges.relation_composition_associative",
+      "lean_source": "formal/lean/Con2physFormal/Bridges.lean",
+      "status": "verified",
       "mathlib_candidates_unverified": [
         "Relation.Comp.assoc",
         "Rel.comp_assoc"
@@ -139,7 +148,16 @@
       ],
       "source_license": "CON2PHYS original exposition",
       "mathlib_license": "Apache-2.0 (reuse must cite actual Mathlib file)",
-      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+      "lean_declarations": [
+        "Con2physFormal.Bridges.relation_composition_associative"
+      ],
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38197994825",
+        "checked_repository_commit": "fd40ced15b6e2e4f49dfed71a147f707d9817fcc",
+        "verified_target": "lake build and lake env lean Con2physFormal/Bridges.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      }
     },
     {
       "id": "BRIDGE-005",
