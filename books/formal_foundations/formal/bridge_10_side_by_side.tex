@@ -1,0 +1,18 @@
+\section{Lean 4: integers as equivalence classes of pairs}
+\label{sec:lean-bridge-10}
+Represent the formal difference $a-b$ by $(a,b)\in\mathbb N^2$.
+Two pairs represent the same integer when $a+d=b+c$.
+Reflexivity, symmetry, and transitivity are proved separately.
+Addition of representatives is componentwise,
+$(a,b)+(c,d)=(a+c,b+d)$; the last theorem shows that
+equivalent inputs give equivalent outputs, making this operation
+well-defined on equivalence classes.
+
+\lstinputlisting[language=LeanFour,basicstyle=\ttfamily\scriptsize,
+breaklines=true,columns=fullflexible,keepspaces=true,frame=single,
+firstline=15,lastline=52]
+{../../formal/lean/Con2physFormal/BridgesNumbers.lean}
+
+\noindent\textit{Scope:} this code establishes an equivalence relation
+and congruence of representative addition. It does not yet define
+the quotient type or establish an explicit equivalence with \texttt{Int}.

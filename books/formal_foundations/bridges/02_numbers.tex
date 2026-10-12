@@ -13,6 +13,8 @@
 \begin{proof}Reflexivity and symmetry follow from equality. If $a+d=b+c$ and $c+f=d+e$, adding equations and canceling $c+d$ yields $a+f=b+e$, so transitivity holds. If $a+b'=b+a'$ and $c+d'=d+c'$, adding gives $(a+c)+(b'+d')=(b+d)+(a'+c')$, proving representative-independent addition.\end{proof}
 \paragraph{Example.} The signed time difference between events is modeled by an integer when timestamps lie on a sample grid; negative offsets have a meaning not available in the natural numbers.
 
+\input{formal/bridge_10_side_by_side}
+
 \bridgeentry{rational-pairs}{Rational arithmetic is independent of representation}
 \begin{proposition}For integers $a,c$ and nonzero integers $b,d$, set $(a,b)\sim(c,d)$ when $ad=bc$. Rational addition $[(a,b)]+[(c,d)]=[(ad+bc,bd)]$ is well-defined.\end{proposition}
 \begin{proof}If $ab'=a'b$ and $cd'=c'd$, then after multiplying by $dd'$ and $bb'$, respectively, one obtains $(ad+bc)b'd'=(a'd'+b'c')bd$. Thus equivalent input fractions yield equivalent output fractions. The nonzero-denominator condition ensures the construction remains in its domain.\end{proof}

@@ -36,6 +36,34 @@
         "verified_target": "lake build and lake env lean Con2physFormal/BridgesNumbers.lean",
         "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
       }
+    },
+    {
+      "id": "BRIDGE-010",
+      "bridge_number": 10,
+      "latex_key": "integer-pairs",
+      "title": "Constructing integers from pairs of naturals",
+      "english_source": "books/formal_foundations/bridges/02_numbers.tex",
+      "english_label": "bridge:integer-pairs",
+      "original_statement_summary": "Relation (a,b)~(c,d) iff a+d=b+c is an equivalence relation; componentwise addition respects it",
+      "lean_source": null,
+      "lean_declaration": null,
+      "status": "pending_kernel_verification",
+      "lean_candidates": [
+        "Con2physFormal.BridgesNumbers.integerPairRel_equivalence",
+        "Con2physFormal.BridgesNumbers.integerPairAdd_respects"
+      ],
+      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+      "math_prerequisites": [
+        "BRIDGE-005",
+        "BRIDGE-009",
+        "natural.addition",
+        "relation.equivalence"
+      ],
+      "pedagogical_prerequisites": [
+        "BRIDGE-005",
+        "BRIDGE-009",
+        "integer.signed_difference"
+      ]
     }
   ]
 }
