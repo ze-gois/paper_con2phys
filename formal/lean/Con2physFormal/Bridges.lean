@@ -70,6 +70,32 @@ theorem relation_composition_associative
   · rintro ⟨z, ⟨y, hxy, hyz⟩, hzw⟩
     exact ⟨y, hxy, z, hyz, hzw⟩
 
+-- BRIDGE-005: equivalence classes cover the carrier and overlap only when equal.
+def equivalenceClass (r : α → α → Prop) (a : α) : Set α :=
+  {b | r b a}
+
+theorem equivalence_class_cover (r : α → α → Prop)
+    (h : Equivalence r) (a : α) :
+    a ∈ equivalenceClass r a := by
+  exact h.refl a
+
+theorem equivalence_classes_equal_of_overlap
+    (r : α → α → Prop) (h : Equivalence r) (a b : α)
+    (hoverlap : ∃ x, x ∈ equivalenceClass r a ∧
+      x ∈ equivalenceClass r b) :
+    equivalenceClass r a = equivalenceClass r b := by
+  obtain ⟨x, hxa, hxb⟩ := hoverlap
+  have hab : r a b := h.trans (h.symm hxa) hxb
+  ext y
+  constructor
+  · intro hya
+    exact h.trans hya hab
+  · intro hyb
+    exact h.trans hyb (h.symm hab)
+
+#print axioms equivalence_class_cover
+#print axioms equivalence_classes_equal_of_overlap
+
 #print axioms relation_composition_associative
 
 #print axioms cartesian_membership
