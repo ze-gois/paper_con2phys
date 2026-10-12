@@ -93,6 +93,26 @@ theorem equivalence_classes_equal_of_overlap
   · intro hyb
     exact h.trans hyb (h.symm hab)
 
+-- BRIDGE-006: images preserve unions; preimages preserve intersections and unions.
+theorem image_union_bridge {β : Type*} (f : α → β)
+    (E F : Set α) :
+    f '' (E ∪ F) = f '' E ∪ f '' F := by
+  exact Set.image_union f E F
+
+theorem preimage_inter_bridge {β : Type*} (f : α → β)
+    (C D : Set β) :
+    f ⁻¹' (C ∩ D) = f ⁻¹' C ∩ f ⁻¹' D := by
+  exact Set.preimage_inter
+
+theorem preimage_union_bridge {β : Type*} (f : α → β)
+    (C D : Set β) :
+    f ⁻¹' (C ∪ D) = f ⁻¹' C ∪ f ⁻¹' D := by
+  exact Set.preimage_union
+
+#print axioms image_union_bridge
+#print axioms preimage_inter_bridge
+#print axioms preimage_union_bridge
+
 #print axioms equivalence_class_cover
 #print axioms equivalence_classes_equal_of_overlap
 
