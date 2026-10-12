@@ -109,6 +109,32 @@ theorem preimage_union_bridge {β : Type*} (f : α → β)
     f ⁻¹' (C ∪ D) = f ⁻¹' C ∪ f ⁻¹' D := by
   exact Set.preimage_union
 
+-- BRIDGE-007: a two-sided inverse exists exactly for bijections.
+theorem inverse_iff_bijective {β : Type*} (f : α → β) :
+    (∃ g : β → α, Function.LeftInverse g f ∧
+      Function.RightInverse g f) ↔ Function.Bijective f := by
+  constructor
+  · rintro ⟨g, hleft, hright⟩
+    constructor
+    · intro a₁ a₂ heq
+      calc
+        a₁ = g (f a₁) := (hleft a₁).symm
+        _ = g (f a₂) := congrArg g heq
+        _ = a₂ := hleft a₂
+    · intro b
+      exact ⟨g b, hright b⟩
+  · intro h
+    let g : β → α := fun b => Classical.choose (h.2 b)
+    have hright : Function.RightInverse g f := by
+      intro b
+      exact Classical.choose_spec (h.2 b)
+    refine ⟨g, ?_, hright⟩
+    intro a
+    apply h.1
+    exact hright (f a)
+
+#print axioms inverse_iff_bijective
+
 #print axioms image_union_bridge
 #print axioms preimage_inter_bridge
 #print axioms preimage_union_bridge
