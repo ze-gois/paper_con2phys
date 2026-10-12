@@ -32,6 +32,7 @@ jobs:
         run: |
           lake build
           lake env lean Con2physFormal/Logic.lean
+          lake env lean Con2physFormal/Bridges.lean
       - name: Export and validate direct proof dependency graph
         working-directory: formal/lean
         run: |
