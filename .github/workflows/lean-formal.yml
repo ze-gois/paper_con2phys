@@ -16,6 +16,7 @@ jobs:
           python3 mathematics/audit_formal.py --write
           python3 mathematics/audit_formal.py --check
           python3 mathematics/build_concept_graphs.py --check
+          python3 mathematics/check_bridge_inventory.py
           python3 mathematics/build_concept_graphs.py --write
       - name: Install elan using the pinned toolchain
         run: |
