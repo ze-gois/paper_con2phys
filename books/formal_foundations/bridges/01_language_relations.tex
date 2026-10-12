@@ -21,6 +21,8 @@
 \begin{proof}By definition a pair is in $A\times B$ only when both coordinate conditions hold. When $A=\varnothing$, no first coordinate can satisfy the requirement, and similarly for $B=\varnothing$.\end{proof}
 \paragraph{Example.} If $U$ is a set of units and $T$ a recording interval, $U\times T$ describes \emph{possible} unit--time pairs; the observed spike relation is only a subset of this product.
 
+\input{formal/bridge_03_side_by_side}
+
 \bridgeentry{relation-composition}{Composition of relations is associative}
 \begin{proposition}If $R\subseteq A\times B$, $S\subseteq B\times C$, and $T\subseteq C\times D$, then $(T\circ S)\circ R=T\circ(S\circ R)$.\end{proposition}
 \begin{proof}A pair $(a,d)$ belongs to the left side exactly when there are $b\in B$ and $c\in C$ such that $aRb$, $bSc$, and $cTd$. The same witnesses $b,c$ characterize the right side. Both relations therefore contain exactly the same pairs.\end{proof}

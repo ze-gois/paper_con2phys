@@ -28,6 +28,28 @@ theorem subset_antisymmetric (A B : Set α)
     (hAB : A ⊆ B) (hBA : B ⊆ A) : A = B := by
   exact (subset_antisymm_iff A B).mpr ⟨hAB, hBA⟩
 
+-- BRIDGE-003: Cartesian product membership and empty factors.
+universe v
+
+theorem cartesian_membership {β : Type v} (A : Set α) (B : Set β)
+    (a : α) (b : β) :
+    (a, b) ∈ Set.prod A B ↔ a ∈ A ∧ b ∈ B := by
+  rfl
+
+theorem cartesian_empty_left {β : Type v} (B : Set β) :
+    Set.prod (∅ : Set α) B = ∅ := by
+  ext p
+  simp
+
+theorem cartesian_empty_right {β : Type v} (A : Set α) :
+    Set.prod A (∅ : Set β) = ∅ := by
+  ext p
+  simp
+
+#print axioms cartesian_membership
+#print axioms cartesian_empty_left
+#print axioms cartesian_empty_right
+
 #print axioms subset_antisymm_iff
 #print axioms subset_reflexive
 #print axioms subset_transitive
