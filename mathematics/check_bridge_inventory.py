@@ -32,7 +32,7 @@ for index, item in enumerate(entries, 1):
             errors.append(f"{label}: missing primary Lean declaration")
         for declaration in declarations:
             local_name = declaration.rsplit(".", 1)[-1]
-            if not re.search(r"\\btheorem\\s+" + re.escape(local_name) + r"\\b", body):
+            if not re.search(r"\btheorem\s+" + re.escape(local_name) + r"\b", body):
                 errors.append(f"{label}: Lean declaration missing: {declaration}")
         for key in ("run_url", "checked_repository_commit", "verified_target", "checked_mathlib_commit"):
             if not evidence.get(key):
