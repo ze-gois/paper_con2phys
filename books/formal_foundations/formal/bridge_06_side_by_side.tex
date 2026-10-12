@@ -1,0 +1,18 @@
+\section{Lean 4: images and preimages}
+\label{sec:lean-bridge-06}
+For any function $f:A\to B$, images preserve unions:
+\[
+f(E\cup F)=f(E)\cup f(F).
+\]
+Preimages preserve both intersections and unions:
+\[
+f^{-1}(C\cap D)=f^{-1}(C)\cap f^{-1}(D),\qquad
+f^{-1}(C\cup D)=f^{-1}(C)\cup f^{-1}(D).
+\]
+The inverse-image notation does not assume that $f$ has an inverse
+function; it describes the set of inputs meeting a membership criterion.
+
+\lstinputlisting[language=LeanFour,basicstyle=\ttfamily\footnotesize,
+breaklines=true,columns=fullflexible,keepspaces=true,frame=single,
+firstline=96,lastline=114]
+{../../formal/lean/Con2physFormal/Bridges.lean}

@@ -42,6 +42,8 @@
 \begin{proof}A value $y$ belongs to $f(E\cup F)$ exactly when some input in $E$ or $F$ maps to $y$. This is the union of the images. An input $x$ belongs to $f^{-1}(C\cap D)$ exactly when $f(x)$ belongs to both $C$ and $D$. The union case follows by replacing ``both'' with ``at least one''.\end{proof}
 \paragraph{Example.} A trial-to-condition mapping permits selecting all trials whose condition lies in a specified set via a preimage. Unlike an inverse function, the preimage is defined even for many-to-one mappings.
 
+\input{formal/bridge_06_side_by_side}
+
 \bridgeentry{inverse-functions}{A two-sided inverse is equivalent to bijectivity}
 \begin{proposition}A function $f:A\to B$ has a function $g:B\to A$ with $g\circ f=\mathrm{id}_A$ and $f\circ g=\mathrm{id}_B$ if and only if $f$ is injective and surjective.\end{proposition}
 \begin{proof}If $f(a_1)=f(a_2)$, applying $g$ gives $a_1=a_2$, so $f$ is injective. For each $b\in B$, $b=f(g(b))$, so it is surjective. Conversely, bijectivity supplies exactly one $a$ for each $b=f(a)$; assigning $g(b)=a$ defines both inverse identities.\end{proof}
