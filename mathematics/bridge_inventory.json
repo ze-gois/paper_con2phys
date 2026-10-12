@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "scope": "BRIDGE-001 through BRIDGE-004 kernel-verified; 005–008 pending",
+  "scope": "BRIDGE-001–005 verified; BRIDGE-006–008 pending",
   "entries": [
     {
       "id": "BRIDGE-001",
@@ -167,10 +167,9 @@
       "english_source": "books/formal_foundations/bridges/01_language_relations.tex",
       "english_label": "bridge:equivalence-partition",
       "original_statement_summary": "An equivalence relation on A produces covering classes, pairwise equal or disjoint",
-      "lean_declaration": null,
-      "lean_source": null,
-      "status": "pending_mathlib_lookup",
-      "reason": "Candidate Mathlib names are search hints only; no version-pinned declaration/type equivalence check has been executed",
+      "lean_declaration": "Con2physFormal.Bridges.equivalence_class_cover",
+      "lean_source": "formal/lean/Con2physFormal/Bridges.lean",
+      "status": "verified",
       "mathlib_candidates_unverified": [
         "Setoid"
       ],
@@ -185,7 +184,17 @@
       ],
       "source_license": "CON2PHYS original exposition",
       "mathlib_license": "Apache-2.0 (reuse must cite actual Mathlib file)",
-      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+      "lean_declarations": [
+        "Con2physFormal.Bridges.equivalence_class_cover",
+        "Con2physFormal.Bridges.equivalence_classes_equal_of_overlap"
+      ],
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38292203923",
+        "checked_repository_commit": "4c44f7521878538e63d3caf93a61306605b71f05",
+        "verified_target": "lake build; lake env lean Con2physFormal/Bridges.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      }
     },
     {
       "id": "BRIDGE-006",
