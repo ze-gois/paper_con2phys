@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "description": "Curated mathematical and pedagogical relations are not kernel-certified; kernel edges are extracted from Lean proof terms.",
+  "entries": [
+    {
+      "id": "LOGIC-001",
+      "topic": "De Morgan conjunction",
+      "math_prerequisites": [
+        "logical.negation",
+        "logical.conjunction",
+        "logical.disjunction",
+        "classical.excluded_middle"
+      ],
+      "pedagogical_prerequisites": [
+        "logical.propositions",
+        "logical.truth_tables",
+        "logical.negation",
+        "logical.conjunction",
+        "logical.disjunction"
+      ],
+      "notes": "Reverse direction uses classical reasoning."
+    },
+    {
+      "id": "LOGIC-002",
+      "topic": "De Morgan disjunction",
+      "math_prerequisites": [
+        "logical.negation",
+        "logical.conjunction",
+        "logical.disjunction"
+      ],
+      "pedagogical_prerequisites": [
+        "logical.propositions",
+        "logical.truth_tables",
+        "logical.negation",
+        "logical.conjunction",
+        "logical.disjunction"
+      ],
+      "notes": "This equivalence admits a constructive proof."
+    },
+    {
+      "id": "LOGIC-003",
+      "topic": "Contraposition equivalence",
+      "math_prerequisites": [
+        "logical.implication",
+        "logical.negation",
+        "classical.excluded_middle"
+      ],
+      "pedagogical_prerequisites": [
+        "logical.propositions",
+        "logical.implication",
+        "logical.negation",
+        "logical.proof_by_contradiction"
+      ],
+      "notes": "Forward implication is constructive; converse requires classical reasoning."
+    },
+    {
+      "id": "LOGIC-004",
+      "topic": "Negation of forall",
+      "math_prerequisites": [
+        "logical.universal_quantifier",
+        "logical.existential_quantifier",
+        "logical.negation",
+        "classical.excluded_middle"
+      ],
+      "pedagogical_prerequisites": [
+        "logical.quantifiers",
+        "logical.counterexample",
+        "logical.negation"
+      ],
+      "notes": "The reverse implication from ¬∀ to ∃¬ uses classical reasoning."
+    },
+    {
+      "id": "LOGIC-005",
+      "topic": "Negation of exists",
+      "math_prerequisites": [
+        "logical.universal_quantifier",
+        "logical.existential_quantifier",
+        "logical.negation"
+      ],
+      "pedagogical_prerequisites": [
+        "logical.quantifiers",
+        "logical.negation"
+      ],
+      "notes": "Constructively provable."
+    }
+  ],
+  "concept_labels": {
+    "logical.negation": "Negation",
+    "logical.conjunction": "Conjunction",
+    "logical.disjunction": "Disjunction",
+    "logical.implication": "Material implication",
+    "logical.propositions": "Propositions",
+    "logical.truth_tables": "Truth tables",
+    "logical.quantifiers": "Quantifiers",
+    "logical.universal_quantifier": "Universal quantifier",
+    "logical.existential_quantifier": "Existential quantifier",
+    "logical.counterexample": "Counterexample",
+    "logical.proof_by_contradiction": "Proof by contradiction",
+    "classical.excluded_middle": "Law of excluded middle"
+  }
+}
