@@ -17,8 +17,60 @@ The ideal Dirac delta $\delta(t-t_0)$ is not an ordinary $L^2$ function. In gene
 \begin{workedexample}[Projection onto one sinusoid]
 On $[0,T]$, let $e(t)=\sqrt{2/T}\cos(2\pi kt/T)$ for a nonzero integer $k$. Its squared integral is one. The coefficient $a=\int_0^T x(t)e(t)\,dt$ determines the best approximation $ae(t)$ to $x(t)$ within this one-dimensional subspace under squared-integral error. This is the geometric core of Fourier analysis.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{The Riemann integral and its limits}
+For a bounded $f$ on $[a,b]$ and a partition $a=t_0<\cdots<t_n=b$, the upper and lower sums are $U=\sum_k\sup_{[t_{k-1},t_k]}f\,\Delta t_k$ and $L=\sum_k\inf_{[t_{k-1},t_k]}f\,\Delta t_k$. The function is Riemann integrable when $\inf U=\sup L$ over all partitions. Every continuous function on $[a,b]$ is integrable (because it is uniformly continuous there), and so is every monotone function.
+
+The indicator of the rationals on $[0,1]$ (the Dirichlet function) is not Riemann integrable: every subinterval contains rationals and irrationals, so $U=1$ and $L=0$ for every partition. In Lebesgue's theory, the rationals form a set of measure zero and the integral is $0$. This example is artificial, but the deficiency it reveals is serious: Riemann integrals do not behave well under limits.
+
+\section{When can limits and integrals be exchanged?}
+Let $f_n(t)=n\,\mathbf 1_{(0,1/n)}(t)$ on $[0,1]$. Then $f_n(t)\to0$ for every $t$, but $\int_0^1f_n=1$ for every $n$. Pointwise convergence does not imply convergence of integrals; the mass escapes into a spike that becomes infinitely narrow, which is precisely how the delta function is approximated.
+
+\begin{theorem}[Uniform convergence]
+If $f_n\to f$ uniformly on $[a,b]$ (that is, $\sup_t|f_n(t)-f(t)|\to0$) and each $f_n$ is integrable, then $f$ is integrable and $\int f_n\to\int f$.
+\end{theorem}
+\begin{proof}[Proof of the convergence statement]
+$\bigl|\int f_n-\int f\bigr|\le\int|f_n-f|\le(b-a)\sup_t|f_n(t)-f(t)|\to0$.
+\end{proof}
+Lebesgue's \emph{dominated convergence theorem} gives a far more flexible criterion: if $f_n\to f$ almost everywhere and $|f_n|\le g$ for one integrable $g$, then $\int f_n\to\int f$. In the example above no integrable dominating function exists, since $\sup_nf_n(t)\approx1/t$ near zero. Dominated convergence justifies differentiating under the integral sign, exchanging expectation and limits, and many steps in spectral estimation.
+
+\section{Inequalities in inner-product spaces}
+\begin{theorem}[Cauchy--Schwarz]
+In any inner-product space, $|\langle f,g\rangle|\le\|f\|\,\|g\|$, with equality iff $f$ and $g$ are linearly dependent.
+\end{theorem}
+\begin{proof}
+If $g=0$ there is nothing to prove. Otherwise let $c=\langle f,g\rangle/\|g\|^2$ and expand $0\le\|f-cg\|^2=\|f\|^2-|\langle f,g\rangle|^2/\|g\|^2$. Equality holds iff $f=cg$.
+\end{proof}
+The triangle inequality $\|f+g\|\le\|f\|+\|g\|$ follows by expanding $\|f+g\|^2$ and applying Cauchy--Schwarz. The normalized quantity $\langle f,g\rangle/(\|f\|\|g\|)$ lies in $[-1,1]$ for real functions; applied to centered data vectors it is the Pearson correlation, and applied to cross-spectra across trials it underlies coherence. Cauchy--Schwarz is the reason both are bounded by one.
+
+\begin{theorem}[Pythagoras and Bessel]
+If $e_1,\ldots,e_k$ are orthonormal, then for every $f$,
+\[
+\Bigl\|f-\sum_j\langle f,e_j\rangle e_j\Bigr\|^2=\|f\|^2-\sum_j|\langle f,e_j\rangle|^2,
+\qquad\text{hence}\qquad\sum_j|\langle f,e_j\rangle|^2\le\|f\|^2.
+\]
+\end{theorem}
+\begin{proof}
+Let $p=\sum_j\langle f,e_j\rangle e_j$. Then $\langle f-p,e_j\rangle=0$ for every $j$, so $f-p\perp p$ and $\|f\|^2=\|f-p\|^2+\|p\|^2$, where $\|p\|^2=\sum_j|\langle f,e_j\rangle|^2$ by orthonormality.
+\end{proof}
+Bessel's inequality says that the energy captured by any orthonormal set of components cannot exceed the total energy. When the orthonormal set is \emph{complete} (its span is dense), equality holds for an infinite sum: this is Parseval's identity, and the Fourier basis is the central example.
+
+\section{Completeness of function spaces}
+A normed space is \emph{complete} (a Banach space; a Hilbert space if the norm comes from an inner product) if every Cauchy sequence converges in the space. The continuous functions on $[0,1]$ with the $L^2$ norm are not complete: continuous ramps approximating a step function form a Cauchy sequence whose limit is discontinuous. The space $L^2$ is the completion of this space, which is why Fourier series, least-squares approximation, and stochastic integrals are formulated there. As with $\mathbb Q\subset\mathbb R$, completeness is the property that guarantees that approximation procedures have something to converge to.
+
+\section{Convolution}
+For integrable $f,g$ on $\mathbb R$, the convolution is $(f\ast g)(t)=\int f(s)g(t-s)\,ds$. It is commutative and associative, and $\|f\ast g\|_1\le\|f\|_1\|g\|_1$. Convolution with a nonnegative kernel of unit integral is a weighted local average; convolving a spike train $\sum_j\delta(t-t_j)$ with a Gaussian kernel $k_\sigma$ gives the familiar smoothed rate $\sum_jk_\sigma(t-t_j)$. The bandwidth $\sigma$ trades temporal resolution for variance, and no choice of $\sigma$ recovers the ``true'' rate without a model of what the rate is.
+
+\begin{workedexample}[Energy of a windowed sinusoid]
+Let $x(t)=A\cos(2\pi f_0t)$ on $[0,T]$ with $f_0T$ a positive integer. Then $\|x\|_2^2=A^2T/2$. In the orthonormal basis of the previous example, only the coefficient with $k=f_0T$ is nonzero, and it equals $A\sqrt{T/2}$; Bessel's inequality holds with equality. If $f_0T$ is not an integer, energy spreads across many coefficients, but by Parseval their squared sum is still $\|x\|_2^2$. Leakage redistributes energy; it does not create or destroy it.
+\end{workedexample}
 \begin{exercises}
 \item Verify that $\int_0^T\sin(2\pi nt/T)\cos(2\pi mt/T)\,dt=0$ for positive integers $m,n$.
 \item Explain why delta functions require care in ordinary function spaces.
 \item State the difference between orthogonality and statistical independence.
+\item Show that $f_n(t)=t^n$ converges pointwise on $[0,1]$ to a discontinuous limit, but not uniformly.
+\item Prove the triangle inequality in an inner-product space from Cauchy--Schwarz.
+\item Compute $\mathbf 1_{[0,1]}\ast\mathbf 1_{[0,1]}$ and sketch it.
+\item Show that a Gaussian smoothing kernel of standard deviation $\sigma$ applied to a single spike produces a function with integral one.
+\item Exhibit a Cauchy sequence of continuous functions in the $L^2[0,1]$ norm whose limit is a step function.
 \end{exercises}

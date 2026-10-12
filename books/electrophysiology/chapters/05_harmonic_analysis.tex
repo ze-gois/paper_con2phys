@@ -91,3 +91,103 @@ Common reference, volume conduction, leakage, sample-size bias,
 and nonstationarity can distort interpretation
 \cite{bastos2016,cohen2018}.
 \end{caution}
+% --- expanded edition (October 2026) ---
+\section{Proofs of selected harmonic-analysis results}
+\begin{proof}[Proof of Result 59 for integrable functions]
+For $f,g\in L^1(\R)$, Tonelli's theorem gives
+\[
+\int\!\!\int|f(s)||g(t-s)|\,ds\,dt=\|f\|_1\|g\|_1<\infty,
+\]
+so $f*g\in L^1$ and Fubini allows the exchange
+\[
+\Fourier(f*g)(\xi)=\int\!\!\int f(s)g(t-s)e^{-2\pi i\xi t}\,ds\,dt
+=\int f(s)e^{-2\pi i\xi s}\Bigl(\int g(u)e^{-2\pi i\xi u}\,du\Bigr)ds,
+\]
+after the substitution $u=t-s$. The inner integral is $\Fourier g(\xi)$.
+\end{proof}
+\begin{proof}[Proof of Result 63 (Riemann--Lebesgue)]
+For $f=\ind_{[a,b]}$, $|\Fourier f(\xi)|=|e^{-2\pi i\xi a}-e^{-2\pi i\xi b}|/(2\pi|\xi|)\le1/(\pi|\xi|)\to0$.
+By linearity the claim holds for step functions. Every $f\in L^1$ is an
+$L^1$-limit of step functions $f_n$, and
+$\sup_\xi|\Fourier f(\xi)-\Fourier f_n(\xi)|\le\|f-f_n\|_1$, so the limit
+property passes to $f$.
+\end{proof}
+The rate of decay reflects smoothness: a jump gives $1/|\xi|$ decay, a
+kink $1/|\xi|^2$, and a function with $k$ integrable derivatives decays
+faster than $|\xi|^{-k}$. Sharp spike waveforms and stimulation artefacts
+therefore spread power over a broad high-frequency range, which is why
+they contaminate gamma and high-frequency band estimates.
+
+\section{Autoregressive spectra and Yule--Walker}
+For a stationary AR($p$) process
+$X_t=\sum_{k=1}^pa_kX_{t-k}+\varepsilon_t$ with white innovations of
+variance $\sigma^2$, multiplying by $X_{t-m}$ ($m\ge1$) and taking
+expectations gives Result 67:
+\[
+\gamma(m)=\sum_{k=1}^pa_k\gamma(m-k),\qquad m=1,\ldots,p,
+\]
+and $\gamma(0)=\sum_ka_k\gamma(k)+\sigma^2$. Solving these Toeplitz
+equations estimates the coefficients from sample autocovariances. The
+spectral density is
+\[
+S(f)=\frac{\sigma^2/f_s}{\bigl|1-\sum_{k=1}^pa_ke^{-2\pi ikf/f_s}\bigr|^2}.
+\]
+\begin{example}[AR(2) resonance]
+For $X_t=2r\cos\theta\,X_{t-1}-r^2X_{t-2}+\varepsilon_t$ with $0<r<1$, the
+characteristic polynomial has roots $re^{\pm i\theta}$. The spectrum
+has a peak near $f_0=\theta f_s/(2\pi)$ whose width is approximately
+$(1-r)f_s/\pi$, and the autocorrelation is a damped cosine
+$\propto r^{|k|}\cos(\theta|k|+\psi)$. With $f_s=250$\,Hz, $\theta$
+chosen for $8$\,Hz and $r=0.98$, the process looks like a waxing and
+waning theta rhythm with a $1.6$\,Hz-wide spectral peak, yet it is a
+linear stochastic resonance: there is no limit cycle, and amplitude and
+phase are driven entirely by noise. AR(2) processes are the standard
+null model for ``is this oscillation more than filtered noise?''.
+\end{example}
+
+\section{Wiener--Hopf prediction and decoding}
+The best linear predictor of $Y_t$ from $X_{t-k}$, $k=0,\ldots,K$, is
+$\hat Y_t=\sum_kw_kX_{t-k}$ with weights solving the normal equations
+(Result 68)
+\[
+\sum_{k=0}^K w_k\,\gamma_{xx}(j-k)=\gamma_{yx}(j),\qquad j=0,\ldots,K.
+\]
+\begin{proof}
+The squared error is a convex quadratic in $w$. Setting its derivative
+with respect to $w_j$ to zero is equivalent to
+$\E[(Y_t-\hat Y_t)X_{t-j}]=0$: the residual is orthogonal to every
+regressor, which is the orthogonal projection theorem (Result 26).
+\end{proof}
+With unlimited lags the solution in frequency is the Wiener filter
+$W(f)=S_{yx}(f)/S_{xx}(f)$ (non-causal) and the explained fraction of
+variance at frequency $f$ is the coherence $C_{yx}(f)$. Coherence is
+therefore the fraction of $Y$'s power at $f$ that is linearly
+predictable from $X$ \emph{at all lags, past and future}: it is a
+symmetric measure of linear dependence, not of directed influence.
+
+\section{Shift, modulation, and the meaning of phase}
+By Result 60, $x(t-\tau)$ has transform $e^{-2\pi if\tau}X(f)$. A pure
+delay shows up as a phase that is linear in frequency with slope
+$-2\pi\tau$. Conversely, if the cross-spectrum phase between two
+channels is approximately linear in $f$ over a band, its slope gives a
+delay estimate (the \emph{phase-slope index} is a robust version of this
+idea). A constant phase offset, independent of frequency, does not
+correspond to a time delay at all; it is what a reference subtraction,
+a derivative, or a Hilbert transform produces.
+
+\section*{Exercises for this chapter}
+\begin{exercise}
+Prove Parseval's identity for Fourier series on $[0,T]$ from the
+orthogonality relations of Result 57 for trigonometric polynomials.
+\end{exercise}
+\begin{exercise}
+Derive the Yule--Walker equations for AR(1) and show that $\gamma(k)=a^{|k|}\sigma^2/(1-a^2)$.
+\end{exercise}
+\begin{exercise}
+For the AR(2) example, find $\theta$ for an 8\,Hz peak at $f_s=250$\,Hz
+and compute the coefficients.
+\end{exercise}
+\begin{exercise}
+Show that $y(t)=x(t-\tau)$ has coherence one with $x$ at every frequency
+and cross-spectral phase $-2\pi f\tau$.
+\end{exercise}

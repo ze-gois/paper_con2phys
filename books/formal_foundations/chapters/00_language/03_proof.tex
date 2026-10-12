@@ -18,9 +18,61 @@ Three questions recur throughout this book: Does the object exist? Is it uniquel
 
 \begin{proposition}If $A$ and $B$ are subsets of a fixed universe $U$, then $A=B$ if and only if both $A\subseteq B$ and $B\subseteq A$.\end{proposition}
 \begin{proof}If $A=B$, either inclusion follows immediately. Conversely, the first inclusion implies every element of $A$ belongs to $B$, and the second implies every element of $B$ belongs to $A$. The two sets therefore have exactly the same elements.\end{proof}
+% --- expanded edition (October 2026) ---
+\section{Writing a proof: from scratch work to final form}
+Proofs are discovered backwards and written forwards. In scratch work one starts from the desired conclusion, unpacks its definitions, and asks what would suffice. The written proof reverses the direction: it begins with the hypotheses and proceeds by justified steps to the conclusion. A useful discipline is the \emph{two-column check}: for every line of a draft proof, name the definition, axiom, earlier result, or logical rule that justifies it. A line without a justification is either a gap or an unstated assumption.
+
+Good proofs also announce their structure. Phrases such as ``we argue by contradiction'', ``we proceed by induction on $n$'', or ``it suffices to show'' tell the reader which logical form is being used. The phrase ``without loss of generality'' (WLOG) is legitimate only when the omitted cases genuinely follow by symmetry; it should never hide a case that behaves differently.
+
+\section{Proof by cases and the pigeonhole principle}
+When a hypothesis is a disjunction, or when the domain splits naturally, one may prove the conclusion separately in each case.
+
+\begin{proposition}
+For every integer $n$, the integer $n^2+n$ is even.
+\end{proposition}
+\begin{proof}
+Either $n$ is even or $n$ is odd. If $n=2k$, then $n^2+n=2k(2k+1)$, which is even. If $n=2k+1$, then $n^2+n=(2k+1)(2k+2)=2(2k+1)(k+1)$, which is even. The two cases are exhaustive.
+\end{proof}
+
+\begin{theorem}[Pigeonhole principle]
+If $m$ objects are placed into $k$ boxes and $m>k$, then some box contains at least two objects. More generally, some box contains at least $\lceil m/k\rceil$ objects.
+\end{theorem}
+\begin{proof}
+Suppose, for contradiction, that every box contains at most $\lceil m/k\rceil-1$ objects. Since $\lceil m/k\rceil-1<m/k$, the total number of objects is at most $k(\lceil m/k\rceil-1)<k\cdot m/k=m$, a contradiction.
+\end{proof}
+The principle has a direct data-analysis reading: if 1001 spikes are recorded in a 1-second window binned at 1\,ms, at least one bin contains two spikes. A binary (0/1) spike representation at that resolution is then necessarily lossy.
+
+\section{Strong induction and well ordering}
+Ordinary induction proves $P(n+1)$ from $P(n)$. \emph{Strong induction} allows the use of all previous cases: if $P(0)$ holds and $\bigl(P(0)\land\cdots\land P(n)\bigr)\Rightarrow P(n+1)$ for every $n$, then $P(n)$ holds for every $n\in\mathbb N_0$. It is equivalent to ordinary induction applied to the statement $Q(n)=P(0)\land\cdots\land P(n)$. A further equivalent form is the \emph{well-ordering principle}: every nonempty subset of $\mathbb N_0$ has a least element.
+
+\begin{proposition}
+Every integer $n\ge2$ is a product of one or more primes.
+\end{proposition}
+\begin{proof}
+By strong induction. The integer $2$ is prime. Let $n>2$ and assume every integer $m$ with $2\le m<n$ is a product of primes. If $n$ is prime we are done. Otherwise $n=ab$ with $2\le a,b<n$; by hypothesis both $a$ and $b$ are products of primes, and so is their product.
+\end{proof}
+
+\section{Common errors in purported proofs}
+Learning to \emph{audit} arguments is as important as learning to write them. The following patterns recur.
+\begin{enumerate}[leftmargin=2em]
+\item \emph{Proof by example.} Checking a universal claim for several values does not prove it. The polynomial $n^2+n+41$ is prime for $n=0,1,\ldots,39$, but $40^2+40+41=41^2$.
+\item \emph{Circular reasoning.} A step that silently uses the conclusion. ``The estimator is unbiased because its expected value equals the parameter'' restates rather than proves.
+\item \emph{Division by zero.} Cancelling a factor that may vanish. From $ax=ay$ one may conclude $x=y$ only when $a\ne0$.
+\item \emph{Wrong quantifier order.} Choosing an $N$ that depends on $n$ when the definition requires $N$ to depend only on $\varepsilon$.
+\item \emph{Unjustified interchange of limits.} Exchanging a limit with a sum, integral, or derivative without a theorem that allows it. Chapter~\ref{ch:functionspaces} gives counterexamples.
+\end{enumerate}
+
+\begin{workedexample}[Auditing a methods argument]
+Claim: ``Because the shuffled-control coherence is lower than the observed coherence on every one of 20 sessions, coherence reflects genuine coupling.'' Audit: (i) the premise concerns 20 sessions, while ``genuine coupling'' is a claim about a mechanism; (ii) shuffling trials destroys trial-locked common input as well as coupling, so the control does not separate the two hypotheses; (iii) consistency across sessions shows reproducibility of the comparison, not uniqueness of its explanation. The argument is a valid rejection of the shuffled null, and an invalid inference to a specific mechanism.
+\end{workedexample}
 \begin{exercises}
 \item Prove that the intersection of two subsets is contained in each subset.
 \item Give two distinct functions with the same value at zero.
 \item Distinguish ``the algorithm converges'' from ``the result estimates the intended biological quantity.''
 \item Write a three-line counterexample to ``a zero Pearson correlation implies independence.''
+\item Prove by cases that $|ab|=|a||b|$ for real numbers $a,b$.
+\item Use the pigeonhole principle to show that among any 13 people two were born in the same month.
+\item Prove by strong induction that every amount of at least 12 cents can be paid with 4- and 5-cent coins.
+\item Find the error: ``Let $a=b$. Then $a^2-b^2=ab-b^2$, so $(a+b)(a-b)=b(a-b)$, hence $a+b=b$ and $2=1$.''
+\item Show that the well-ordering principle implies ordinary induction.
 \end{exercises}

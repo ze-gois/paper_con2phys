@@ -91,3 +91,93 @@ renewal, and latent-rate simulations. A function operating on
 binned counts or spike phases does not itself implement a
 continuous-time Bartlett spectral estimator.
 \end{example}
+% --- expanded edition (October 2026) ---
+\section{A central limit theorem for renewal counts}
+\begin{theorem}[Renewal CLT]
+For a renewal process with interval mean $m$ and variance $v<\infty$,
+\[
+\frac{N(T)-T/m}{\sqrt{vT/m^3}}\Longrightarrow\Normal(0,1)\qquad(T\to\infty).
+\]
+\end{theorem}
+\begin{proof}[Proof sketch]
+Let $S_n=\tau_1+\cdots+\tau_n$. The events $\{N(T)<n\}$ and
+$\{S_n>T\}$ coincide. Choose $n=n(T)=\lfloor T/m+x\sqrt{vT/m^3}\rfloor$.
+Then
+\[
+\Prob\Bigl(\frac{N(T)-T/m}{\sqrt{vT/m^3}}<x\Bigr)\approx\Prob(S_n>T)
+=\Prob\Bigl(\frac{S_n-nm}{\sqrt{nv}}>\frac{T-nm}{\sqrt{nv}}\Bigr).
+\]
+Since $T-nm\approx-xm\sqrt{vT/m^3}$ and $nv\approx vT/m$, the right-hand
+threshold tends to $-x$, and the ordinary CLT for $S_n$ gives the limit
+$\Prob(Z>-x)=\Phi(x)$. Rounding errors in $n$ vanish after scaling.
+\end{proof}
+The theorem justifies the long-window identity $\Var N(T)\sim vT/m^3$
+used for the Fano factor. Its rate of convergence depends on the third
+moment of the intervals; for bursty neurons with heavy-tailed intervals
+it can be very slow, so the asymptotic Fano factor may not be reached in
+windows of a few seconds.
+
+\section{R\'enyi's characterization of the Poisson process}
+\begin{theorem}[R\'enyi]
+A simple point process on $\R$ is a Poisson process with a diffuse mean
+measure $\Lambda$ if and only if $\Prob(N(B)=0)=e^{-\Lambda(B)}$ for every
+set $B$ that is a finite union of intervals.
+\end{theorem}
+The theorem says that the \emph{void probabilities} alone determine a
+simple process to be Poisson: one need not check independence of counts
+or their full distributions. In practice it motivates a diagnostic:
+compute the fraction of windows of length $w$ without spikes and compare
+it with $e^{-\hat\lambda w}$ across a range of $w$. For a stationary process with the same rate,
+$\Prob(N(w)=0)=1-\bar\lambda w+\Prob(N(w)=2)+2\Prob(N(w)=3)+\cdots$, so
+refractoriness and regular firing, which suppress multiple spikes in a
+window, \emph{lower} the empty fraction relative to Poisson; bursting,
+which packs spikes together, raises it for windows longer than a burst.
+
+\section{Hawkes processes: mean rate and spectrum}
+For the linear Hawkes process of Section~\ref{sec:hawkes} with branching
+ratio $\nu<1$, take expectations in the intensity:
+$\bar\lambda=\mu+\bar\lambda\int_0^\infty h(s)\,ds=\mu+\nu\bar\lambda$,
+which gives $\bar\lambda=\mu/(1-\nu)$. Each immigrant event starts a
+cluster of expected size $1/(1-\nu)$, matching the branching
+interpretation. The Bartlett spectrum is
+\[
+S_{nn}(f)=\frac{\bar\lambda}{|1-H(f)|^2},\qquad H(f)=\int_0^\infty h(t)e^{-2\pi ift}\,dt.
+\]
+For an exponential kernel $h(t)=\nu\beta e^{-\beta t}$, $|1-H(f)|^2$ is
+smallest at $f=0$, so self-excitation concentrates power at low
+frequencies; at $f=0$ the spectrum is $\bar\lambda/(1-\nu)^2$, giving a
+long-window Fano factor $1/(1-\nu)^2$. A branching ratio of $0.5$ makes
+the Fano factor $4$ even though each event triggers on average only half
+an extra event. Self-excitation is thus one mechanism of overdispersion,
+alongside latent gain fluctuations (Result 42); the two are hard to
+distinguish from counts alone, but differ in their autocorrelograms.
+
+\begin{example}[Gamma renewal spectrum]
+For gamma intervals with shape $\kappa$ and rate $\kappa\lambda$ (mean
+$1/\lambda$), $\varphi(f)=(1+2\pi if/(\kappa\lambda))^{-\kappa}$. For
+$\kappa=1$ (Poisson) the spectrum is flat. For large $\kappa$ the train
+is nearly periodic and the spectrum develops peaks at multiples of the
+firing rate $\lambda$, with a dip at low frequencies: a regular neuron
+transfers little power below its own firing rate. A ``spectral peak at
+the firing rate'' in spike--field analysis may simply reflect regular
+firing, not an oscillatory input.
+\end{example}
+
+\section*{Exercises for this chapter}
+\begin{exercise}
+Using the renewal CLT, compute an approximate 95\% interval for the
+count of a gamma renewal neuron with rate 10\,spikes/s and $\kappa=4$ in
+10\,s.
+\end{exercise}
+\begin{exercise}
+Verify R\'enyi's void probability for a homogeneous Poisson process and
+show that a dead-time process violates it for short windows.
+\end{exercise}
+\begin{exercise}
+Compute $S_{nn}(f)$ for the exponential Hawkes kernel and find the
+frequency at which it falls to half its zero-frequency value.
+\end{exercise}
+\begin{exercise}
+Show that for $\kappa=1$ the gamma renewal spectrum formula gives
+$S_{nn}(f)=\lambda$.
+\end{exercise}

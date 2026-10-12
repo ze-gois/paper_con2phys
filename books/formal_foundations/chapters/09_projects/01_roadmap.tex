@@ -18,8 +18,32 @@ Simulate $z_{t+1}=Az_t+w_t$ for a two-dimensional rotating latent state, then ob
 \section{A research conclusion requires four layers}
 For each study, the final report should distinguish (1) the original English claim; (2) the formal mathematical target and its assumptions; (3) the numerical algorithm and validation outcomes; and (4) the physiological interpretation and its remaining alternatives. A clean implementation establishes only the third layer. A statistically significant result speaks to the second within its null model. A mechanistic conclusion requires evidence beyond either one in isolation.
 
+% --- expanded edition (October 2026) ---
+\section{Project VI: a point-process model of a place cell}
+Simulate a neuron whose intensity depends on position $x(t)$ along a linear track through a Gaussian tuning curve, $\lambda(t)=\lambda_0+\lambda_1\exp(-(x(t)-c)^2/(2w^2))$, together with a refractory history term. Fit (i) an occupancy-normalized rate map, (ii) a Poisson GLM with a spline basis in position, and (iii) the same GLM with a history filter. Compare estimates of $c$ and $w$, compute KS plots by time rescaling, and quantify how many laps are needed for a given precision. Then make the true field drift slowly across laps and identify which fits report this drift and which average it away. The mathematical tools are Chapters~\ref{ch:points} and~\ref{ch:glm}; the scientific lesson is that ``the place field'' is an estimand defined by a model.
+
+\section{Project VII: source mixing and laminar profiles}
+Place three dipolar sources at different depths of a homogeneous medium and compute the potential at a 32-contact linear probe with $50\,\mu$m spacing using the formulas of Chapter~\ref{ch:biophysics}. Give each source an independent time course. Compute the second-difference CSD, an inverse CSD with finite-radius discs, and a PCA of the laminar profiles. Vary the lateral extent of the sources and add independent noise at each contact. Determine when each method recovers the number, depth, and time courses of the sources, and when it creates spurious sinks at probe edges. The point of the project is to know the forward model before trusting any inverse.
+
+\section{Project VIII: population information and correlations}
+Simulate $N$ neurons with tuning curves to orientation and noise covariance built from three components: private Poisson-like variability, a shared multiplicative gain, and a small differential-correlation term along $\mu'(s)$. Estimate linear Fisher information with bias correction as a function of $N$ and of the number of trials, and compare with the value obtained after shuffling trials within stimulus. Identify which covariance component limits information and whether a realistic number of trials could detect the limit. Compare the results with the formulas of Chapter~\ref{ch:population}.
+
+\section{A checklist for each project}
+\begin{enumerate}[leftmargin=2em]
+\item State the English claim and the formal estimand, with units.
+\item List every assumption of the generative model and of the estimator.
+\item Write down the null hypothesis, what it preserves, and what it randomizes.
+\item Simulate data where the answer is known, including at least one case designed to fool the method.
+\item Estimate bias, variance, coverage, and false-positive rate across many simulated datasets.
+\item Only then apply the method to recordings, reporting the same quantities that were validated.
+\item Separate in the conclusion what was established mathematically, numerically, statistically, and physiologically.
+\end{enumerate}
+Each item corresponds to a part of this book: language and logic for (1), models and probability for (2) and (3), numerical analysis for (4) and (5), and the scientific chapters for (6) and (7).
 \begin{exercises}
 \item Draft a preregistered null hypothesis for one project, including the sampling unit, statistic, and exclusion rule.
 \item Create a matrix matching five methods to their scientific estimands, key assumptions, and primary failure modes.
 \item Design one negative control and one positive control for your chosen method.
+\item For Project VI, derive the expected spike count in a lap from the intensity and the animal's trajectory.
+\item For Project VII, compute the potential at a contact $100\,\mu$m above a dipole of moment $Id=10^{-12}$\,A\,m aligned with the probe.
+\item For Project VIII, state one result that would falsify the hypothesis that differential correlations limit information in your simulation.
 \end{exercises}

@@ -18,9 +18,83 @@ With $u(t)=u_0$ constant, the solution is $x(t)=u_0+[x(0)-u_0]e^{-t/\tau}$. The 
 \section{A distinction between models and data}
 Recorded spikes are events and need not be represented by a differentiable function. The firing-rate function is an inferred or modeled quantity. Writing $\dot r(t)$ for the derivative of an estimated rate assumes a degree of smoothness that the raw point process does not possess. We will state these choices explicitly when we develop state-space models.
 
+% --- expanded edition (October 2026) ---
+\section{Rules of differentiation}
+\begin{proposition}[Differentiability implies continuity]
+If $f$ is differentiable at $t$, it is continuous at $t$.
+\end{proposition}
+\begin{proof}
+$f(t+h)-f(t)=h\cdot\frac{f(t+h)-f(t)}h\to0\cdot f'(t)=0$ as $h\to0$.
+\end{proof}
+The converse is false: $|t|$ is continuous but not differentiable at $0$.
+
+\begin{theorem}[Product and chain rules]
+If $f,g$ are differentiable at $t$, then $(fg)'(t)=f'(t)g(t)+f(t)g'(t)$. If $g$ is differentiable at $t$ and $f$ at $g(t)$, then $(f\circ g)'(t)=f'(g(t))g'(t)$.
+\end{theorem}
+\begin{proof}
+For the product,
+\[
+\frac{f(t+h)g(t+h)-f(t)g(t)}h=\frac{f(t+h)-f(t)}hg(t+h)+f(t)\frac{g(t+h)-g(t)}h,
+\]
+and $g(t+h)\to g(t)$ by continuity. For the chain rule, define $\phi(k)=[f(g(t)+k)-f(g(t))]/k$ for $k\ne0$ and $\phi(0)=f'(g(t))$; $\phi$ is continuous at $0$. With $k=g(t+h)-g(t)$, we have $f(g(t+h))-f(g(t))=\phi(k)k$ in all cases, so the difference quotient equals $\phi(k)\,[g(t+h)-g(t)]/h\to f'(g(t))g'(t)$.
+\end{proof}
+
+\section{The mean value theorem}
+\begin{theorem}[Rolle and mean value]
+Let $f$ be continuous on $[a,b]$ and differentiable on $(a,b)$. If $f(a)=f(b)$, there is $c\in(a,b)$ with $f'(c)=0$. In general there is $c\in(a,b)$ with
+\[
+f'(c)=\frac{f(b)-f(a)}{b-a}.
+\]
+\end{theorem}
+\begin{proof}
+By the extreme value theorem $f$ attains a maximum and a minimum on $[a,b]$. If both occur at endpoints, $f$ is constant and $f'\equiv0$. Otherwise an extremum occurs at an interior $c$, where the one-sided difference quotients have opposite signs, forcing $f'(c)=0$. For the general case apply Rolle's theorem to $g(t)=f(t)-\frac{f(b)-f(a)}{b-a}(t-a)$.
+\end{proof}
+Consequences: a function with $f'\equiv0$ on an interval is constant; $f'>0$ implies $f$ is strictly increasing; and if $|f'|\le K$ then $|f(x)-f(y)|\le K|x-y|$ (a \emph{Lipschitz} bound). The last statement bounds how fast a signal can change given a bound on its slope, which links bandwidth to sample-to-sample variation.
+
+\section{Taylor's theorem and the error of finite differences}
+\begin{theorem}[Taylor with Lagrange remainder]
+If $f$ is $n+1$ times differentiable on an interval containing $t$ and $t+h$, then
+\[
+f(t+h)=\sum_{k=0}^n\frac{f^{(k)}(t)}{k!}h^k+\frac{f^{(n+1)}(\xi)}{(n+1)!}h^{n+1}
+\]
+for some $\xi$ between $t$ and $t+h$.
+\end{theorem}
+The proof applies Rolle's theorem repeatedly to the difference between $f$ and its Taylor polynomial. Two consequences matter for sampled signals. The forward difference satisfies
+\[
+\frac{f(t+h)-f(t)}h=f'(t)+\tfrac h2f''(\xi),
+\]
+an $O(h)$ error, whereas the central difference $[f(t+h)-f(t-h)]/(2h)=f'(t)+O(h^2)$. If each sample carries independent noise of standard deviation $\sigma$, the forward difference adds noise of standard deviation $\sqrt2\sigma/h$. The total error $\approx\frac h2|f''|+\sqrt2\sigma/h$ is minimized at $h^\ast=\sqrt{2\sqrt2\sigma/|f''|}$: shrinking $h$ below this value makes the derivative estimate \emph{worse}.
+
+\section{The exponential function}
+Define $\exp(x)=\sum_{k\ge0}x^k/k!$, which converges absolutely for every real or complex $x$ by comparison with a geometric series once $k>2|x|$. Termwise multiplication of absolutely convergent series and the binomial theorem give $\exp(x+y)=\exp(x)\exp(y)$, and termwise differentiation (justified by uniform convergence on bounded sets) gives $\exp'=\exp$. Writing $e^x=\exp(x)$ and splitting the series for $e^{i\theta}$ into even and odd powers yields
+\[
+e^{i\theta}=\sum_{m\ge0}\frac{(-1)^m\theta^{2m}}{(2m)!}+i\sum_{m\ge0}\frac{(-1)^m\theta^{2m+1}}{(2m+1)!}=\cos\theta+i\sin\theta,
+\]
+which proves Euler's formula once cosine and sine are defined by these series.
+
+\section{Linear first-order equations in general}
+\begin{theorem}
+Let $\tau>0$ and $u$ be continuous. The unique solution of $\tau\dot x=-x+u(t)$ with $x(0)=x_0$ is
+\[
+x(t)=x_0e^{-t/\tau}+\frac1\tau\int_0^te^{-(t-s)/\tau}u(s)\,ds.
+\]
+\end{theorem}
+\begin{proof}
+Multiply by the integrating factor $e^{t/\tau}/\tau$: $\frac d{dt}\bigl(e^{t/\tau}x\bigr)=e^{t/\tau}u(t)/\tau$. Integrate from $0$ to $t$ and multiply by $e^{-t/\tau}$. If $x,y$ are two solutions, $w=x-y$ satisfies $\tau\dot w=-w$, $w(0)=0$, so $\frac d{dt}(e^{t/\tau}w)=0$ and $w\equiv0$.
+\end{proof}
+The solution is a \emph{convolution} of the input with the exponential kernel $k(t)=\tau^{-1}e^{-t/\tau}\mathbf 1_{t\ge0}$. A leaky integrator, an RC membrane, and an exponential synaptic filter are the same mathematical object. Its step response reaches $1-e^{-1}\approx63\%$ of its final value after one time constant.
+
+\begin{workedexample}[Membrane time constant from a current step]
+A passive membrane obeys $C\dot V=-(V-E_L)/R+I(t)$, i.e.\ $\tau\dot V=-(V-E_L)+RI$ with $\tau=RC$. For a step $I(t)=I_0$ at $t=0$ from rest, $V(t)=E_L+RI_0(1-e^{-t/\tau})$. With $R=100\,\mathrm{M\Omega}$ and $C=200$\,pF, $\tau=20$\,ms and a 50\,pA step produces a 5\,mV steady depolarization. Fitting $\tau$ from data presumes the passive model; active conductances, space clamp errors, and series resistance change the curve.
+\end{workedexample}
 \begin{exercises}
 \item Differentiate $f(t)=e^{-t/\tau}$ and confirm the result has units of inverse time.
 \item Solve $dx/dt=-ax$ for $a>0$ and a specified initial condition.
 \item Explain why a spike-count cumulative function is not ordinarily differentiable at spike times.
 \item Compute $\int_0^T 3\,dt$ and interpret it for a rate of 3 spikes/s.
+\item Use the mean value theorem to prove $|\sin x-\sin y|\le|x-y|$.
+\item Show that the central difference has error $O(h^2)$ using Taylor's theorem to third order.
+\item Solve $\tau\dot x=-x+\sin(\omega t)$ with $x(0)=0$ and find the steady-state amplitude and phase lag.
+\item Show that $f(t)=t^2\sin(1/t)$ (with $f(0)=0$) is differentiable at $0$ but $f'$ is not continuous there.
+\item Derive the optimal step $h^\ast$ for the noisy forward difference.
 \end{exercises}

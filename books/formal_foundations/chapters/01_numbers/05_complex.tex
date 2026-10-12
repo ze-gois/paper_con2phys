@@ -14,9 +14,64 @@ A sine wave can be written $x(t)=A\cos(2\pi ft+\phi)=\Re\{Ae^{i(2\pi ft+\phi)}\}
 \begin{workedexample}[Phase wraps]
 The angles $179^\circ$ and $-179^\circ$ differ numerically by $358^\circ$ but lie just $2^\circ$ apart on a circle. Their arithmetic mean is $0^\circ$, which points in the opposite direction. A circular mean instead uses the argument of $e^{i179^\circ}+e^{-i179^\circ}$ and correctly points near $180^\circ$.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{The complex numbers form a field}
+With the multiplication rule $(a,b)(c,d)=(ac-bd,ad+bc)$, the set $\mathbb C=\mathbb R^2$ satisfies all field axioms: the operations are associative and commutative, multiplication distributes over addition, $(0,0)$ and $(1,0)$ are identities, and every nonzero $(a,b)$ has inverse $(a,-b)/(a^2+b^2)$. The map $a\mapsto(a,0)$ embeds $\mathbb R$ in $\mathbb C$, and $i=(0,1)$ satisfies $i^2=(-1,0)=-1$. Unlike $\mathbb R$, the complex field admits \emph{no} order compatible with its arithmetic: in an ordered field every nonzero square is positive, but $i^2=-1$ and $1^2=1$ cannot both be positive.
+
+\begin{proposition}[Properties of conjugation and modulus]
+For $z,w\in\mathbb C$: $\overline{z+w}=\bar z+\bar w$, $\overline{zw}=\bar z\bar w$, $|zw|=|z||w|$, $\Re z=(z+\bar z)/2$, $\Im z=(z-\bar z)/(2i)$, and $|z+w|\le|z|+|w|$.
+\end{proposition}
+\begin{proof}
+The first two follow by expanding both sides. Then $|zw|^2=zw\overline{zw}=z\bar zw\bar w=|z|^2|w|^2$. For the triangle inequality,
+\[
+|z+w|^2=|z|^2+|w|^2+2\Re(z\bar w)\le|z|^2+|w|^2+2|z||w|=(|z|+|w|)^2,
+\]
+using $\Re u\le|u|$ and $|z\bar w|=|z||w|$.
+\end{proof}
+
+\section{Euler's formula and de Moivre}
+For now we take $e^{i\theta}$ to be defined by $\cos\theta+i\sin\theta$; Chapter~\ref{ch:calculus} justifies this through power series. The addition formulas for sine and cosine are then equivalent to the exponential law
+\[
+e^{i(\alpha+\beta)}=e^{i\alpha}e^{i\beta}.
+\]
+Iterating gives de Moivre's formula $(\cos\theta+i\sin\theta)^n=\cos n\theta+i\sin n\theta$, and the trigonometric identities
+\[
+\cos\theta=\frac{e^{i\theta}+e^{-i\theta}}2,\qquad\sin\theta=\frac{e^{i\theta}-e^{-i\theta}}{2i}.
+\]
+These two formulas convert any product of sines and cosines into a sum of exponentials, which is how frequency mixing is analysed: $\cos(\omega_1t)\cos(\omega_2t)=\tfrac12[\cos((\omega_1-\omega_2)t)+\cos((\omega_1+\omega_2)t)]$. A nonlinearity applied to a sum of two rhythms creates power at sum and difference frequencies, a source of spurious cross-frequency coupling.
+
+\section{Roots of unity and the discrete Fourier basis}
+The equation $z^N=1$ has exactly $N$ complex solutions, the \emph{$N$th roots of unity} $\omega^k$ for $k=0,\ldots,N-1$, where $\omega=e^{2\pi i/N}$. They are equally spaced on the unit circle.
+
+\begin{proposition}[Orthogonality of roots of unity]
+For integers $k$,
+\[
+\sum_{n=0}^{N-1}\omega^{kn}=\begin{cases}N,&k\equiv0\pmod N,\\0,&\text{otherwise.}\end{cases}
+\]
+\end{proposition}
+\begin{proof}
+If $k\equiv0$ then every term is $1$. Otherwise $q=\omega^k\ne1$ and the geometric sum is $(1-q^N)/(1-q)$; since $q^N=(\omega^N)^k=1$, the numerator vanishes.
+\end{proof}
+This identity is the entire algebraic content of the discrete Fourier transform's invertibility. It also explains why a sinusoid whose frequency is not an integer multiple of $f_s/N$ ``leaks'' into many DFT bins: the corresponding geometric sum does not cancel.
+
+\section{Complex numbers as rotations and scalings}
+Multiplication by a fixed $c=re^{i\phi}$ maps the plane to itself by rotating through $\phi$ and scaling by $r$. As a map of $\mathbb R^2$, it is the matrix
+\[
+\begin{pmatrix}a&-b\\b&a\end{pmatrix},\qquad c=a+ib.
+\]
+This identifies complex numbers with a special class of $2\times2$ real matrices. A linear filter acting on a single sinusoid at frequency $f$ does exactly this: it multiplies the complex amplitude by the frequency response $H(f)$, rescaling amplitude by $|H(f)|$ and shifting phase by $\arg H(f)$. Composing two filters multiplies their responses, which adds their phase shifts.
+
+\begin{workedexample}[Averaging phases correctly]
+Suppose spike phases relative to theta are $\theta_1,\ldots,\theta_n$. The \emph{mean resultant vector} is $\bar z=\frac1n\sum_je^{i\theta_j}$. Its argument is the circular mean phase and its modulus $R=|\bar z|\in[0,1]$ measures concentration; $R=1$ iff all phases coincide, by the equality case of the triangle inequality. For phases $\{170^\circ,-170^\circ,180^\circ\}$, $\bar z\approx\frac13(-0.985+0.174i-0.985-0.174i-1)=-0.990$, so the mean phase is $180^\circ$ and $R\approx0.99$, as intuition demands.
+\end{workedexample}
 \begin{exercises}
 \item Compute $(1+i)^2$ and $|1+i|$.
 \item Show $|zw|=|z||w|$ using complex conjugation.
 \item Express $\cos\theta\cos\phi$ as a combination of complex exponentials and simplify.
 \item Explain why phase averages need not be meaningful when oscillatory amplitude is close to zero.
+\item Show that $\mathbb C$ cannot be ordered: assume $i>0$ or $i<0$ and derive a contradiction with the ordered-field axioms.
+\item Derive the identities for $\cos(\alpha+\beta)$ and $\sin(\alpha+\beta)$ from $e^{i(\alpha+\beta)}=e^{i\alpha}e^{i\beta}$.
+\item List the 6th roots of unity in Cartesian form and verify that their sum is zero.
+\item Show that $|z+w|=|z|+|w|$ if and only if one of $z,w$ is a nonnegative real multiple of the other.
+\item Expand $\cos^3(\omega t)$ into a sum of cosines and identify which frequencies a cubic nonlinearity creates.
 \end{exercises}

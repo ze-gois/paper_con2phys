@@ -23,9 +23,52 @@ Transfer entropy is a conditional information measure, often written $I(Y_t;X_{t
 \begin{workedexample}[A shared driver]
 Let $s_t$ be a stochastic signal, $x_t=s_t+\eta_t$, and $y_t=s_{t-1}+\xi_t$ with independent observation noises. The lag creates directional predictability from $x$ to $y$, but the actual source is $s$, not a connection from the observed $x$ channel to the observed $y$ channel. This is a constructive counterexample to an unrestricted causal interpretation.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{The spectral density matrix}
+For a $d$-dimensional weakly stationary process with absolutely summable cross-covariances, the \emph{spectral density matrix} $S(f)$ has entries $S_{jk}(f)$, the cross-spectra. For every $f$ it is Hermitian ($S_{kj}=\overline{S_{jk}}$) and positive semidefinite: for any $a\in\mathbb C^d$, $a^\ast S(f)a$ is the spectral density of the scalar process $\sum_j\bar a_jX_j$ and is therefore nonnegative.
+
+\begin{proposition}
+$0\le\mathcal C_{xy}(f)\le1$ whenever $S_{xx}(f)S_{yy}(f)>0$.
+\end{proposition}
+\begin{proof}
+The $2\times2$ matrix $\begin{pmatrix}S_{xx}&S_{xy}\\S_{yx}&S_{yy}\end{pmatrix}$ is positive semidefinite, so its determinant $S_{xx}S_{yy}-|S_{xy}|^2$ is nonnegative.
+\end{proof}
+
+\section{Coherence under a common source}
+Let $x=s+n_x$, $y=s+n_y$ with $s,n_x,n_y$ mutually uncorrelated and spectra $S_s,S_x^{n},S_y^{n}$. Then $S_{xy}=S_s$, $S_{xx}=S_s+S^n_x$, $S_{yy}=S_s+S^n_y$, and
+\[
+\mathcal C_{xy}(f)=\frac{S_s^2}{(S_s+S^n_x)(S_s+S^n_y)}=\frac{1}{(1+1/\mathrm{SNR}_x)(1+1/\mathrm{SNR}_y)},
+\]
+with $\mathrm{SNR}_x=S_s/S^n_x$. Coherence here is entirely a function of signal-to-noise ratios. A condition that increases the power of the shared signal (e.g.\ running increases theta in all electrodes) increases coherence without any change in interaction. Conversely, adding independent noise to one channel decreases coherence without any change in interaction. Comparisons of coherence across conditions are only interpretable alongside the corresponding power changes.
+
+\section{Bias of estimated coherence}
+Coherence is estimated from $K$ independent trials or tapers by $\hat{\mathcal C}=|\sum_kX_k\bar Y_k|^2/(\sum_k|X_k|^2\sum_k|Y_k|^2)$. When the true coherence is zero, $\E\hat{\mathcal C}=1/K$ for Gaussian data, so ten tapers give a baseline near $0.1$, not $0$. The same $1/K$ bias that affects the PLV affects coherence. Confidence intervals are usually constructed on the Fisher-transformed coherency $\operatorname{atanh}|\hat c|$ or by jackknife over tapers or trials.
+
+\section{The imaginary part of coherency}
+\emph{Coherency} is the complex quantity $c_{xy}=S_{xy}/\sqrt{S_{xx}S_{yy}}$. Under instantaneous linear mixing, for example volume conduction in a quasistatic medium where $x=a_1s_1+a_2s_2$ and $y=b_1s_1+b_2s_2$ with real coefficients and independent sources, the cross-spectrum is $S_{xy}=a_1b_1S_{s_1}+a_2b_2S_{s_2}$, which is \emph{real}. Hence:
+
+\begin{proposition}
+If two channels are real instantaneous mixtures of mutually uncorrelated sources, then $\Im c_{xy}(f)=0$ for every $f$.
+\end{proposition}
+A nonzero imaginary part therefore requires a time lag between the channels' contributions and cannot be produced by zero-lag mixing alone. This motivates the imaginary coherence and the (weighted) phase-lag index. The converse inference fails: a genuine zero-lag interaction is invisible to these measures, and lags due to differing filter delays or reference effects produce nonzero imaginary parts without interaction.
+
+\section{Spectral Granger causality}
+Write a stationary bivariate VAR in moving-average form $Z(f)=H(f)E(f)$ with innovation covariance $\Sigma$. If $\Sigma$ is diagonal, $S_{yy}(f)=|H_{yy}(f)|^2\Sigma_{yy}+|H_{yx}(f)|^2\Sigma_{xx}$, and Geweke's frequency-domain measure is
+\[
+f_{X\to Y}(f)=\log\frac{S_{yy}(f)}{|H_{yy}(f)|^2\Sigma_{yy}},
+\]
+the log ratio of total power of $Y$ at $f$ to the part of its power driven by its own innovations. (When $\Sigma$ has off-diagonal terms a normalizing transformation is applied first.) Under regularity conditions, $\int_{-1/2}^{1/2}f_{X\to Y}(f)\,df$ equals the time-domain statistic $F_{X\to Y}$. Non-parametric estimates compute $H$ and $\Sigma$ from the spectral matrix by Wilson's spectral factorization rather than fitting a VAR. All the cautions of the time-domain measure carry over, and filtering the data before estimating Granger causality can create or destroy spectral structure in it; filtering is therefore discouraged.
+
+\begin{workedexample}[Coherence change without coupling change]
+Two electrodes record $x=s+n_x$, $y=s+n_y$ with noise spectra equal to $1$ at 8\,Hz. At rest the shared theta spectrum is $S_s=1$, so $\mathcal C=1/4$. During running $S_s=4$, so $\mathcal C=(4/5)^2=0.64$. The mixing and the noise are unchanged; only the shared source power has grown. A report that ``theta coherence increased during running'' is accurate; a report that ``coupling increased'' is not supported.
+\end{workedexample}
 \begin{exercises}
 \item State why coherence is unchanged by a fixed nonzero scaling of one signal.
 \item Distinguish phase locking, coherence, and Granger prediction.
 \item Construct an example of common reference that raises coherence without coupling.
 \item Describe checks for VAR residual autocorrelation and stability.
+\item Show that the spectral density matrix is Hermitian.
+\item Compute coherence for the common-source model with $\mathrm{SNR}_x=\mathrm{SNR}_y=1$ and with $\mathrm{SNR}_x=9,\mathrm{SNR}_y=1$.
+\item Show that a pure delay $y(t)=x(t-\tau)$ gives coherency $e^{-2\pi if\tau}$ and determine when its imaginary part vanishes.
+\item Explain why a common reference electrode with zero-lag activity contributes only to the real part of coherency.
 \end{exercises}

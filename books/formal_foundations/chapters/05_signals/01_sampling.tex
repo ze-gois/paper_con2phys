@@ -15,9 +15,36 @@ A discrete recording is represented in finite precision. With $C$ channels, $N$ 
 \begin{workedexample}[A large acquisition]
 For 128 channels at 30,000 samples/s over one hour, stored as signed 16-bit integers, the raw size is $128\cdot30000\cdot3600\cdot2=27{,}648{,}000{,}000$ bytes (about 27.65 GB in decimal units). Converting the entire array to 64-bit floats multiplies memory by four. A streaming analysis therefore need not sacrifice mathematical precision in its intermediate accumulators, but should avoid careless full-array expansion.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{Aliasing as an equivalence relation}
+Fix a sampling rate $f_s$. Two frequencies $f$ and $f'$ produce identical samples of the complex exponential $e^{2\pi ift}$ at times $n/f_s$ iff $e^{2\pi i(f-f')n/f_s}=1$ for every integer $n$, i.e.\ iff $f-f'$ is an integer multiple of $f_s$. ``Same samples'' is thus the equivalence relation $f\sim f'\iff f-f'\in f_s\mathbb Z$ of Chapter~\ref{ch:relations}, and each class has exactly one representative in $(-f_s/2,f_s/2]$. For \emph{real} sinusoids, $\cos(2\pi ft)$ and $\cos(-2\pi ft)$ coincide, so each class of $|f|$ has a representative in $[0,f_s/2]$: the folded or \emph{alias} frequency
+\[
+f_{\rm alias}=\bigl|f-f_s\cdot\operatorname{round}(f/f_s)\bigr|.
+\]
+A 60\,Hz line-noise harmonic at 540\,Hz sampled at 1000\,Hz appears at $|540-1000|=460$\,Hz; sampled at 500\,Hz it appears at $|540-500|=40$\,Hz, inside the gamma band.
+
+\section{Quantization}
+An analog-to-digital converter with $b$ bits over an input range of width $V$ has step $q=V/2^b$. Rounding to the nearest level introduces an error $e\in[-q/2,q/2]$. If the signal varies over many levels, a standard model treats $e$ as uniform on that interval and independent of the signal, giving error variance $q^2/12$. For a full-scale sinusoid the resulting signal-to-quantization-noise ratio is approximately $6.02b+1.76$\,dB.
+
+\begin{workedexample}[Resolution of a 16-bit headstage]
+A 16-bit converter spanning $\pm5$\,mV has $q=10\,\text{mV}/65536\approx0.15\,\mu$V and quantization noise standard deviation $q/\sqrt{12}\approx0.044\,\mu$V, far below typical thermal and biological noise of several microvolts. In this regime the uniform-error model is harmless. When gain is set so low that a signal spans only a few levels, the model fails: the error becomes deterministic and signal-dependent, and it creates harmonics rather than white noise.
+\end{workedexample}
+
+\section{Resampling}
+Changing the sampling rate by a rational factor $L/M$ (in lowest terms) consists of three steps: insert $L-1$ zeros between samples (upsampling), low-pass filter at the lower of the two Nyquist frequencies, and keep every $M$th sample (downsampling). Omitting the filter before downsampling folds high frequencies into the band exactly as in analog sampling: decimating a 30\,kHz wideband trace to 1\,kHz by taking every 30th sample aliases spike energy into the LFP band. Library routines that ``decimate'' include the filter; plain indexing does not.
+
+\section{Timing and synchronization}
+Two acquisition systems running at nominally equal rates drift apart because their clocks differ by a few parts per million. A 10\,ppm discrepancy accumulates to $36$\,ms per hour, larger than many spike--LFP or spike--behavior timing effects. Alignment therefore requires shared synchronization pulses, and the mapping between clocks is estimated by regression of pulse times, typically linear ($t_B=a+bt_A$) over a session. Residuals of that regression measure the timing uncertainty that should be propagated into any latency claim.
+
+\section{Sample-and-hold and the zero-order hold}
+Physical converters do not take instantaneous point samples; they integrate over a short aperture, and digital-to-analog converters hold each value until the next sample. Holding for one sample period multiplies the spectrum by $\operatorname{sinc}(f/f_s)$, an attenuation of about $3.9$\,dB at Nyquist. This is a reminder that the ``ideal sampling'' of the previous sections is a model whose deviations are small but quantifiable.
 \begin{exercises}
 \item Determine the Nyquist frequency for an LFP sampled at 1250 Hz.
 \item Calculate the storage size of 80 channels sampled at 2 kHz for 2 hours using float32.
 \item Explain why the reference electrode can affect estimated coherence.
 \item Distinguish a physical source model, an amplifier signal, and a floating-point array.
+\item Compute the alias frequency of a 1.1\,kHz component sampled at 1250\,Hz.
+\item What is the quantization step of a 24-bit converter spanning $\pm2.5$\,V?
+\item Explain why taking every 30th sample of a 30\,kHz recording is not a valid way to obtain a 1\,kHz LFP.
+\item Two clocks differ by 20\,ppm. How long until they disagree by 1\,ms?
 \end{exercises}

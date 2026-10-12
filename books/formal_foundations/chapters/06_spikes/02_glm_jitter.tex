@@ -21,9 +21,49 @@ The plus-one convention avoids zero estimated $p$-values, but validity also requ
 \begin{workedexample}[What is preserved?]
 Suppose one window has three spikes. A conditional jitter method preserving this count cannot test whether the process increased its number of spikes in that window; it can test aspects of fine timing within the window. Rejection must be interpreted relative to preserved coarse structure, not as evidence for a particular synapse.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{Concavity of the Poisson GLM log-likelihood}
+With $\log\mu_k=\log\Delta_k+x_k^\top\beta$ (absorbing $\beta_0$ into $\beta$ with a constant regressor), the log-likelihood is
+\[
+\ell(\beta)=\sum_k\bigl[n_kx_k^\top\beta-\Delta_ke^{x_k^\top\beta}\bigr]+\text{const}.
+\]
+\begin{proposition}
+The gradient and Hessian are
+\[
+\nabla\ell(\beta)=\sum_k(n_k-\mu_k)x_k,\qquad\nabla^2\ell(\beta)=-\sum_k\mu_kx_kx_k^\top=-X^\top WX,
+\]
+with $W=\diag(\mu_k)$. Hence $\ell$ is concave, and strictly concave if $X$ has full column rank.
+\end{proposition}
+\begin{proof}
+Differentiate term by term. For any $v$, $v^\top\nabla^2\ell\,v=-\sum_k\mu_k(x_k^\top v)^2\le0$, with equality only if $Xv=0$.
+\end{proof}
+Concavity means every local maximum is global, and Newton's method converges reliably from reasonable starting points. The Newton step can be written as a weighted least-squares problem with working response $\tilde y_k=x_k^\top\beta+(n_k-\mu_k)/\mu_k$: this is \emph{iteratively reweighted least squares}. The MLE may fail to exist if the data are \emph{separable}, for example if a regressor is positive in every bin with spikes and zero otherwise: the likelihood then increases without bound as the coefficient grows. Regularization (a ridge penalty $-\frac\alpha2\|\beta\|^2$ keeps concavity) resolves this, at the cost of bias.
+
+\section{Basis functions for filters}
+A stimulus or history filter of length $L$ bins has $L$ free coefficients. Representing it as $h=Bc$ with a basis $B\in\mathbb R^{L\times J}$, $J\ll L$, reduces parameters and imposes smoothness. Raised-cosine bumps with logarithmically stretched time are common for history filters because they give fine resolution at short lags (refractoriness) and coarse resolution at long lags. The basis choice is a prior: features not representable in the span of $B$ cannot be estimated, and the apparent shape of a fitted filter partly reflects the basis.
+
+\section{Goodness of fit with time rescaling}
+Given a fitted conditional intensity $\hat\lambda(t\mid\mathcal H_t)$ and spike times $t_k$, compute $z_k=\int_{t_{k-1}}^{t_k}\hat\lambda(s\mid\mathcal H_s)\,ds$ and $u_k=1-e^{-z_k}$. If the model is correct, the $u_k$ are iid uniform. A KS plot compares their sorted values with uniform quantiles, with approximate 95\% bands $\pm1.36/\sqrt K$ for $K$ spikes. Two practical caveats apply. In discrete time, the integral must be computed with a correction for the bin width, or the test rejects correct models at high rates. And with many spikes the bands become narrow enough that every model is rejected; the KS plot is then more useful as a diagnostic of \emph{where} the model fails than as a binary test.
+
+\section{Validity of Monte Carlo tests}
+\begin{proposition}
+Suppose that under $H_0$ the values $T_{\rm obs},T_1^\ast,\ldots,T_B^\ast$ are exchangeable and almost surely distinct. Then $P_{H_0}(\hat p\le\alpha)\le\alpha$ for every $\alpha\in(0,1)$, where $\hat p=(1+\#\{b:T_b^\ast\ge T_{\rm obs}\})/(B+1)$.
+\end{proposition}
+\begin{proof}
+By exchangeability, the rank of $T_{\rm obs}$ among the $B+1$ values is uniformly distributed on $\{1,\ldots,B+1\}$. The event $\hat p\le\alpha$ says that $T_{\rm obs}$ is among the $\lfloor\alpha(B+1)\rfloor$ largest, which has probability $\lfloor\alpha(B+1)\rfloor/(B+1)\le\alpha$.
+\end{proof}
+The hypothesis is exchangeability \emph{of the observed data with the surrogates under the null}. Interval jitter achieves it exactly when the null is ``given the counts in each window, spike positions within windows are uniform and independent'': the observed train is then one draw from the same conditional distribution that generates the surrogates. Shuffling procedures that do not have this property yield $p$-values whose validity is unknown.
+
+\begin{workedexample}[A coupling filter that is really a common input]
+Simulate two neurons that are independent given a shared slow input $s(t)$, with intensities $\exp(a+s(t))$ for each. Fit a GLM for neuron 2 that includes neuron 1's recent spikes but omits $s$. The fitted coupling filter from 1 to 2 is positive at short lags, because neuron 1's spikes are a noisy proxy for $s$. Including an estimate of $s$, for instance a smoothed population rate or the LFP, shrinks the coupling filter towards zero. The coefficient measured the predictive value of neuron 1 given the regressors \emph{in the model}; it changes whenever the model changes.
+\end{workedexample}
 \begin{exercises}
 \item Derive the score of the Poisson log-likelihood with respect to $\beta$.
 \item State the null hypothesis and exact conditioning in a 20-ms interval jitter test.
 \item Explain why randomizing every timestamp independently across a session may destroy behavioral modulation.
 \item Design a split-trial validation plan that avoids training and testing on overlapping windows from the same trial.
+\item Derive the IRLS working response from Newton's method for the Poisson GLM.
+\item Construct a tiny dataset (three bins) for which the Poisson GLM MLE does not exist.
+\item Show that adding a ridge penalty keeps the log-likelihood strictly concave.
+\item Prove that, under exchangeability, $P(\hat p\le\alpha)=\lfloor\alpha(B+1)\rfloor/(B+1)$ when ties have probability zero.
 \end{exercises}

@@ -80,3 +80,99 @@ its time average can estimate the ensemble mean under integrability.
 Stationarity alone does not justify equating those means, nor does
 increasing the sample rate create independent trials.
 \end{example}
+% --- expanded edition (October 2026) ---
+\section{Modes of convergence and their counterexamples}
+For random variables on one probability space, four modes of convergence
+are in common use:
+\begin{itemize}[leftmargin=2em]
+\item \emph{almost sure}: $\Prob(X_n\to X)=1$;
+\item \emph{in $L^p$}: $\E|X_n-X|^p\to0$;
+\item \emph{in probability}: $\Prob(|X_n-X|>\varepsilon)\to0$ for every $\varepsilon>0$;
+\item \emph{in distribution}: $\Prob(X_n\le x)\to\Prob(X\le x)$ at continuity points of the limit.
+\end{itemize}
+Almost sure convergence and $L^p$ convergence each imply convergence in
+probability, which implies convergence in distribution. No other
+implication holds in general.
+\begin{proposition}
+$L^p$ convergence implies convergence in probability.
+\end{proposition}
+\begin{proof}
+Markov's inequality applied to $|X_n-X|^p$ gives
+$\Prob(|X_n-X|>\varepsilon)\le\E|X_n-X|^p/\varepsilon^p\to0$.
+\end{proof}
+\begin{example}[Convergence without convergence of means]
+On $\Omega=(0,1)$ with Lebesgue measure let $X_n=n\ind_{(0,1/n)}$.
+Then $X_n\to0$ almost surely, but $\E X_n=1$ for all $n$. The
+spike-count analogue is a rare, large burst: it vanishes in probability
+but keeps a fixed contribution to the mean.
+\end{example}
+\begin{example}[Convergence in probability without almost sure convergence]
+Enumerate the dyadic intervals $[0,1],[0,\tfrac12],[\tfrac12,1],[0,\tfrac14],\ldots$
+and let $X_n$ be the indicator of the $n$th one. The lengths tend to
+zero, so $X_n\to0$ in probability, but every $\omega$ lies in
+infinitely many of the intervals, so $X_n(\omega)$ does not converge.
+\end{example}
+Consistency of an estimator is usually stated in probability; strong
+consistency is almost sure. A central limit theorem is a statement in
+distribution, and says nothing about any particular realization.
+
+\section{Product measures and independence}
+Independence of $X$ and $Y$ means that their joint law is the product
+of the marginals: $\Prob_{(X,Y)}=\Prob_X\otimes\Prob_Y$. For $\sigma$-finite
+measures the product measure is unique on the product $\sigma$-algebra,
+and the Tonelli and Fubini theorems (Chapter~\ref{ch:classical-sampling})
+license computing expectations of functions of independent variables
+by iterated integration. Independence of a whole family requires the
+product property for every finite subfamily.
+
+\section{Filtrations, stopping times, and martingales}
+A \emph{filtration} $(\mathcal F_t)$ is an increasing family of
+$\sigma$-algebras representing information available at time $t$.
+A process $M_t$ adapted to it, with $\E|M_t|<\infty$, is a
+\emph{martingale} if $\E[M_t\mid\mathcal F_s]=M_s$ for $s\le t$.
+\begin{example}[Counting-process martingale]
+For a homogeneous Poisson process of rate $\lambda$ with its natural
+filtration, $M_t=N(t)-\lambda t$ is a martingale: for $s<t$,
+$\E[N(t)-N(s)\mid\mathcal F_s]=\lambda(t-s)$ by independent
+increments. More generally $N(t)-\int_0^t\lambda(u\mid\mathcal H_{u-})\,du$
+is a (local) martingale for the conditional intensity, which is
+Result 74.
+\end{example}
+A \emph{stopping time} $\tau$ is a random time such that
+$\{\tau\le t\}\in\mathcal F_t$: whether it has happened is known from
+the past. The first spike after stimulus onset is a stopping time;
+``the spike that precedes the largest ripple of the session'' is not.
+\begin{theorem}[Optional stopping, bounded case]
+If $M$ is a martingale and $\tau$ a bounded stopping time, then
+$\E M_\tau=\E M_0$.
+\end{theorem}
+\begin{proof}[Proof in discrete time]
+If $\tau\le K$, write $M_\tau=M_0+\sum_{k=1}^K(M_k-M_{k-1})\ind_{\{\tau\ge k\}}$.
+The event $\{\tau\ge k\}=\{\tau\le k-1\}^c$ belongs to $\mathcal F_{k-1}$,
+so each term has expectation
+$\E[\ind_{\{\tau\ge k\}}\E(M_k-M_{k-1}\mid\mathcal F_{k-1})]=0$.
+\end{proof}
+Applied to $N(t)-\lambda t$, optional stopping gives
+$\E N(\tau)=\lambda\E\tau$ for bounded stopping times: the expected
+number of spikes before a history-dependent stopping rule equals the
+rate times the expected duration, as long as the rule does not look
+into the future. Analyses that end an epoch ``at the last spike'' violate
+this and are biased.
+
+\section*{Exercises for this chapter}
+\begin{exercise}
+Show that the intersection of two $\sigma$-algebras is a $\sigma$-algebra
+but their union need not be.
+\end{exercise}
+\begin{exercise}
+Show that convergence in distribution to a constant implies convergence
+in probability to that constant.
+\end{exercise}
+\begin{exercise}
+For a Poisson process, show that $(N(t)-\lambda t)^2-\lambda t$ is a
+martingale.
+\end{exercise}
+\begin{exercise}
+Decide whether ``the first time the LFP envelope exceeds five MADs'' and
+``the time of the session's largest envelope value'' are stopping times.
+\end{exercise}

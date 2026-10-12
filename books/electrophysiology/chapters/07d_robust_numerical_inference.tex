@@ -76,3 +76,87 @@ condition numbers, convergence criteria, effective independent
 units, model selection, bin duration and handling of omitted
 variables, not just a coefficient array.
 \end{example}
+% --- expanded edition (October 2026) ---
+\section{Influence functions and M-estimators}
+For an estimator defined as a functional $T(F)$ of the distribution, the
+\emph{influence function} at $x$ is
+$\mathrm{IF}(x)=\lim_{\epsilon\downarrow0}[T((1-\epsilon)F+\epsilon\delta_x)-T(F)]/\epsilon$.
+For the mean, $\mathrm{IF}(x)=x-\mu$: unbounded, so a single artefact can
+move it arbitrarily. For the median of a continuous $F$ with density $p$,
+$\mathrm{IF}(x)=\operatorname{sign}(x-m)/(2p(m))$: bounded. Huber's
+M-estimator of location minimizes $\sum_i\rho_c(x_i-\theta)$ with
+\[
+\rho_c(u)=\begin{cases}u^2/2,&|u|\le c,\\c|u|-c^2/2,&|u|>c,\end{cases}
+\]
+which behaves like the mean for small residuals and like the median for
+large ones; its influence function is $\psi_c(u)=\max(-c,\min(c,u))$ up
+to scaling. With $c=1.345\sigma$, it retains 95\% efficiency at the
+Gaussian while bounding the influence of artefacts.
+
+\section{Derivation of the Miller--Madow correction}
+For a discrete distribution $p_1,\ldots,p_K$ and empirical frequencies
+$\hat p_i$ from $T$ samples, expand the plug-in entropy
+$\hat H=-\sum_i\hat p_i\log\hat p_i$ to second order around $p$. The
+first-order term has zero mean, and the second-order term is
+$-\sum_i(\hat p_i-p_i)^2/(2p_i)$. Since $\E(\hat p_i-p_i)^2=p_i(1-p_i)/T$,
+\[
+\E\hat H\approx H-\sum_i\frac{1-p_i}{2T}=H-\frac{K-1}{2T}.
+\]
+The bias is negative, grows with the number of occupied bins, and
+shrinks only as $1/T$. Mutual information estimated as
+$\hat H(X)+\hat H(Y)-\hat H(X,Y)$ inherits a \emph{positive} bias of about
+$(K_X-1)(K_Y-1)/(2T)$ nats, because the joint histogram has many more
+bins. With 10 response bins, 8 stimuli and 200 trials, the bias is about
+$63/400\approx0.16$\,nats, comparable to many reported effects. Shuffle
+correction (subtracting the information computed after permuting
+stimulus labels) estimates and removes this bias empirically.
+
+\section{Confidence bands from DKW}
+Setting the DKW bound equal to $\alpha$ gives a simultaneous confidence
+band for an entire distribution function:
+\[
+\Prob\Bigl(\sup_x|F_T(x)-F(x)|\le\epsilon_T\Bigr)\ge1-\alpha,\qquad
+\epsilon_T=\sqrt{\frac{\log(2/\alpha)}{2T}}.
+\]
+For $T=400$ rescaled intervals and $\alpha=0.05$, $\epsilon_T\approx0.068$.
+This band is valid for every $T$, not only asymptotically, and here it
+has essentially the same half-width as the asymptotic KS band
+$1.36/\sqrt T=0.068$. The DKW band applies to iid samples; for time-rescaled intervals
+it presupposes a correctly specified model, as stated above.
+
+\section{Stable evaluation of log-likelihoods}
+Likelihoods of long spike trains or of mixtures involve products of many
+small numbers and sums of exponentials. Three rules prevent overflow and
+underflow:
+\begin{enumerate}[leftmargin=2em]
+\item work with log-likelihoods, never likelihoods;
+\item compute $\log\sum_ie^{a_i}$ as $a^\ast+\log\sum_ie^{a_i-a^\ast}$ with
+$a^\ast=\max_ia_i$ (the \emph{log-sum-exp} trick), which is exact in
+exact arithmetic and never overflows;
+\item compute $\log(1+x)$ and $e^x-1$ for small $x$ with dedicated
+functions (\texttt{log1p}, \texttt{expm1}) to avoid cancellation, as in
+the complementary log-log link.
+\end{enumerate}
+\begin{example}[Posterior over 1000 hypotheses]
+A Bayesian decoder evaluates the log-likelihood of a population response
+under 1000 candidate positions, with values around $-5000$. Direct
+exponentiation underflows to zero for all of them and gives $0/0$.
+Subtracting the maximum first gives finite weights, and the posterior is
+recovered exactly.
+\end{example}
+
+\section*{Exercises for this chapter}
+\begin{exercise}
+Compute the breakdown point of the trimmed mean that discards the
+largest and smallest 10\% of observations.
+\end{exercise}
+\begin{exercise}
+Derive the second-order bias of the plug-in entropy estimator in detail.
+\end{exercise}
+\begin{exercise}
+Find $T$ such that the DKW band at $\alpha=0.05$ has half-width $0.02$.
+\end{exercise}
+\begin{exercise}
+Show that the log-sum-exp identity holds for any choice of $a^\ast$, and
+explain why the maximum is the safe choice.
+\end{exercise}

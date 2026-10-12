@@ -11,8 +11,48 @@ This formula assumes uniform spacing and sufficiently smooth fields. Differentia
 \section{Assumptions should travel with the result}
 The physics depends on conductivities, boundaries, geometry, electrode positions, and reference schemes. A depth reversal in LFP phase may be consistent with a laminar generator but does not alone locate a unique set of synaptic currents. Modeling and validation with synthetic sources help distinguish plausible mechanisms \cite{Buzsaki2012,Einevoll2013}.
 
+% --- expanded edition (October 2026) ---
+\section{From Maxwell's equations to the quasistatic approximation}
+In a conductor with conductivity $\sigma$ and permittivity $\varepsilon$, the current density is $\mathbf J=\sigma\mathbf E+\mathbf J^s$, where $\mathbf J^s$ is the transmembrane source current density. Charge conservation reads $\nabla\cdot\mathbf J_{\rm total}=-\partial\rho/\partial t$. For brain tissue at frequencies below a few kilohertz, three approximations are standard: (i) capacitive currents are small compared with ohmic ones, because $\omega\varepsilon/\sigma\ll1$; (ii) magnetic induction is negligible, so $\mathbf E=-\nabla\phi$; and (iii) propagation delays are negligible over centimetres. Under these \emph{quasistatic} assumptions, conservation of current becomes
+\[
+\nabla\cdot(\sigma\nabla\phi)=\nabla\cdot\mathbf J^s=:I_{\rm CSD},
+\]
+a Poisson equation relating the potential to the current source density. When $\sigma$ is constant, $\sigma\nabla^2\phi=I_{\rm CSD}$, and the CSD convention of the earlier section follows (up to the sign convention for sources and sinks). Because time enters only as a parameter, each instant of the potential is determined by the instantaneous sources; filtering by tissue is, in this approximation, frequency independent.
+
+\section{The point-source solution and superposition}
+\begin{proposition}
+In an infinite homogeneous medium, the potential of a point current source $I$ at the origin is $\phi(\mathbf r)=I/(4\pi\sigma|\mathbf r|)$.
+\end{proposition}
+\begin{proof}
+By symmetry the current flows radially and the total current through a sphere of radius $r$ is $I$, so $|\mathbf J|=I/(4\pi r^2)$. Ohm's law gives $|\mathbf E|=I/(4\pi\sigma r^2)$, and integrating $-\partial\phi/\partial r=|\mathbf E|$ with $\phi(\infty)=0$ yields the claim.
+\end{proof}
+Since the Poisson equation is linear, potentials of several sources add. Every neuron has as much current leaving as entering, so the simplest realistic source is a \emph{dipole}: $+I$ at $\mathbf r_+$ and $-I$ at $\mathbf r_-$ separated by $d$. Far away ($r\gg d$),
+\[
+\phi(\mathbf r)\approx\frac{I d\cos\theta}{4\pi\sigma r^2},
+\]
+where $\theta$ is the angle between the dipole axis and $\mathbf r$. Dipole potentials decay as $r^{-2}$, faster than monopoles, and change sign across the plane perpendicular to the dipole: this is the polarity reversal seen across cortical layers. Spatially aligned dipoles (pyramidal cells with parallel apical dendrites) add constructively; randomly oriented ones (many interneurons) largely cancel. The LFP is therefore weighted towards geometrically aligned populations, not towards the most active ones.
+
+\section{Uniqueness and nonuniqueness}
+\begin{theorem}[Uniqueness for the forward problem]
+Let $\Omega$ be a bounded domain with smooth boundary, $\sigma>0$ smooth, and sources given. Then the solution of $\nabla\cdot(\sigma\nabla\phi)=I_{\rm CSD}$ with prescribed boundary values (or prescribed normal current and a fixed reference) is unique.
+\end{theorem}
+\begin{proof}
+The difference $w$ of two solutions satisfies $\nabla\cdot(\sigma\nabla w)=0$ with zero boundary data. Multiply by $w$ and integrate by parts: $\int_\Omega\sigma|\nabla w|^2=0$, so $\nabla w=0$ and $w$ is constant, hence zero (or fixed by the reference).
+\end{proof}
+The \emph{inverse} problem has no such uniqueness. Helmholtz already observed that a current distribution inside a volume conductor can be altered by any ``silent'' source configuration, one that produces zero potential outside a region, without changing the measurements made outside it. A closed shell of dipoles pointing radially (a double layer of constant strength) is an explicit example. Any source estimate from extracellular potentials therefore rests on constraints (anatomy, sparsity, smoothness, a fixed number of dipoles) that are not determined by the data.
+
+\section{Inverse CSD and the role of boundaries}
+The standard three-point second difference estimates the CSD only at interior contacts and assumes infinite, laterally homogeneous sheets of current. When the activated region has finite lateral extent, the second difference reports spurious sources at the edges of the probe. \emph{Inverse} CSD methods instead assume a parametric source distribution (e.g.\ discs of finite radius $R$ at each contact depth), compute the forward matrix $F$ from sources to potentials, and estimate the CSD as $F^{-1}\phi$, possibly regularized. Kernel CSD performs the same task with a smoothness prior in a reproducing-kernel Hilbert space. Each method is the pseudoinverse or Tikhonov estimator of Chapter~\ref{ch:inverse} with a different forward model and prior.
+
+\begin{workedexample}[How fast does a spike's field decay?]
+Model the extracellular action potential of a soma near the electrode as a monopole-dominated near field and a dipole far field. With $\sigma=0.3$\,S/m and a peak net current of $1$\,nA, the monopole formula gives $\phi\approx1\times10^{-9}/(4\pi\cdot0.3\cdot r)$\,V; at $r=50\,\mu$m this is about $5.3\,\mu$V per nanoampere, and spike amplitudes of tens to hundreds of microvolts imply currents of several to tens of nanoamperes. Beyond about $100$--$150\,\mu$m the dipolar $r^{-2}$ decay dominates and the amplitude falls below typical noise levels, which bounds the radius from which a single electrode can isolate units.
+\end{workedexample}
 \begin{exercises}
 \item Derive the units of $\sigma\nabla^2\phi$ in SI units.
 \item Explain why a second spatial derivative is sensitive to electrode noise.
 \item State two conditions needed for a one-dimensional laminar CSD approximation.
+\item Derive the far-field dipole formula by expanding the two point-source potentials to first order in $d/r$.
+\item Check that $\omega\varepsilon/\sigma\ll1$ at $1$\,kHz for $\sigma=0.3$\,S/m and $\varepsilon=10^{5}\varepsilon_0$ (with $\varepsilon_0\approx8.85\times10^{-12}$\,F/m).
+\item Show that adding a constant to the potential leaves the CSD unchanged, and explain what this implies about referencing.
+\item Explain why randomly oriented dipoles contribute little to the LFP but may contribute to multi-unit activity.
 \end{exercises}

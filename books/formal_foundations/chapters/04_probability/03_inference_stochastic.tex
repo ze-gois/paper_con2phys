@@ -16,9 +16,56 @@ A state-dependent process may have time-varying conditional mean or variance des
 \begin{workedexample}[A stochastic oscillator is not just a sine wave]
 A pure sinusoid has a well-defined frequency and deterministic phase evolution. A noisy oscillatory process may have a broad spectral peak and time-varying phase. Conversely, a stochastic process with $1/f$-like spectrum can place substantial power within the theta band without containing an independent theta oscillator. The distinction motivates explicit spectral modeling \cite{Donoghue2020,Gerster2022}.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{Laws of large numbers and the central limit theorem}
+\begin{theorem}[Weak law of large numbers]
+If $X_1,X_2,\ldots$ are uncorrelated with common mean $\mu$ and variance $\sigma^2<\infty$, then for every $\varepsilon>0$, $P(|\bar X_n-\mu|\ge\varepsilon)\le\sigma^2/(n\varepsilon^2)\to0$.
+\end{theorem}
+\begin{proof}
+$\Var(\bar X_n)=\sigma^2/n$ by the variance-of-sums formula; apply Chebyshev.
+\end{proof}
+
+\begin{theorem}[Central limit theorem, iid case]
+If $X_1,X_2,\ldots$ are iid with mean $\mu$ and finite variance $\sigma^2>0$, then $\sqrt n(\bar X_n-\mu)/\sigma$ converges in distribution to $\mathcal N(0,1)$.
+\end{theorem}
+The proof uses characteristic functions and is given in standard texts. Its hypotheses matter: with dependence, the variance of $\bar X_n$ is $\frac{\sigma^2}n\bigl[1+2\sum_{k=1}^{n-1}(1-k/n)\rho_k\bigr]$, where $\rho_k$ is the lag-$k$ autocorrelation. For positively autocorrelated data the naive standard error $\sigma/\sqrt n$ is too small, sometimes by a large factor. The \emph{effective sample size} $n_{\rm eff}=n/[1+2\sum_k\rho_k]$ (for long series) quantifies how many independent observations the data are worth. For an AR(1) process with $\rho_k=\phi^k$, $n_{\rm eff}\approx n(1-\phi)/(1+\phi)$: with $\phi=0.9$, $n_{\rm eff}\approx n/19$.
+
+\section{Properties of estimators}
+An estimator $\hat\theta_n$ is \emph{unbiased} if $\E\hat\theta_n=\theta$ and \emph{consistent} if $\hat\theta_n\to\theta$ in probability. The sample variance with divisor $n-1$, $s^2=\frac1{n-1}\sum(X_i-\bar X)^2$, is unbiased for iid data.
+
+\begin{proposition}
+For iid $X_i$ with variance $\sigma^2$, $\E\bigl[\sum_i(X_i-\bar X)^2\bigr]=(n-1)\sigma^2$.
+\end{proposition}
+\begin{proof}
+$\sum_i(X_i-\bar X)^2=\sum_i(X_i-\mu)^2-n(\bar X-\mu)^2$. Taking expectations gives $n\sigma^2-n\cdot\sigma^2/n$.
+\end{proof}
+Unbiasedness is not sacred. The divisor $n$ gives a biased but lower-variance estimator, and the plug-in estimators of entropy or mutual information are biased in ways that depend strongly on sample size, which can create apparent condition differences when conditions have different numbers of trials.
+
+\section{Maximum likelihood}
+The \emph{maximum-likelihood estimator} (MLE) maximizes $\ell(\theta)=\log L(\theta;x)$. For $n$ iid Poisson counts with common mean $\lambda$, $\ell(\lambda)=\sum_in_i\log\lambda-n\lambda+\text{const}$, so $\ell'(\lambda)=\sum_in_i/\lambda-n=0$ gives $\hat\lambda=\bar n$. For counts $n_i$ in windows of length $T_i$ with rate $r$, $\hat r=\sum n_i/\sum T_i$, the pooled rate.
+
+Under regularity conditions, the MLE is consistent and asymptotically normal with variance given by the inverse \emph{Fisher information} $I(\theta)=-\E[\ell''(\theta)]$. For the Poisson example, $I(\lambda)=n/\lambda$, so $\operatorname{se}(\hat\lambda)\approx\sqrt{\hat\lambda/n}$. The \emph{Cram\'er--Rao bound} states that, under regularity, every unbiased estimator has variance at least $1/I(\theta)$. These asymptotic results presuppose that the model is correct; under misspecification the MLE converges to the parameter of the model closest to the truth in Kullback--Leibler divergence, and the correct variance is the ``sandwich'' $I^{-1}JI^{-1}$ with $J$ the variance of the score.
+
+\section{Stationary processes: examples}
+\begin{itemize}[leftmargin=2em]
+\item \emph{White noise}: uncorrelated, mean zero, variance $\sigma^2$; autocovariance $\sigma^2\mathbf 1_{\tau=0}$; flat spectrum.
+\item \emph{AR(1)}: $X_t=\phi X_{t-1}+\varepsilon_t$ with $|\phi|<1$. Iterating gives $X_t=\sum_{k\ge0}\phi^k\varepsilon_{t-k}$, so $\Var X_t=\sigma^2/(1-\phi^2)$ and $C_X(\tau)=\phi^{|\tau|}\sigma^2/(1-\phi^2)$. The autocorrelation decays geometrically with time constant $-1/\log|\phi|$ samples. If $|\phi|\ge1$ no stationary solution of this form exists.
+\item \emph{Random phase sinusoid}: $X_t=A\cos(\omega t+\Theta)$ with $\Theta$ uniform on $[0,2\pi)$. Its mean is zero and $C_X(\tau)=\tfrac{A^2}2\cos(\omega\tau)$, which does not decay. If the amplitude $A$ is itself random and independent of $\Theta$, the process is still stationary, with $C_X(\tau)=\tfrac12\E[A^2]\cos(\omega\tau)$, but a single realization reveals only its own amplitude.
+\item \emph{Random walk}: $X_t=\sum_{s\le t}\varepsilon_s$ has $\Var X_t=t\sigma^2$, so it is not stationary; its increments are.
+\end{itemize}
+A process is \emph{ergodic} (for the mean) if time averages along one realization converge to the ensemble mean. Ergodicity is what licenses estimating expectations from a single long recording. It is an assumption, and it fails whenever a slowly varying latent state (arousal, drift) makes one session unrepresentative of the ensemble.
+
+\begin{workedexample}[How many independent seconds?]
+An LFP envelope sampled at 100\,Hz has lag-one autocorrelation $\phi=0.98$ at that sampling rate, and decays approximately geometrically. A 60-s segment contains $n=6000$ samples but $n_{\rm eff}\approx6000\cdot0.02/1.98\approx61$. A $t$-test that treats the 6000 samples as independent overstates the evidence by a factor of about $\sqrt{6000/61}\approx10$ in the test statistic.
+\end{workedexample}
 \begin{exercises}
 \item Explain what changes when observations are serially correlated but an iid likelihood is used.
 \item Derive the mean and variance of an average of $n$ independent variables with equal finite variance.
 \item Define weak stationarity in your own words and give a counterexample.
 \item Explain why trial averaging can suppress evidence of state switches.
+\item Show that $\frac1n\sum(X_i-\bar X)^2$ is biased, and compute its bias.
+\item Derive the MLE of the rate of an exponential distribution from iid inter-spike intervals, and its Fisher information.
+\item Derive the autocovariance of an AR(1) process from its moving-average representation.
+\item Show that the random walk is not weakly stationary.
+\item Compute $n_{\rm eff}$ for $n=1000$ samples from an AR(1) with $\phi=0.5$.
 \end{exercises}

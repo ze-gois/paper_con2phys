@@ -68,3 +68,67 @@ to PCA stability and manifold caveats. Project IV: from
 conditional probability to spike-train GLM validation.
 Project V: from state-space observability to limits of
 causal and mechanistic inference.
+% --- expanded edition (October 2026) ---
+\section{Further problems by chapter}
+\begin{exercise}[Partitions and sorting]
+Two spike-sorting runs on the same data give partitions $\mathcal P$ and
+$\mathcal Q$. Prove that the number of spike pairs placed together by
+both runs equals $\sum_{P,Q}\binom{|P\cap Q|}{2}$, and use this to define
+the Rand index.
+\end{exercise}
+\begin{exercise}[Contraction and recurrent rates]
+For $r=\tanh(wr+I)$, find the range of $w$ for which the fixed-point
+iteration is guaranteed to converge for every $I$.
+\end{exercise}
+\begin{exercise}[PCA of a random walk]
+Simulate 100 independent random walks of length 1000, compute the PCA
+across time, and compare the leading components with the
+Karhunen--Lo\`eve eigenfunctions of Brownian motion.
+\end{exercise}
+\begin{exercise}[Delta method for coherence]
+Using the Fisher transformation $\operatorname{atanh}|\hat c|$, derive an
+approximate confidence interval for coherence from $K$ tapers and
+compare it with a jackknife over tapers in simulation.
+\end{exercise}
+\begin{exercise}[GHK inversion]
+Given reversal potentials measured under two different extracellular
+sodium concentrations, show that the ratio $P_{\rm Na}/P_{\rm K}$ is
+identifiable from the GHK voltage equation, while the absolute
+permeabilities are not.
+\end{exercise}
+\begin{exercise}[Causal phase estimation]
+Fit an AR model to the past 500\,ms of an LFP and forecast 100\,ms ahead
+to estimate the current theta phase. Compare the error with that of a
+causal Butterworth filter and with the zero-phase reference.
+\end{exercise}
+\begin{exercise}[Hawkes overdispersion]
+Simulate a Hawkes process with exponential kernel and branching ratio
+$0.5$, and verify the long-window Fano factor $1/(1-\nu)^2$.
+\end{exercise}
+\begin{exercise}[Collider bias in event-triggered analysis]
+Simulate two independent Poisson neurons, define population events as
+bins where the summed count exceeds a threshold, and compute their
+correlation within and outside events.
+\end{exercise}
+\begin{exercise}[Spiked covariance]
+Plant a rank-one component of variance $1+\theta$ in $N=100$ isotropic
+Gaussian neurons. For $T\in\{50,100,400,1600\}$, estimate the leading
+sample eigenvalue and the squared alignment, and compare with the BBP
+predictions.
+\end{exercise}
+\begin{exercise}[Entrainment tongue]
+Drive a noisy phase oscillator with natural frequency 8\,Hz at
+frequencies from 6 to 10\,Hz and several intensities. Map the region in
+which the phase-locking value to the drive exceeds 0.8, and compare with
+the Adler prediction.
+\end{exercise}
+\begin{exercise}[Entropy bias]
+For a uniform distribution on $K=16$ symbols, estimate the plug-in
+entropy bias for $T=20,50,200$ by simulation and compare with
+$(K-1)/(2T)$.
+\end{exercise}
+\begin{exercise}[Time rescaling with a wrong model]
+Simulate an inhomogeneous Poisson process with sinusoidal rate, fit a
+constant-rate model, and show how the KS plot of rescaled intervals
+reveals the misspecification.
+\end{exercise}

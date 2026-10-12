@@ -14,8 +14,58 @@ Between any two rational numbers $a<b$, their midpoint $(a+b)/2$ is another rati
 \begin{workedexample}[Units and normalization]
 Compare $\mathrm{spikes}/\mathrm{bin}$ with $\mathrm{spikes}/\mathrm{s}$. If the bin width is $\Delta t$ seconds, the rate estimate is $r=n/\Delta t$ in spikes/s. Changing $\Delta t$ changes the variance and resolution of the estimate even if the underlying experiment is unchanged. This anticipates the bias-variance trade-off in spike-rate estimation.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{Well-definedness and the field axioms}
+As with integers, the operations on fractions must be checked to be independent of representatives. If $a/b=a'/b'$ (so $ab'=a'b$) then
+\[
+\frac ab\cdot\frac cd=\frac{ac}{bd}\quad\text{and}\quad\frac{a'}{b'}\cdot\frac cd=\frac{a'c}{b'd}
+\]
+are equal because $ac\cdot b'd=(ab')cd=(a'b)cd=a'c\cdot bd$. A similar computation handles addition.
+
+A \emph{field} is a commutative ring with identity $1\ne0$ in which every nonzero element has a multiplicative inverse. In $\mathbb Q$ the inverse of $a/b$ with $a\ne0$ is $b/a$. The field axioms imply all the familiar algebra of fractions; for example, $x\ne0$ and $xy=xz$ give $y=z$ by multiplying with $x^{-1}$.
+
+\section{Order and the Archimedean property}
+Call $a/b$ \emph{positive} if $ab>0$; this is independent of representative. Define $x<y$ iff $y-x$ is positive. Then $\mathbb Q$ is an \emph{ordered field}: the order is total, and $x<y$ implies $x+z<y+z$, while $x<y$ and $z>0$ imply $xz<yz$.
+
+\begin{proposition}[Archimedean property]
+For every rational $x>0$ and every rational $y$, there is a natural number $n$ with $nx>y$.
+\end{proposition}
+\begin{proof}
+Write $x=a/b$ and $y=c/d$ with $a,b,d>0$. Take $n=|c|b+1$. Then $nx=(|c|b+1)a/b\ge|c|+a/b>|c|\ge y$, since $a\ge1$ and $d\ge1$ give $|c|\ge|c|/d\ge c/d$.
+\end{proof}
+The Archimedean property says there are no infinitely large or infinitely small positive rationals. It justifies statements such as ``choose $N>1/\varepsilon$'' in convergence proofs.
+
+\section{Decimal expansions}
+\begin{proposition}
+The decimal expansion of a rational number is eventually periodic, and every eventually periodic decimal represents a rational number.
+\end{proposition}
+\begin{proof}
+For $p/q$ with $q>0$, long division produces successive remainders in $\{0,\ldots,q-1\}$. By the pigeonhole principle a remainder must repeat within $q+1$ steps, after which the digits repeat. Conversely, if $x=0.\overline{d_1\cdots d_k}$, then $10^kx-x=d_1\cdots d_k$ is an integer, so $x=d_1\cdots d_k/(10^k-1)$; a finite preperiod only shifts and adds a rational.
+\end{proof}
+Numerical software does not store decimals: it stores binary floating-point numbers, which are rationals with power-of-two denominators. The decimal $0.1$ has an infinite binary expansion and is therefore stored inexactly. This is the origin of the familiar fact that $0.1+0.2\ne0.3$ in double precision, discussed further in Chapter~\ref{ch:numerical}.
+
+\section{Weighted averages and ratio estimators}
+Given counts $n_j$ and exposures $T_j>0$, there are two natural rate summaries:
+\[
+\bar r_{\rm pooled}=\frac{\sum_jn_j}{\sum_jT_j},\qquad
+\bar r_{\rm mean}=\frac1J\sum_j\frac{n_j}{T_j}.
+\]
+The pooled rate is the weighted average of the trial rates $r_j=n_j/T_j$ with weights $w_j=T_j/\sum_kT_k$:
+\[
+\bar r_{\rm pooled}=\sum_jw_jr_j.
+\]
+The two summaries coincide when all $T_j$ are equal. Otherwise they answer different questions: the pooled rate is ``spikes per second of recording'', and the mean of rates is ``the typical trial's rate''. Under a constant-rate Poisson model, the pooled rate is the maximum-likelihood estimator; the mean of rates gives more influence to short, noisy trials.
+
+\begin{workedexample}[Simpson's paradox with rates]
+Two conditions are recorded on two days. On day 1, condition A yields 20 spikes in 10\,s (2.0 spikes/s) and B yields 210 spikes in 100\,s (2.1 spikes/s). On day 2, A yields 900 spikes in 100\,s (9.0 spikes/s) and B yields 95 spikes in 10\,s (9.5 spikes/s). Condition B has the higher rate on \emph{each} day. Pooled over days, however, A has $920/110\approx8.36$ spikes/s and B has $305/110\approx2.77$ spikes/s. The reversal occurs because A was recorded mostly on the high-rate day and B mostly on the low-rate day. Rational arithmetic is exact here; the paradox lies in which question each ratio answers.
+\end{workedexample}
 \begin{exercises}
 \item Explain what fails if $b=0$ is allowed in a fraction.
 \item Calculate the pooled firing rate across a 5-s trial with 20 spikes and a 15-s trial with 30 spikes; compare with the unweighted average of the two trial rates.
 \item Prove that between two unequal rationals there is a rational number.
+\item Show that the addition of fractions is well defined.
+\item Prove that $\mathbb Q$ is not closed under taking square roots of positive elements.
+\item Convert $0.1\overline{36}$ to a fraction in lowest terms.
+\item Show that $\bar r_{\rm pooled}$ lies between $\min_jr_j$ and $\max_jr_j$.
+\item In the Simpson example, compute the mean of daily rates for each condition and explain why it agrees with the day-wise comparison.
 \end{exercises}

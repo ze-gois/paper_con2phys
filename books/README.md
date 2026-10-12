@@ -4,8 +4,8 @@ Two books, two different kinds of mathematical evidence:
 
 | Book | Entry point | Intended role | Current state |
 |---|---|---|---|
-| [Computational Electrophysiology](electrophysiology/main.tex) | `books/electrophysiology/main.tex` | MATLAB-linked methods, simulations, and scientific interpretation | Existing theorem/method manuscript migrated intact; MATLAB executable examples still need expansion |
-| [Formal Foundations](formal_foundations/main.tex) | `books/formal_foundations/main.tex` | Mathematics from ordinary language, eventually checked in Lean 4 / Mathlib | Foundational manuscript with five verified Lean 4 logic proofs side by side with English; remaining formalizations pending |
+| [Computational Electrophysiology](electrophysiology/main.tex) | `books/electrophysiology/main.tex` | MATLAB-linked methods, simulations, and scientific interpretation | 98 pages; every chapter expanded with proofs, derivations, worked examples and exercises (Oct 2026); MATLAB executable examples still need expansion |
+| [Formal Foundations](formal_foundations/main.tex) | `books/formal_foundations/main.tex` | Mathematics from ordinary language, eventually checked in Lean 4 / Mathlib | 176 pages; all chapters expanded with new proved results and exercises (Oct 2026); five verified Lean 4 logic proofs side by side with English; remaining formalizations pending |
 
 No theorem is called formally proved by software unless it builds with Lean. Neither a MATLAB numerical test nor a TeX proof constitutes a machine-checked theorem.
 

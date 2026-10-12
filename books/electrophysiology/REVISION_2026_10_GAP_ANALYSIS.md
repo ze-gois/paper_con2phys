@@ -31,3 +31,19 @@ This is a **substantial first corrective revision**, not a claim to have closed 
 The 11 new modules independently compile with pdflatex using the theorem catalogue's environments (22 A4 pages of new material). The entire integrated repository should additionally be compiled via `make -C latex all` and inspected for overfull boxes and PDF bookmarks. Do not claim a full integrated PDF build passed until a GitHub Actions run or a local fresh checkout confirms it.
 
 Nothing in this revision changes MATLAB implementations or claims scientific validation of the exploratory arsenal.
+## Follow-up expansion (October 2026)
+
+A second pass appended proofs, derivations, examples and exercises to every chapter. Several items from the "Remaining depth" column now have text in the book. Each is marked below with how far it goes.
+
+| Remaining-depth item | Where | Coverage |
+|---|---|---|
+| Full HH derivation, GHK permeability inversion | `05b_biophysics_inverse.tex` | Full HH system, GHK current and voltage equations with worked resting potential, identifiability of permeability ratios (exercise) |
+| Complete Picard condition | `05b_biophysics_inverse.tex` | Discrete Picard condition, Picard plots, discrepancy/L-curve/GCV parameter choice |
+| Filter design detail | `05a_filtering_sampling.tex` | Linear-phase FIR proof, Butterworth and bilinear transform with pre-warping, notch filters, causal zero-phase impossibility |
+| Full renewal CLT, Rényi characterization | `06b_spike_renewal_spectra.tex` | CLT proof sketch via the ordinary CLT; Rényi stated with a void-probability diagnostic; Hawkes mean rate and spectrum |
+| CKA/RSA estimator properties | `07a_population_geometry.tex` | CCA as an SVD (proof), reduced-rank regression (proof sketch), CKA invariances, BBP worked example |
+| Wilson factorization | `07b_dependence_causality.tex` | Minimum-phase factorization, Kolmogorov--Szegő with AR(1) proof, description of Wilson's algorithm (no implementation) |
+| Center manifold, Kuramoto/Arnold tongues | `07c_dynamics_oscillators.tex` | Center manifold theorem stated, Adler locking with drift frequency, Kuramoto critical coupling |
+| DKW full proof | `07d_robust_numerical_inference.tex` | DKW confidence bands applied; full proof still not given |
+
+Still open: full proofs of DKW, BBP and the center manifold theorem; asymptotic CLTs under mixing; nonlinear ICA; restricted-eigenvalue compressed sensing; anisotropic FEM. None of the new material has been checked by a MATLAB run or formalized in Lean.

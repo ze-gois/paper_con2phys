@@ -77,3 +77,91 @@ produce numerical estimators. A scientific significance statement
 requires effective degrees of freedom, trial/block design and
 an appropriate null; it is not guaranteed by the function name.
 \end{example}
+% --- expanded edition (October 2026) ---
+\section{Morlet wavelets: resolution and normalization}
+A complex Morlet wavelet centred at frequency $f_0$ with $n_c$ cycles is
+\[
+\psi(t)=A\exp(2\pi if_0t)\exp\bigl(-t^2/(2\sigma_t^2)\bigr),\qquad
+\sigma_t=\frac{n_c}{2\pi f_0}.
+\] Its Fourier transform is a Gaussian centred at
+$f_0$ with standard deviation $\sigma_f=1/(2\pi\sigma_t)=f_0/n_c$, so
+that $\sigma_t\sigma_f=1/(2\pi)$. The energy densities $|\psi|^2$ and
+$|\Psi|^2$ have standard deviations $\sigma_t/\sqrt2$ and
+$\sigma_f/\sqrt2$, whose product $1/(4\pi)$ is the minimum allowed by the
+uncertainty principle (Result 61), as for every Gaussian. The \emph{number of cycles}
+is the single parameter that sets the trade-off: at $f_0=40$\,Hz with
+$n_c=7$, $\sigma_t\approx28$\,ms and $\sigma_f\approx5.7$\,Hz; at
+$f_0=4$\,Hz the same $n_c$ gives $\sigma_t\approx280$\,ms and
+$\sigma_f\approx0.57$\,Hz. Constant $n_c$ is constant relative
+bandwidth, the defining property of a wavelet transform.
+
+Two normalizations are common. With $A=(\sigma_t\sqrt{\pi})^{-1/2}$ the
+wavelet has unit energy and white noise yields equal expected power at
+all scales. With $A$ chosen so that $|\Psi(f_0)|=1$, a unit-amplitude
+sinusoid at $f_0$ yields unit amplitude, which is convenient for
+envelope interpretation. Power spectra computed with the two conventions
+differ by a factor proportional to $f_0$, which changes the apparent
+$1/f$ slope by one. The convention must be reported.
+
+\section{Testing phase concentration}
+For $N$ independent phases, the Rayleigh statistic $Z=N R^2$, with
+$R$ the mean resultant length, is approximately exponential with mean
+one under uniformity; a refined approximation of the $p$-value is
+\[
+p\approx\exp\Bigl(\sqrt{1+4N+4(N^2-NZ)}-(1+2N)\Bigr).
+\]
+The test is most powerful against unimodal (von Mises) alternatives and
+has no power against bimodal locking with opposite modes, for which
+the resultant vanishes. The relation $\widehat{\mathrm{PPC}}=(NR^2-1)/(N-1)$
+connects the PPC of this chapter to the Rayleigh statistic, so the two
+measures carry the same information about a single set of phases; PPC
+is preferred for \emph{comparing} conditions because its expectation does
+not depend on $N$.
+
+\begin{proposition}
+For independent phases with common resultant $\rho=|\E e^{i\phi}|$,
+$\E[\widehat{\mathrm{PPC}}]=\rho^2$.
+\end{proposition}
+\begin{proof}
+For $j\ne k$, independence gives
+$\E e^{i(\phi_j-\phi_k)}=\E e^{i\phi_j}\overline{\E e^{i\phi_k}}=\rho^2$,
+which is real; its real part is $\E\cos(\phi_j-\phi_k)$. Average over the
+$N(N-1)$ ordered pairs.
+\end{proof}
+Spikes from the same burst, or many spikes from one trial, violate
+independence. The PPC variants that only pair spikes from \emph{different
+trials} remove this dependence at the cost of variance.
+
+\section{Why phase-randomized surrogates preserve the spectrum}
+Given a real series of length $T$ with DFT $X_k$, a phase-randomized
+surrogate replaces $X_k$ by $|X_k|e^{i\theta_k}$ with independent uniform
+$\theta_k$ for $0<k<T/2$, sets $\theta_{T-k}=-\theta_k$ to keep the
+result real, and inverts. Its periodogram is identical to the original's
+by construction, and its circular autocovariance is therefore identical
+too (the periodogram is the DFT of the circular sample autocovariance).
+Under the null hypothesis that the data are a linear Gaussian stationary
+process, the surrogates are draws from (approximately) the same
+distribution; nonlinear statistics such as PAC, bicoherence or
+time-asymmetry then have a valid reference distribution. The surrogate
+destroys every non-Gaussian feature, including spikes, sharp waves and
+bursts, so a rejection means only ``not a stationary linear Gaussian
+process'', which is almost always true of brain signals.
+
+\section*{Exercises for this chapter}
+\begin{exercise}
+Derive $\sigma_f=f_0/n_c$ for the Morlet wavelet from the Fourier
+transform of a Gaussian.
+\end{exercise}
+\begin{exercise}
+Show that the mean resultant length of phases concentrated equally at
+$0$ and $\pi$ is zero, and propose a statistic that detects such
+bimodal locking.
+\end{exercise}
+\begin{exercise}
+Prove that the periodogram is the DFT of the circular sample
+autocovariance.
+\end{exercise}
+\begin{exercise}
+Simulate phases from a von Mises distribution with $\kappa=0.5$ and
+compare the average PLV and PPC for $N=10$ and $N=1000$.
+\end{exercise}

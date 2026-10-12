@@ -77,3 +77,98 @@ at the same sampling frequency. Compare autocorrelation,
 PSD and phase stability under different recording lengths.
 A narrow spectral peak alone does not establish the Hopf model.
 \end{example}
+% --- expanded edition (October 2026) ---
+\section{Locking to a periodic input: the Adler equation}
+Let an oscillator with natural frequency $\omega$ be driven weakly at
+frequency $\Omega$ with a sinusoidal phase interaction. Averaging gives
+for the phase difference $\psi=\theta-\Omega t$
+\[
+\dot\psi=\Delta\omega-\varepsilon\sin\psi,\qquad\Delta\omega=\omega-\Omega.
+\]
+Fixed points exist iff $|\Delta\omega|\le\varepsilon$, at
+$\sin\psi^\ast=\Delta\omega/\varepsilon$; the one with $\cos\psi^\ast>0$ is
+stable. Inside this range the oscillator is \emph{entrained}: it runs
+at the driving frequency with a constant phase lag that depends on the
+detuning. Outside it, $\psi$ drifts, with mean drift frequency
+$\sqrt{\Delta\omega^2-\varepsilon^2}$ (phase slips separated by long
+quasi-locked epochs). Plotted in the $(\Omega,\varepsilon)$ plane, the
+locking region is a wedge, the first \emph{Arnold tongue}; higher-order
+tongues for $p\!:\!q$ locking appear with nonsinusoidal interaction
+functions.
+
+The equation predicts what to look for in rhythmic stimulation
+experiments: entrainment should hold over a range of stimulation
+frequencies that grows with intensity, the phase lag should vary
+systematically across that range, and the effect should vanish abruptly
+outside it. A response that simply follows every stimulus frequency with
+constant lag is more consistent with a driven filter than with an
+entrained oscillator.
+
+\section{The Kuramoto model}
+For $N$ oscillators with natural frequencies $\omega_j$ drawn from a
+density $g$ and all-to-all coupling,
+\[
+\dot\theta_j=\omega_j+\frac KN\sum_{k=1}^N\sin(\theta_k-\theta_j).
+\]
+With the order parameter $re^{i\Phi}=\frac1N\sum_ke^{i\theta_k}$ the
+system becomes $\dot\theta_j=\omega_j+Kr\sin(\Phi-\theta_j)$: each
+oscillator is driven by the mean field, an Adler equation with
+$\varepsilon=Kr$. Oscillators with $|\omega_j-\Omega|\le Kr$ lock;
+the others drift. Self-consistency of $r$ gives Kuramoto's result: for a
+symmetric unimodal $g$, the incoherent state $r=0$ loses stability at
+\[
+K_c=\frac{2}{\pi g(0)},
+\]
+and for a Lorentzian $g$ of half-width $\gamma$, $K_c=2\gamma$ and
+$r=\sqrt{1-K_c/K}$ for $K>K_c$. The order parameter $r$ is the
+population analogue of the phase-locking value, and the model shows that
+partial synchrony, a fraction of locked units with others drifting, is a
+generic state rather than a sign of measurement failure.
+
+\section{Center manifolds and the Hopf normal form}
+The normal form of this chapter is not an arbitrary model: near a
+bifurcation, it is what any smooth system reduces to.
+\begin{theorem}[Center manifold, stated]
+Let $\dot x=f(x,\mu)$ with $f(0,\mu)=0$, and suppose $Df(0,0)$ has a pair
+of eigenvalues $\pm i\omega_0$ and all others with negative real part.
+Then for $\mu$ near $0$ there is a locally invariant two-dimensional
+manifold through the origin that attracts nearby trajectories, and the
+dynamics on it are smoothly equivalent to
+$\dot z=(\alpha(\mu)+i\omega(\mu))z+\ell_1|z|^2z+O(|z|^4)$.
+\end{theorem}
+The sign of the real part of the \emph{first Lyapunov coefficient}
+$\ell_1$ decides the type: negative gives the supercritical Hopf of
+this chapter (small limit cycles growing as $\sqrt\mu$); positive gives
+a subcritical Hopf, in which a large-amplitude oscillation appears
+abruptly and coexists with the resting state (bistability, hysteresis).
+Neuron models distinguish these: class-2 excitability with a
+subcritical Hopf begins firing at a nonzero frequency and can show
+bistability between rest and repetitive firing.
+
+\section{Noise-driven oscillations near a Hopf point}
+Below the bifurcation ($\mu<0$), noise $dz=(\mu+i\omega)z\,dt+\sigma\,dW$
+(complex $W$) produces a stationary Gaussian process whose spectrum is a
+Lorentzian peaked at $\omega/(2\pi)$ with half-width $|\mu|/(2\pi)$ in
+hertz. Its amplitude has a Rayleigh distribution and its phase diffuses.
+Above the bifurcation, the amplitude concentrates near $\sqrt\mu$ and the
+phase still diffuses, with a much narrower peak. The two regimes can
+produce similar power spectra; the amplitude distribution and the
+duration of phase coherence discriminate them better than the spectrum.
+
+\section*{Exercises for this chapter}
+\begin{exercise}
+Solve the Adler equation outside the locking range and derive the mean
+drift frequency $\sqrt{\Delta\omega^2-\varepsilon^2}$.
+\end{exercise}
+\begin{exercise}
+For a Lorentzian $g$ with $\gamma=1$\,rad/s, compute $K_c$ and the order
+parameter at $K=4$.
+\end{exercise}
+\begin{exercise}
+Show that the OU process $dX=-\kappa X\,dt+\sigma\,dW$ has spectral
+density proportional to $1/(\kappa^2+(2\pi f)^2)$.
+\end{exercise}
+\begin{exercise}
+For $\dot r=\mu r+r^3-r^5$, find the equilibria and their stability, and
+describe the hysteresis as $\mu$ crosses zero.
+\end{exercise}

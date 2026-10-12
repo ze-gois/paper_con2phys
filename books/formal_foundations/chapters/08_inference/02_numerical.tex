@@ -15,8 +15,54 @@ Good numerical tests use known synthetic inputs: a sinusoid with known frequency
 \section{Scientific metadata as part of the result}
 An estimate needs sampling rate, time origin, measurement units, reference configuration, filtering parameters, electrode and trial identifiers, quality masks, random seeds, and software versions. Metadata are part of the mathematical map between the array and its real-world interpretation. A floating-point matrix detached from its coordinates can be mathematically valid yet scientifically unusable.
 
+% --- expanded edition (October 2026) ---
+\section{Floating-point error analysis}
+The standard model of floating-point arithmetic states that for each basic operation $\circ\in\{+,-,\times,/\}$, $\mathrm{fl}(a\circ b)=(a\circ b)(1+\delta)$ with $|\delta|\le u=\epsilon_{\rm mach}/2$. Errors in a long computation are analysed by propagating these factors.
+
+\begin{proposition}[Error of recursive summation]
+Computing $s=\sum_{i=1}^nx_i$ left to right gives $\hat s$ with $|\hat s-s|\le(n-1)u\sum_i|x_i|+O(u^2)$.
+\end{proposition}
+The bound grows linearly in $n$ and with $\sum|x_i|$, not $|s|$: summing many terms of mixed sign whose total nearly cancels gives large \emph{relative} error. Pairwise (tree) summation reduces the factor $n-1$ to $\lceil\log_2n\rceil$, and compensated (Kahan) summation reduces it to a constant.
+
+\paragraph{Catastrophic cancellation.} Subtracting two nearly equal rounded numbers exposes their rounding errors. The one-pass variance formula $\frac1n\sum x_i^2-\bar x^2$ suffers from this when the mean is large relative to the standard deviation: for a signal with mean $10^4\,\mu$V and standard deviation $1\,\mu$V, the two terms agree to eight digits and the computed variance retains only about eight correct digits in double precision, or none in single precision. The two-pass formula $\frac1n\sum(x_i-\bar x)^2$, or Welford's streaming update, avoids the problem.
+
+\section{Backward stability}
+An algorithm is \emph{backward stable} if its computed answer is the exact answer for slightly perturbed data, with perturbation of order $u$. Combined with the condition number, this gives the rule of thumb
+\[
+\text{relative forward error}\lesssim\kappa\times\text{backward error}\approx\kappa u.
+\]
+Householder QR and the SVD are backward stable for least squares, so the error is governed by $\kappa(X)$. Solving the normal equations is governed by $\kappa(X)^2$. For $\kappa(X)=10^6$ in double precision, QR may deliver about ten correct digits and the normal equations about four.
+
+\section{Complexity of core algorithms}
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Operation & Cost\\
+\midrule
+FFT of length $N$ & $O(N\log N)$\\
+Direct convolution, signal $N$, filter $L$ & $O(NL)$\\
+FFT convolution (overlap--add) & $O(N\log L)$\\
+Covariance of $T\times N$ data & $O(TN^2)$\\
+Full SVD of $T\times N$, $T\ge N$ & $O(TN^2)$\\
+Top-$k$ SVD by randomized methods & $O(TNk)$\\
+Pairwise cross-correlograms, $N$ units & $O(N^2)$ pairs\\
+\bottomrule
+\end{tabular}
+\end{center}
+For $N=1000$ units, all pairwise cross-correlograms involve about $5\times10^5$ pairs; at one millisecond per pair the job takes about eight minutes, and storing $201$ lag bins per pair in double precision requires about $0.8$\,GB. Estimating cost before running a full analysis is part of numerical design.
+
+\section{Randomness and reproducibility}
+Pseudorandom number generators are deterministic sequences initialized by a seed. Recording the seed and generator type makes a resampling analysis exactly reproducible. Monte Carlo $p$-values carry their own sampling error: with $B$ surrogates and true $p$, the estimate has standard error about $\sqrt{p(1-p)/B}$. Near $p=0.05$, $B=1000$ gives a standard error near $0.007$, so a reported $p=0.048$ is not distinguishable from $0.052$. When a decision depends on the third decimal, increase $B$.
+
+\begin{workedexample}[Counting bins without floating-point surprises]
+Spike times are stored in seconds and binned at $\Delta=0.001$\,s. Computing the bin index as \texttt{floor(t/0.001)} for $t=0.003$ may return $2$, because neither $0.003$ nor $0.001$ is exactly representable and their quotient can round to $2.9999999999999996$. Storing times as integer sample counts at the acquisition rate, or computing indices as \texttt{floor(round(t*fs)/ (fs*Delta))} with integer arithmetic, removes the ambiguity. The mathematical definition of a bin is exact; only its floating-point implementation is fragile.
+\end{workedexample}
 \begin{exercises}
 \item Explain why zero-padding an FFT does not improve physical spectral resolution.
 \item Design a test for chunked FIR filtering that detects boundary discontinuities.
 \item List the metadata necessary to interpret a Hilbert-envelope moment series from 10-second windows.
+\item Show that the two-pass variance formula is algebraically equal to the one-pass formula, and explain why they differ numerically.
+\item Implement Welford's update $\bar x_k=\bar x_{k-1}+(x_k-\bar x_{k-1})/k$, $M_k=M_{k-1}+(x_k-\bar x_{k-1})(x_k-\bar x_k)$, and verify that $M_n/(n-1)$ is the sample variance.
+\item Estimate the time and memory needed to compute a $2048$-point FFT spectrogram of a 2-hour, 384-channel recording at 2.5\,kHz with 50\% overlap.
+\item How many surrogates are needed for a Monte Carlo $p$-value near $0.01$ to have standard error $0.001$?
 \end{exercises}

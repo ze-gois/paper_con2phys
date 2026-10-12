@@ -128,3 +128,73 @@ no direct physical edge from $x$ to $y$.
 Consequently Granger prediction depends on the chosen
 variables and may reflect unobserved common inputs
 \cite{bastos2016,cekic2018}.
+% --- expanded edition (October 2026) ---
+\section{The time-rescaling theorem for a conditional intensity}
+\begin{theorem}
+Let $N$ be a simple point process on $[0,T]$ with continuous, strictly
+positive conditional intensity $\lambda(t\mid\mathcal H_t)$, and let
+$\Lambda(t)=\int_0^t\lambda(s\mid\mathcal H_s)\,ds$. Then the rescaled
+times $\Lambda(t_1)<\Lambda(t_2)<\cdots$ form a unit-rate Poisson process
+on $[0,\Lambda(T)]$.
+\end{theorem}
+\begin{proof}[Proof via the likelihood]
+By Result 76, the joint density of the first $n$ event times is
+$\prod_{i=1}^n\lambda(t_i\mid\mathcal H_{t_i})\exp(-\Lambda(t_n))$.
+Change variables to $z_i=\Lambda(t_i)-\Lambda(t_{i-1})$. Because
+$\Lambda$ is differentiable with derivative $\lambda$, and because
+$\Lambda(t_i)$ depends only on events before $t_i$, the Jacobian matrix
+of the map $(t_1,\ldots,t_n)\mapsto(z_1,\ldots,z_n)$ is triangular with
+diagonal entries $\lambda(t_i\mid\mathcal H_{t_i})$. The density of
+$(z_1,\ldots,z_n)$ is therefore
+$\exp(-\sum_iz_i)$ on the positive orthant: the $z_i$ are iid
+exponential with mean one.
+\end{proof}
+The proof shows exactly where predictability is used: the triangular
+Jacobian requires that the intensity at $t_i$ not depend on $t_i$ itself
+or on later events. A model whose ``history'' term accidentally uses the
+current bin's spike passes every goodness-of-fit test trivially.
+
+\section{Gauss--Markov and whitening}
+If $y=X\beta+\varepsilon$ with $\Cov\varepsilon=\sigma^2\Omega$, $\Omega\succ0$
+known, set $\tilde y=\Omega^{-1/2}y$ and $\tilde X=\Omega^{-1/2}X$. The
+transformed errors have covariance $\sigma^2I$, so by Result 31 the best
+linear unbiased estimator is OLS on the transformed data:
+\[
+\hat\beta_{\rm GLS}=(X^\top\Omega^{-1}X)^{-1}X^\top\Omega^{-1}y.
+\]
+For AR(1) errors with coefficient $a$, $\Omega^{-1/2}$ is the
+prewhitening filter $\tilde y_t=y_t-ay_{t-1}$ (with a corrected first
+sample). Regression of a slowly varying LFP feature on behaviour with
+OLS gives unbiased but inefficient coefficients and badly overconfident
+standard errors; prewhitening fixes both if $a$ is well estimated.
+
+\section{Positive semidefiniteness of empirical spectral matrices}
+\begin{proposition}
+For any data, the multitaper or Welch cross-spectral estimate
+$\hat S(f)=\frac1K\sum_{k=1}^Kz_k(f)z_k(f)^\ast$, with $z_k(f)$ the vector
+of tapered Fourier coefficients across channels, is Hermitian positive
+semidefinite. Consequently the estimated coherence lies in $[0,1]$.
+\end{proposition}
+\begin{proof}
+Each $z_kz_k^\ast$ is Hermitian with $a^\ast z_kz_k^\ast a=|z_k^\ast a|^2\ge0$; a
+nonnegative combination preserves both properties. Apply the $2\times2$
+determinant argument used for Result 69.
+\end{proof}
+With $K=1$ (a single taper and trial), $\hat S$ has rank one and the
+estimated coherence equals one at every frequency for any pair of
+signals. Coherence estimation requires averaging, and the number of
+averaged terms sets the bias floor $\approx1/K$.
+
+\section{An identity behind trial-averaged evoked responses}
+Let $x_r(t)=s(t)+n_r(t)$ for trials $r=1,\ldots,R$ with zero-mean noise
+of variance $\sigma^2(t)$, independent across trials. The trial average
+$\bar x$ has variance $\sigma^2/R$, and
+\[
+\E\Bigl[\frac1{R-1}\sum_r(x_r-\bar x)^2\Bigr]=\sigma^2,\qquad
+\E[\bar x^2]=s^2+\frac{\sigma^2}R.
+\]
+Hence the power of the average overestimates the power of the evoked
+signal by $\sigma^2/R$, and the unbiased estimate is
+$\bar x^2-\hat\sigma^2/R$. Comparing evoked power between conditions with
+different trial counts without this correction biases the comparison
+towards the condition with fewer trials.

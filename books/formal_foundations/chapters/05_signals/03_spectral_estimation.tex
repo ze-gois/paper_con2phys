@@ -17,9 +17,51 @@ Brain spectra often contain aperiodic structure approximated locally by a $1/f^\
 \begin{workedexample}[Two indistinguishable band powers]
 Imagine condition A has a 10-Hz Gaussian peak over a low background while condition B has no distinct peak but a sufficiently elevated broadband background. The integrals of their spectral power from 8 to 12 Hz may be equal. The same band-power summary corresponds to different generative accounts; it is therefore not a sufficient statistic for the existence of an oscillator.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{The periodogram is inconsistent}
+For a stationary process sampled at $f_s$ with $N$ samples, the periodogram is
+\[
+\hat S(f_k)=\frac{1}{Nf_s}\Bigl|\sum_{n=0}^{N-1}x[n]e^{-2\pi ikn/N}\Bigr|^2.
+\]
+\begin{proposition}
+If $x[n]$ is Gaussian white noise with variance $\sigma^2$, then for $0<k<N/2$ the values $\hat S(f_k)$ are independent, each distributed as $\frac{\sigma^2}{f_s}\cdot\frac{\chi^2_2}{2}$, i.e.\ exponential with mean equal to the true spectral density $\sigma^2/f_s$.
+\end{proposition}
+\begin{proof}[Sketch]
+The real and imaginary parts of $X[k]$ are linear combinations of independent Gaussians with orthogonal coefficient vectors $\cos(2\pi kn/N)$ and $\sin(2\pi kn/N)$, each of squared norm $N/2$. They are therefore independent $\mathcal N(0,N\sigma^2/2)$ variables, and $|X[k]|^2$ is $N\sigma^2/2$ times a $\chi^2_2$ variable. Distinct bins use orthogonal coefficient vectors and are independent.
+\end{proof}
+The standard deviation of an exponential variable equals its mean. Doubling the record length doubles the number of bins but leaves each bin's relative error at $100\%$. This is \emph{inconsistency}: more data give finer resolution, not lower variance. Variance falls only by averaging, across segments (Welch), tapers (multitaper), neighboring frequencies (smoothing), or trials.
+
+\section{Bias, variance, and degrees of freedom}
+Averaging $K$ approximately independent periodogram-like estimates gives an estimate distributed approximately as $S(f)\chi^2_{2K}/(2K)$. Its relative standard deviation is $1/\sqrt K$, and a $95\%$ confidence interval for $S(f)$ is
+\[
+\Bigl[\frac{2K\hat S(f)}{\chi^2_{2K,0.975}},\ \frac{2K\hat S(f)}{\chi^2_{2K,0.025}}\Bigr],
+\]
+which on a logarithmic (dB) scale has a width independent of $S(f)$. This is one reason to plot spectra in decibels. Overlapping Welch segments are correlated; with $50\%$ overlap and a Hann window the effective number of independent segments is somewhat less than the nominal number.
+
+\section{Slepian tapers}
+Among all sequences of length $N$ with unit energy, which one concentrates the most of its spectral energy inside the band $[-W,W]$? The answer is the first discrete prolate spheroidal (Slepian) sequence, the leading eigenvector of the $N\times N$ matrix
+\[
+A_{mn}=\frac{\sin(2\pi W(m-n))}{\pi(m-n)}\quad(m\ne n),\qquad A_{nn}=2W,
+\]
+with $W$ in cycles per sample. The eigenvalues $\lambda_0>\lambda_1>\cdots$ are the fractions of energy inside the band. Approximately $2NW$ of them are close to one and the rest fall rapidly to zero; the corresponding eigenvectors are mutually orthogonal. The multitaper estimate averages the $K\approx2NW-1$ well-concentrated eigenspectra, achieving $K$ degrees of freedom (in pairs) with leakage controlled at resolution $2W$. A multitaper analysis therefore has two parameters with physical meaning: the window length $T=N/f_s$ and the half-bandwidth $Wf_s$ in hertz. Their product fixes $K$.
+
+\section{The aperiodic component}
+Write a parametric spectral model as
+\[
+\log_{10}S(f)=b-\log_{10}(k+f^\chi)+\sum_jG_j(f),
+\]
+with offset $b$, optional ``knee'' $k$, exponent $\chi$, and Gaussian peaks $G_j$ in log-power. When $k=0$, the aperiodic part is a straight line of slope $-\chi$ in log--log coordinates. Two consequences follow. First, a change in $\chi$ rotates the spectrum and changes band power in opposite directions at low and high frequencies, without any oscillation changing. Second, the ratio of two band powers (e.g.\ theta/delta) depends on $\chi$ even when no peak exists. The exponent has been related to the balance of excitation and inhibition in models, but that link is model-dependent and not a theorem about tissue.
+
+\begin{workedexample}[Resolution, variance, and record length]
+A 4-s LFP segment sampled at 1000\,Hz has DFT resolution $0.25$\,Hz. With multitaper half-bandwidth $W=1$\,Hz, $NW=4$ and $K=7$ tapers give $14$ degrees of freedom; the 95\% confidence interval spans roughly $-2.7$ to $+4.0$\,dB around the estimate. Doubling $W$ to $2$\,Hz yields $K=15$ and an interval of about $-2.0$ to $+2.5$\,dB, at the cost of blurring peaks narrower than $4$\,Hz. Neither choice is ``correct''; the report must state it.
+\end{workedexample}
 \begin{exercises}
 \item Explain the meaning of time-bandwidth product in multitaper estimation.
 \item Simulate a signal whose $1/f$ slope changes but whose oscillatory peak remains fixed.
 \item Explain why a spectral peak detector needs a null or baseline definition.
 \item Describe two ways spectrogram edge artifacts can mislead interpretation.
+\item Show that the periodogram of white noise has the same relative variance for every record length.
+\item Compute the 95\% confidence interval in dB for $K=1$ and $K=10$ independent averaged periodograms.
+\item For $T=2$\,s and half-bandwidth $3$\,Hz, how many Slepian tapers are well concentrated?
+\item Show that a change in aperiodic exponent with fixed value at $f=20$\,Hz increases 4--8\,Hz power and decreases 30--80\,Hz power.
 \end{exercises}

@@ -16,9 +16,49 @@ A linear observation model $r_t=Cz_t+d+\varepsilon_t$ represents high-dimensiona
 \section{Random-matrix caution}
 For a high-dimensional sample covariance, random eigenvalue fluctuations can be large even when the true covariance is isotropic. In a simple independent-Gaussian null with feature-to-sample ratio $q$, the Mar\v{c}enko--Pastur bulk has support $\sigma^2(1\pm\sqrt q)^2$ under the standard asymptotic assumptions. This is not a universal biological noise threshold; correlated trials, heterogeneous variances, and temporal smoothing violate simple null assumptions.
 
+% --- expanded edition (October 2026) ---
+\section{Covariance from a latent factor model}
+Under the factor model $r=Cz+d+\varepsilon$ with $z\sim\mathcal N(0,I_k)$ independent of $\varepsilon\sim\mathcal N(0,\Psi)$, $\Psi$ diagonal, the covariance of $r$ is
+\[
+\Sigma=CC^\top+\Psi.
+\]
+The \emph{shared} covariance $CC^\top$ has rank $k$; the \emph{private} variance $\Psi$ is neuron-specific. PCA treats all variance alike and therefore mixes the two: a neuron with large private variance attracts a principal component of its own. Factor analysis estimates $C$ and $\Psi$ by maximum likelihood (usually with the EM algorithm). The factor loadings are identifiable only up to rotation, since $C\mapsto CQ$ for orthogonal $Q$ leaves $\Sigma$ unchanged; the \emph{shared subspace} $\operatorname{col}(C)$ is identifiable, the axes within it are not.
+
+\section{Noise correlations and coding}
+Consider a population encoding a scalar stimulus $s$ through mean responses $\mu(s)$ with stimulus-independent covariance $\Sigma$. The \emph{linear Fisher information} is
+\[
+I_{\rm lin}(s)=\mu'(s)^\top\Sigma^{-1}\mu'(s).
+\]
+It bounds the precision of any locally unbiased linear decoder: $\Var(\hat s)\ge1/I_{\rm lin}$. Whether noise correlations help or hurt depends on their \emph{direction} relative to the signal direction $\mu'(s)$, not on their average size.
+
+\begin{proposition}
+If $\Sigma=\Sigma_0+\epsilon\,\mu'\mu'^\top$ with $\Sigma_0$ positive definite and $\epsilon>0$, then
+\[
+I_{\rm lin}=\frac{I_0}{1+\epsilon I_0},\qquad I_0=\mu'^\top\Sigma_0^{-1}\mu',
+\]
+which is bounded by $1/\epsilon$ no matter how many neurons are recorded.
+\end{proposition}
+\begin{proof}
+By the Sherman--Morrison formula, $\Sigma^{-1}=\Sigma_0^{-1}-\epsilon\Sigma_0^{-1}\mu'\mu'^\top\Sigma_0^{-1}/(1+\epsilon I_0)$. Hence $\mu'^\top\Sigma^{-1}\mu'=I_0-\epsilon I_0^2/(1+\epsilon I_0)=I_0/(1+\epsilon I_0)$.
+\end{proof}
+These \emph{differential} or \emph{information-limiting} correlations are small in any single pair but cap the population's information. They are indistinguishable from upstream noise in the stimulus itself, which no downstream circuit can remove.
+
+\section{Estimating correlation from spike counts}
+The Pearson correlation of spike counts depends on the counting window and on firing rate even when the underlying dependence is fixed. For two neurons driven by a common Gaussian input and spiking by thresholding, the count correlation grows with window length and with firing rate. Comparing $r_{sc}$ between conditions with different rates therefore requires matching rates or modeling the dependence. Short windows produce correlations close to zero for almost any mechanism, because counts are mostly $0$ or $1$.
+
+\section{Signal versus noise correlation from data}
+Given trials $r_{j}^{(s)}$ for stimulus $s$, the noise covariance is estimated within each stimulus and pooled; the signal covariance is the covariance of the stimulus-conditioned means across stimuli. Shuffling trial order independently for each neuron within a stimulus destroys noise correlations while preserving signal correlations, giving a direct test of whether noise correlations affect decoding. With few trials, the estimated means contain noise, which inflates the apparent signal covariance by approximately $\Sigma_{\rm noise}/n_{\rm trials}$; this bias should be removed or cross-validated.
+
+\begin{workedexample}[Information saturation]
+Let $N$ neurons have $\mu'_i=1$, private variances $1$, and differential correlations of strength $\epsilon=0.01$. Then $I_0=N$ and $I_{\rm lin}=N/(1+0.01N)$. For $N=10$, $I_{\rm lin}\approx9.1$; for $N=100$, $50$; for $N=1000$, $\approx91$; the limit is $100$. The pairwise correlation coefficient implied is about $0.01/1.01\approx0.01$, below what most experiments can resolve reliably, yet it halves the information of a 100-neuron population.
+\end{workedexample}
 \begin{exercises}
 \item Derive the gain-modulated variance formula using total variance.
 \item Explain how simultaneous recording differs from assembling pseudo-populations across sessions.
 \item Give a counterexample where noise correlation increases without a change in the direct connection between neurons.
 \item Explain why a large first eigenvalue is not automatically a genuine latent neural mode.
+\item Show that $C$ and $CQ$ give the same covariance in the factor model for orthogonal $Q$.
+\item Verify the Sherman--Morrison formula by multiplying $\Sigma$ by the claimed inverse.
+\item Compute $I_{\rm lin}$ for two neurons with $\mu'=(1,1)$, unit variances, and correlation $\rho$; for which sign of $\rho$ is information larger?
+\item Explain why trial shuffling within a stimulus preserves signal correlations.
 \end{exercises}

@@ -19,9 +19,71 @@ The first term measures variation remaining after conditioning; the second measu
 \begin{workedexample}[Poisson versus overdispersed counts]
 For $N\sim\mathrm{Poisson}(\lambda)$, $E[N]=\Var(N)=\lambda$. If $N\mid\Lambda\sim\mathrm{Poisson}(\Lambda)$ and $\Lambda$ varies, then $\Var(N)=E[\Lambda]+\Var(\Lambda)$. Extra variance can arise from latent fluctuations even if spikes are conditionally Poisson.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{Expectation as an integral and its linearity}
+For a discrete random variable, $\E[X]=\sum_xx\,P(X=x)$; for one with density $f$, $\E[X]=\int xf(x)\,dx$, provided the sum or integral converges absolutely. In general $\E[X]=\int_\Omega X\,dP$ is the Lebesgue integral with respect to the probability measure. The most used property is linearity, $\E[aX+bY]=a\E[X]+b\E[Y]$, which holds \emph{without any independence assumption}.
+
+\begin{workedexample}[Expected coincidences by linearity]
+Two spike trains are binned into $n$ bins with firing probabilities $p$ and $q$ per bin, and coincidences are counted as $C=\sum_{k=1}^nX_kY_k$. If the trains are independent in each bin, $\E[X_kY_k]=pq$, so $\E[C]=npq$ regardless of any dependence \emph{across} bins. The variance of $C$, by contrast, does depend on the temporal dependence structure, so ``expected coincidences'' is easy and ``significance of coincidences'' is not.
+\end{workedexample}
+
+\begin{proposition}[Law of the unconscious statistician]
+For a function $g$, $\E[g(X)]=\sum_xg(x)P(X=x)$ or $\int g(x)f(x)\,dx$, without computing the distribution of $g(X)$.
+\end{proposition}
+In particular $\E[X^2]$ and $\Var(X)=\E[X^2]-(\E X)^2$ can be computed directly from the distribution of $X$.
+
+\section{Fundamental inequalities}
+\begin{theorem}[Markov and Chebyshev]
+If $X\ge0$ and $a>0$, then $P(X\ge a)\le\E[X]/a$. For any $X$ with finite variance and $k>0$, $P(|X-\E X|\ge k)\le\Var(X)/k^2$.
+\end{theorem}
+\begin{proof}
+$a\mathbf 1_{\{X\ge a\}}\le X$ pointwise; take expectations. Chebyshev is Markov applied to $(X-\E X)^2$ and $a=k^2$.
+\end{proof}
+
+\begin{theorem}[Jensen]
+If $\varphi$ is convex and $X$, $\varphi(X)$ are integrable, then $\varphi(\E X)\le\E[\varphi(X)]$.
+\end{theorem}
+\begin{proof}
+By convexity there is a supporting line at $m=\E X$: $\varphi(x)\ge\varphi(m)+c(x-m)$ for all $x$. Substitute $X$ and take expectations; the linear term has mean zero.
+\end{proof}
+Jensen's inequality shows that $\E[X^2]\ge(\E X)^2$, that the mean of log-power is at most the log of mean power (so averaging in decibels and in linear units give different answers), and that the KL divergence is nonnegative.
+
+\section{Common distributions}
+\begin{center}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Distribution & Support & Mean & Variance\\
+\midrule
+Bernoulli$(p)$ & $\{0,1\}$ & $p$ & $p(1-p)$\\
+Binomial$(n,p)$ & $\{0,\ldots,n\}$ & $np$ & $np(1-p)$\\
+Poisson$(\lambda)$ & $\mathbb N_0$ & $\lambda$ & $\lambda$\\
+Geometric$(p)$ (trials to success) & $\mathbb N_+$ & $1/p$ & $(1-p)/p^2$\\
+Uniform$(a,b)$ & $[a,b]$ & $(a+b)/2$ & $(b-a)^2/12$\\
+Exponential$(\lambda)$ & $[0,\infty)$ & $1/\lambda$ & $1/\lambda^2$\\
+Gamma$(k,\lambda)$ & $[0,\infty)$ & $k/\lambda$ & $k/\lambda^2$\\
+Normal$(\mu,\sigma^2)$ & $\mathbb R$ & $\mu$ & $\sigma^2$\\
+\bottomrule
+\end{tabular}
+\end{center}
+These are connected. A binomial count with $n\to\infty$, $p\to0$ and $np\to\lambda$ converges to Poisson$(\lambda)$, which is why counts of rare events in many small bins are approximately Poisson. Waiting times between events of a homogeneous Poisson process are exponential, and the waiting time to the $k$th event is gamma. The exponential distribution is the only continuous distribution on $[0,\infty)$ with the \emph{memoryless} property $P(X>s+t\mid X>s)=P(X>t)$, which is the property a refractory neuron violates.
+
+\section{Independence of random variables and sums}
+Random variables $X$ and $Y$ are independent if $P(X\in A,Y\in B)=P(X\in A)P(Y\in B)$ for all Borel sets $A,B$. Then $\E[g(X)h(Y)]=\E[g(X)]\E[h(Y)]$ for integrable $g,h$, and in particular $\Cov(X,Y)=0$. For any random variables,
+\[
+\Var\Bigl(\sum_iX_i\Bigr)=\sum_i\Var(X_i)+2\sum_{i<j}\Cov(X_i,X_j).
+\]
+For uncorrelated summands the variances add. For a population of $N$ neurons with equal variances $\sigma^2$ and equal pairwise correlation $\rho$, the variance of the summed activity is $N\sigma^2[1+(N-1)\rho]$. Even a small $\rho=0.05$ dominates when $N=100$: the summed variance is about six times the independent value. Weak pairwise correlations have large population consequences.
+
+\section{Moment generating functions}
+The moment generating function $M_X(s)=\E[e^{sX}]$, when finite near $s=0$, determines the distribution and generates moments by $M_X^{(k)}(0)=\E[X^k]$. For independent $X,Y$, $M_{X+Y}=M_XM_Y$. For Poisson$(\lambda)$, $M(s)=\exp(\lambda(e^s-1))$, so the sum of independent Poisson variables with means $\lambda_1,\lambda_2$ is Poisson$(\lambda_1+\lambda_2)$: pooling spike counts from independent Poisson neurons gives a Poisson count.
 \begin{exercises}
 \item Calculate the population mean, variance, skewness, and kurtosis of the discrete values $0,1,2$ under equal probabilities.
 \item Prove $\Var(aX+b)=a^2\Var(X)$.
 \item Explain the difference between window overlap and an actual temporal correlation in the source.
 \item Derive the overdispersion identity from total variance.
+\item Use Chebyshev's inequality to bound the probability that a Poisson$(100)$ count deviates from 100 by at least 30.
+\item Show that the exponential distribution is memoryless.
+\item Show by Jensen that $\E[\log P]\le\log\E[P]$ for a positive random power $P$, and give a numerical example.
+\item Compute the variance of a population sum with $N=50$, $\sigma^2=4$, $\rho=0.1$.
+\item Derive the Poisson moment generating function and use it to compute the variance.
 \end{exercises}

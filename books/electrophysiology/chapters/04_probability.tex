@@ -100,3 +100,107 @@ A confidence interval does not automatically have its nominal coverage
 after choosing frequency bands, time windows, and hypotheses from
 the same data without accounting for selection.
 \end{caution}
+% --- expanded edition (October 2026) ---
+\section{Proofs of selected inference results}
+\begin{proof}[Proof of Result 43 (total covariance)]
+Write $X-\E X=(X-\E[X\mid G])+(\E[X\mid G]-\E X)$ and similarly for $Y$.
+Expanding the product, the two cross terms vanish because
+$\E[(X-\E[X\mid G])\,h(G)]=0$ for any square-integrable $h(G)$. The
+remaining terms are $\E[\Cov(X,Y\mid G)]$ and
+$\Cov(\E[X\mid G],\E[Y\mid G])$.
+\end{proof}
+For two neurons modulated by a common gain $G$ with
+$X\mid G\sim\Poisson(\mu_1G)$, $Y\mid G\sim\Poisson(\mu_2G)$, conditionally
+independent, the first term vanishes and $\Cov(X,Y)=\mu_1\mu_2\Var G$.
+Shared gain alone produces positive noise correlations proportional to
+the product of the rates, which is one reason correlations scale with
+firing rate.
+
+\begin{proof}[Proof of Result 50 (Cram\'er--Rao, scalar case)]
+Let $U=\partial_\theta\log p_\theta(X)$. Under conditions allowing
+differentiation under the integral, $\E_\theta U=0$ and, for any unbiased
+$\hat\theta$, $\partial_\theta\E_\theta\hat\theta=1=\E_\theta[\hat\theta U]
+=\Cov_\theta(\hat\theta,U)$. Cauchy--Schwarz gives
+$1\le\Var_\theta(\hat\theta)\,\Var_\theta(U)=\Var_\theta(\hat\theta)\,\mathcal I(\theta)$.
+\end{proof}
+For $n$ independent Poisson counts in windows of length $\Delta$ with
+rate $r$, $\mathcal I(r)=n\Delta/r$, so no unbiased estimator of the rate
+has variance below $r/(n\Delta)$, which the pooled rate attains. More
+recording time, not finer binning, is the only way to improve it.
+
+\begin{example}[Result 53: counts are sufficient for Poisson rates]
+For a homogeneous Poisson process on $[0,T]$, the likelihood of spike
+times $t_1,\ldots,t_n$ is $\lambda^ne^{-\lambda T}$. It depends on the
+data only through $n$, so the count is sufficient for $\lambda$: spike
+timing carries no further information about the rate \emph{under this
+model}. For an inhomogeneous or history-dependent model, the likelihood
+depends on the times, and binning to counts discards information.
+Sufficiency is always relative to a model.
+\end{example}
+
+\section{The delta method in neural statistics}
+If $\sqrt n(\hat\theta-\theta)\Rightarrow\Normal(0,\sigma^2)$ and $g$ is
+differentiable at $\theta$ with $g'(\theta)\ne0$, then
+$\sqrt n(g(\hat\theta)-g(\theta))\Rightarrow\Normal(0,g'(\theta)^2\sigma^2)$.
+\begin{proof}[Proof sketch]
+By Taylor's theorem $g(\hat\theta)-g(\theta)=g'(\tilde\theta)(\hat\theta-\theta)$
+with $\tilde\theta$ between the two; $\tilde\theta\to\theta$ in
+probability, so Slutsky's lemma applies.
+\end{proof}
+\begin{example}[Standard error of power in decibels]
+If a spectral estimate is $\hat S\approx S\chi^2_{2K}/(2K)$, then
+$\Var\hat S\approx S^2/K$. With $g(S)=10\log_{10}S$,
+$g'(S)=10/(S\ln10)$ and
+$\operatorname{sd}(10\log_{10}\hat S)\approx 10/(\ln10\sqrt K)\approx4.34/\sqrt K$\,dB,
+independent of $S$. The log transform stabilizes the variance, which is
+why spectra and their condition differences are analysed in decibels.
+\end{example}
+\begin{example}[Fano factor]
+For $n$ counts with mean $\mu$, variance $v$ and Fano factor $F=v/\mu$,
+the multivariate delta method gives an approximate standard error that
+grows as the counts become more skewed. A simple bootstrap over trials is
+often more reliable than the asymptotic formula when $n<50$.
+\end{example}
+
+\section{Concentration: Hoeffding's inequality}
+\begin{theorem}[Hoeffding]
+If $X_1,\ldots,X_n$ are independent with $a_i\le X_i\le b_i$, then for $t>0$,
+\[
+\Prob\bigl(\bar X-\E\bar X\ge t\bigr)\le\exp\Bigl(-\frac{2n^2t^2}{\sum_i(b_i-a_i)^2}\Bigr).
+\]
+\end{theorem}
+For a decoder evaluated on $n$ independent test trials with $0/1$ loss,
+the observed accuracy is within $t$ of its expectation with probability
+at least $1-2e^{-2nt^2}$. With $n=100$ trials and $t=0.1$ this is $0.73$;
+to guarantee $\pm0.05$ with probability $0.95$ requires $n\ge738$.
+The guarantee assumes independent test trials; neighbouring time bins
+from the same trial are not.
+
+\section{Isserlis' theorem and the variance of covariance estimates}
+For a centered Gaussian vector,
+$\E[X_1X_2X_3X_4]=\Sigma_{12}\Sigma_{34}+\Sigma_{13}\Sigma_{24}+\Sigma_{14}\Sigma_{23}$.
+Applied to the product $X_iX_j$, it gives
+$\Var(X_iX_j)=\Sigma_{ii}\Sigma_{jj}+\Sigma_{ij}^2$, so the sample
+covariance from $T$ independent samples has variance
+$(\Sigma_{ii}\Sigma_{jj}+\Sigma_{ij}^2)/T$. Translated into correlations,
+the standard error of a near-zero correlation is about $1/\sqrt T$:
+detecting pairwise correlations of $0.02$ at two standard errors needs
+$T\approx10^4$ independent samples.
+
+\section*{Exercises for this chapter}
+\begin{exercise}
+Derive the Fisher information of an exponential interspike-interval model
+and the Cram\'er--Rao bound for its rate.
+\end{exercise}
+\begin{exercise}
+Use the delta method to find the approximate variance of
+$\log(\hat r_1/\hat r_2)$ for two independent Poisson rate estimates.
+\end{exercise}
+\begin{exercise}
+Prove Isserlis' formula for four jointly Gaussian variables by
+differentiating the moment generating function $\exp(\tfrac12 s^\top\Sigma s)$.
+\end{exercise}
+\begin{exercise}
+Show by an example that pairwise-independent Bernoulli variables can
+violate Hoeffding's bound for their mean.
+\end{exercise}

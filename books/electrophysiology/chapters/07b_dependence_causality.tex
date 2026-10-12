@@ -101,3 +101,99 @@ log-variance ratio, not spectral Granger; the existing
 \path{transfer_entropy.m} is a first-order,
 discrete plug-in conditional-information estimator.
 \begin{caution}The two MATLAB primitives are exploratory and do not by themselves establish causal identifiability.\end{caution}
+% --- expanded edition (October 2026) ---
+\section{Holm's procedure controls the family-wise error}
+\begin{proposition}
+Let $p_{(1)}\le\cdots\le p_{(m)}$ be ordered $p$-values with hypotheses
+$H_{(i)}$. Reject $H_{(1)},\ldots,H_{(k-1)}$ where $k$ is the first index
+with $p_{(k)}>\alpha/(m-k+1)$. If every null $p$-value is valid
+($\Prob(p\le u)\le u$), then $\Prob(\text{any true null rejected})\le\alpha$,
+whatever the dependence.
+\end{proposition}
+\begin{proof}
+Let $I_0$ be the set of $m_0$ true nulls and $E$ the event that every
+$p_i$ with $i\in I_0$ exceeds $\alpha/m_0$. By the union bound,
+$\Prob(E^c)\le m_0\cdot\alpha/m_0=\alpha$. On $E$, consider the first true
+null in the ordered list, at position $j$. At most $m-m_0$ hypotheses
+precede it, so $j\le m-m_0+1$ and its threshold is
+$\alpha/(m-j+1)\le\alpha/m_0$, which its $p$-value exceeds. The procedure
+stops there or earlier and rejects no true null.
+\end{proof}
+
+\section{d-separation by example}
+Three elementary configurations determine whether a path between $X$
+and $Y$ transmits association:
+\begin{itemize}[leftmargin=2em]
+\item a \emph{chain} $X\to M\to Y$ and a \emph{fork} $X\leftarrow C\to Y$
+are open unless the middle node is conditioned on;
+\item a \emph{collider} $X\to K\leftarrow Y$ is closed unless $K$ or one of
+its descendants is conditioned on.
+\end{itemize}
+A path is blocked by a conditioning set $Z$ if it contains a non-collider
+in $Z$ or a collider with neither it nor any descendant in $Z$.
+\begin{example}[Conditioning on a detected event]
+Let $X$ and $Y$ be the activities of two independent neurons, and let a
+``population event'' $K$ be detected when the summed activity crosses a
+threshold. Analysing only event-triggered epochs conditions on $K$, a
+collider: within events, the two neurons become negatively associated
+(if one is quiet, the other must have been active to trigger the event).
+Event-triggered correlations therefore cannot be compared with
+unconditional ones without modelling the selection.
+\end{example}
+\begin{example}[Behaviour as a common cause]
+If running speed $C$ modulates both an LFP band $X$ and a unit's rate $Y$,
+the fork $X\leftarrow C\to Y$ produces spike--field correlations.
+Adjusting for $C$ (the backdoor formula of this chapter) blocks the
+path. If speed is measured noisily, adjustment is incomplete, and
+residual association persists: measurement error in confounders is a
+common reason why ``controlling for behaviour'' fails.
+\end{example}
+
+\section{Spectral factorization and Wilson's method}
+For a bivariate stationary process with spectral density matrix $S(f)$,
+Wold's theorem (Result 66) and its spectral counterpart give a
+\emph{minimum-phase factorization}
+\[
+S(f)=H(f)\Sigma H(f)^\ast,
+\]
+with $H(f)=I+\sum_{k\ge1}H_ke^{-2\pi ifk}$ analytic in the sense that
+its inverse exists as a causal filter, and $\Sigma$ the innovation
+covariance. For a scalar spectrum the factor has an explicit expression,
+$\log\sigma^2=\int_{-1/2}^{1/2}\log S(f)\,df$ (the Kolmogorov--Szeg\H{o}
+formula), which gives the one-step prediction error variance from the
+spectrum alone. In the multivariate case \emph{Wilson's algorithm}
+computes $H$ and $\Sigma$ by Newton iterations on the equation
+$S=H\Sigma H^\ast$ on a frequency grid, preserving the minimum-phase
+property at each step. The resulting $H$ and $\Sigma$ feed Geweke's
+spectral Granger measure without fitting a finite VAR, avoiding the
+choice of model order but inheriting the bias and variance of the
+nonparametric spectral estimate, including its frequency smoothing.
+
+\begin{proposition}[Kolmogorov--Szeg\H{o} for AR(1)]
+For $X_t=aX_{t-1}+\varepsilon_t$ with $|a|<1$ and innovation variance
+$\sigma^2$, $\int_{-1/2}^{1/2}\log S(f)\,df=\log\sigma^2$.
+\end{proposition}
+\begin{proof}
+$S(f)=\sigma^2/|1-ae^{-2\pi if}|^2$, so the integral is
+$\log\sigma^2-2\Re\int\log(1-ae^{-2\pi if})\,df$. Expanding
+$\log(1-az)=-\sum_{k\ge1}a^kz^k/k$ and integrating term by term over the
+unit circle, every term vanishes.
+\end{proof}
+
+\section*{Exercises for this chapter}
+\begin{exercise}
+Apply Holm and Bonferroni to five $p$-values of your choice and find a
+case where Holm rejects more hypotheses.
+\end{exercise}
+\begin{exercise}
+For the DAG $C\to X\to Y$, $C\to Y$, show that $\{C\}$ is a valid
+backdoor adjustment set and that $\varnothing$ is not.
+\end{exercise}
+\begin{exercise}
+Simulate two independent Gaussian sequences, select samples where their
+sum exceeds 2, and compute their correlation within the selection.
+\end{exercise}
+\begin{exercise}
+Compute the effective sample size of an AR(1) series with $a=0.8$ and
+$T=500$.
+\end{exercise}

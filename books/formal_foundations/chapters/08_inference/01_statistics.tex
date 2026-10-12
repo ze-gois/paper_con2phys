@@ -18,9 +18,43 @@ Preprocessing fitted on all the data before cross-validation can leak informatio
 \begin{workedexample}[An exact conditional question]
 To test whether two cells exhibit synchrony below a 5-ms scale beyond fixed 20-ms window spike counts, define windows, fixed spike counts, a synchrony statistic, and a resampling mechanism that randomizes fine timing conditional on the fixed counts. Any rejection should refer to the particular 20-ms coarse information held fixed, as emphasized in \cite{Amarasingham2012}.
 \end{workedexample}
+% --- expanded edition (October 2026) ---
+\section{The Neyman--Pearson lemma}
+\begin{theorem}[Neyman--Pearson]
+For testing a simple null $H_0:X\sim p_0$ against a simple alternative $H_1:X\sim p_1$, the test that rejects when the likelihood ratio $p_1(X)/p_0(X)$ exceeds a threshold $c$ (chosen so that the size is $\alpha$) has the greatest power among all tests of size at most $\alpha$.
+\end{theorem}
+\begin{proof}
+Let $\phi^\ast=\mathbf 1\{p_1>cp_0\}$ and let $\phi$ be any test with $\E_0\phi\le\alpha=\E_0\phi^\ast$. Pointwise, $(\phi^\ast-\phi)(p_1-cp_0)\ge0$, since $\phi^\ast=1$ exactly where $p_1-cp_0>0$. Integrating gives $\E_1\phi^\ast-\E_1\phi\ge c(\E_0\phi^\ast-\E_0\phi)\ge0$.
+\end{proof}
+The lemma explains why likelihood-ratio statistics are the default: they are optimal for the simplest problem and asymptotically well behaved more generally. Under regularity, Wilks' theorem states that $2\log$ of the maximized likelihood ratio between nested models differing by $q$ parameters is approximately $\chi^2_q$ under the null. Nested GLMs (e.g.\ with and without a coupling term) are compared this way; non-nested models require cross-validation or information criteria instead.
+
+\section{Confidence intervals and their duality with tests}
+A $(1-\alpha)$ confidence set $C(X)$ satisfies $P_\theta(\theta\in C(X))\ge1-\alpha$ for every $\theta$. Given a family of level-$\alpha$ tests of $H_0:\theta=\theta_0$, the set of $\theta_0$ not rejected is a $(1-\alpha)$ confidence set, and conversely. The statement concerns the \emph{procedure}: before the data are seen, the random set covers the fixed parameter with the stated probability. A realized interval either contains $\theta$ or does not.
+
+\section{Multiple comparisons}
+For $m$ tests, let $V$ be the number of false rejections and $R$ the number of rejections. Two error rates are common:
+\begin{itemize}[leftmargin=2em]
+\item the \emph{family-wise error rate} $\mathrm{FWER}=P(V\ge1)$, controlled by Bonferroni (reject $p_i\le\alpha/m$) or the uniformly more powerful Holm step-down procedure;
+\item the \emph{false discovery rate} $\mathrm{FDR}=\E[V/\max(R,1)]$, controlled by the Benjamini--Hochberg procedure.
+\end{itemize}
+\begin{theorem}[Benjamini--Hochberg]
+Order the $p$-values $p_{(1)}\le\cdots\le p_{(m)}$, let $k$ be the largest $i$ with $p_{(i)}\le i\alpha/m$, and reject the hypotheses with the $k$ smallest $p$-values. If the null $p$-values are independent of each other and of the non-null $p$-values, then $\mathrm{FDR}\le m_0\alpha/m\le\alpha$, where $m_0$ is the number of true nulls.
+\end{theorem}
+Under arbitrary dependence, replacing $\alpha$ by $\alpha/\sum_{i\le m}1/i$ (Benjamini--Yekutieli) restores control. For maps over time, frequency, or channels, \emph{cluster-based permutation tests} control the FWER for the statement ``there is some effect somewhere'' by comparing the largest observed cluster statistic with its permutation distribution. They do not license claims about the exact extent or location of a cluster.
+
+\section{The bootstrap}
+Given iid data $X_1,\ldots,X_n$ and an estimator $\hat\theta$, the nonparametric bootstrap draws $n$ observations with replacement, recomputes $\hat\theta^\ast$, and repeats $B$ times. The spread of $\hat\theta^\ast$ estimates the sampling spread of $\hat\theta$. The percentile interval $[\hat\theta^\ast_{\alpha/2},\hat\theta^\ast_{1-\alpha/2}]$ is simple; bias-corrected and accelerated (BCa) intervals improve coverage for skewed estimators. The bootstrap fails, or needs modification, for extremes (e.g.\ the maximum), for very small samples, and for dependent data, where whole blocks of consecutive observations (block bootstrap) or whole clusters (cluster bootstrap) must be resampled.
+
+\begin{workedexample}[Thirty electrodes, one hundred frequencies]
+A study tests coherence change at $30$ channel pairs and $100$ frequency bins, $3000$ tests. With uncorrected $\alpha=0.05$ and no true effect, about $150$ false positives are expected. Bonferroni requires $p\le1.7\times10^{-5}$; Benjamini--Hochberg adapts to the number of true effects; a cluster test over frequency within each pair exploits the fact that true spectral effects span neighboring bins. The three answers address different claims: ``no false positive anywhere'', ``few false positives among the reported ones'', and ``some effect exists in this pair''.
+\end{workedexample}
 \begin{exercises}
 \item State the difference between an effect-size estimate and a hypothesis-test decision.
 \item Propose a hierarchical resampling unit for a dataset containing animals, sessions, trials, and time windows.
 \item Explain why using the test set to choose a frequency band biases held-out performance.
 \item Describe a null distribution that would be inappropriate for testing phase-amplitude coupling under strong signal nonstationarity.
+\item Apply Holm and Benjamini--Hochberg at $\alpha=0.05$ to the $p$-values $0.001,0.008,0.012,0.04,0.2$.
+\item Derive the likelihood-ratio test for a Poisson rate $\lambda=\lambda_0$ versus $\lambda=\lambda_1>\lambda_0$, and show it rejects for large counts.
+\item Explain why bootstrapping individual time points of an autocorrelated LFP envelope underestimates uncertainty.
+\item Show that the set of $\theta_0$ not rejected by level-$\alpha$ tests is a $(1-\alpha)$ confidence set.
 \end{exercises}

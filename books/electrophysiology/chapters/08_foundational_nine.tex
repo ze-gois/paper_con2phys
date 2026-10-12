@@ -1,4 +1,5 @@
 \chapter[Classical sampling and random matrices]{Sampling, spectral concentration, and random-matrix theorems}
+\label{ch:classical-sampling}
 The following classical theorems connect continuous-time measurement,
 spectral estimation, and high-dimensional statistical models. They are
 presented here immediately after Fourier and spectral foundations rather
@@ -132,3 +133,68 @@ and have finite common value.
 \end{theorem}
 These theorems justify integrals used in spike-count expectations and
 latent-variable models only when their hypotheses apply.
+% --- expanded edition (October 2026) ---
+\section{The expected periodogram: Wiener--Khinchin in finite samples}
+Let $X_t$ be zero-mean stationary with absolutely summable autocovariance
+$\gamma$ and spectral density $S(f)=\sum_k\gamma(k)e^{-2\pi ifk}$ (unit
+sampling interval). For the periodogram
+$I_T(f)=T^{-1}|\sum_{t=0}^{T-1}X_te^{-2\pi ift}|^2$,
+\[
+\E I_T(f)=\sum_{|k|<T}\Bigl(1-\frac{|k|}T\Bigr)\gamma(k)e^{-2\pi ifk}
+=\int_{-1/2}^{1/2}F_T(f-\nu)S(\nu)\,d\nu,
+\]
+where $F_T(f)=T^{-1}\bigl(\sin(\pi Tf)/\sin(\pi f)\bigr)^2$ is the Fej\'er kernel.
+\begin{proof}
+Expand the squared modulus into a double sum over $s,t$ and take
+expectations: $\E X_s X_t=\gamma(s-t)$. Grouping by $k=s-t$ there are
+$T-|k|$ pairs with each lag, giving the first expression. The second
+follows by substituting $\gamma(k)=\int S(\nu)e^{2\pi i\nu k}d\nu$ and
+recognising $\sum_{|k|<T}(1-|k|/T)e^{2\pi i(\nu-f)k}=F_T(f-\nu)$.
+\end{proof}
+The periodogram is therefore an unbiased estimate not of $S(f)$ but of
+$S$ smoothed by the Fej\'er kernel, whose sidelobes decay only as
+$f^{-2}$. Where the spectrum has a large dynamic range, such as the steep
+$1/f^\chi$ LFP spectrum, leakage from low frequencies can dominate the
+expected periodogram at high frequencies. Tapering replaces $F_T$ by the
+squared transform of the taper, which is the rigorous reason that
+Slepian tapers reduce bias.
+
+\section{Johnson--Lindenstrauss in numbers}
+The lemma guarantees that $n$ points can be mapped linearly to
+$k=O(\varepsilon^{-2}\log n)$ dimensions with all pairwise distances
+preserved within a factor $1\pm\varepsilon$, and a random Gaussian matrix
+scaled by $1/\sqrt k$ achieves this with high probability. A commonly
+used explicit sufficient dimension is
+$k\ge4\log n/(\varepsilon^2/2-\varepsilon^3/3)$.
+\begin{example}[Random projections of population states]
+For $n=10^4$ time bins and $\varepsilon=0.2$, the bound gives
+$k\ge4\cdot9.21/(0.02-0.00267)\approx2126$. The number does not depend on
+the number of recorded neurons. The lemma is therefore a statement that
+\emph{distance geometry} of many points survives random compression,
+not that neural activity is low-dimensional: the required $k$ grows with
+the number of points, whatever the data.
+\end{example}
+
+\section{When Fubini fails}
+The hypotheses of Fubini's theorem are not decorative. On
+$[0,1]^2$, let $f(x,y)=(x^2-y^2)/(x^2+y^2)^2$. Then
+$\int_0^1\int_0^1f\,dy\,dx=\pi/4$ while
+$\int_0^1\int_0^1f\,dx\,dy=-\pi/4$, because $\int\!\!\int|f|=\infty$. In
+spike-train calculations the analogous failure arises when exchanging
+an expectation with an infinite sum over spikes whose contributions are
+not absolutely summable, for example in shot-noise models with heavy-tailed
+kernels.
+
+\section*{Exercises for this chapter}
+\begin{exercise}
+Show that $F_T(0)=T$ and $\int_{-1/2}^{1/2}F_T(f)\,df=1$.
+\end{exercise}
+\begin{exercise}
+For white noise, show that $\E I_T(f)=\gamma(0)$ exactly for every $T$.
+\end{exercise}
+\begin{exercise}
+Compute the JL dimension for $n=10^6$ and $\varepsilon=0.1$.
+\end{exercise}
+\begin{exercise}
+Verify the two iterated integrals in the Fubini counterexample.
+\end{exercise}
