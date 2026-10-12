@@ -11,6 +11,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 CURATED = ROOT / "mathematics" / "concept_dependencies.json"
 REGISTRY = ROOT / "mathematics" / "formal_registry.json"
+BRIDGES = ROOT / "mathematics" / "bridge_inventory.json"
 
 
 def render(entries, attribute):
@@ -23,9 +24,10 @@ def render(entries, attribute):
             "edges": [{"from": a, "to": b} for a, b in edges]}
 
 
-def validate(data, registry):
+def validate(data, registry, bridges):
     failures = []
     ids = {item["id"] for item in registry["results"]}
+    ids |= {item["id"] for item in bridges["entries"] if item["status"] == "verified"}
     seen = set()
     for item in data["entries"]:
         ident = item["id"]
@@ -51,7 +53,10 @@ def main():
     opts = parser.parse_args()
     data = json.loads(CURATED.read_text())
     registry = json.loads(REGISTRY.read_text())
-    failures = validate(data, registry)
+    bridges = json.loads(BRIDGES.read_text())
+    verified_bridges = [item for item in bridges["entries"] if item["status"] == "verified"]
+    data["entries"].extend(verified_bridges)
+    failures = validate(data, registry, bridges)
     for failure in failures:
         print("ERROR:", failure, file=sys.stderr)
     if failures:
@@ -61,7 +66,7 @@ def main():
                               ("pedagogical_prerequisites", "pedagogical_graph.json")]:
             (ROOT / "mathematics" / filename).write_text(
                 json.dumps(render(data["entries"], key), indent=2) + "\n")
-    print(f"Curated graph validation passed: {len(data['entries'])} mapped results")
+    print(f"Curated graph validation passed: {len(data['entries'])} mapped results (including {len(verified_bridges)} verified bridges)")
     return 0
 
 
