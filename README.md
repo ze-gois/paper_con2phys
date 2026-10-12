@@ -260,18 +260,7 @@ disponivel no ambiente de autoria; a execucao numerica permanece pendente.
 
 ## Books and formal mathematics
 
-The publishing sources live in [books/](books/), with two independently
-buildable manuscripts:
-
-- [Computational Electrophysiology](books/electrophysiology/README.md) —
-  MATLAB-oriented methods and theorems; executable textbook examples are
-  planned under [examples/matlab/](examples/matlab/).
-- [Formal Foundations](books/formal_foundations/README.md) —
-  elementary-to-advanced mathematics. The planned Lean 4/Mathlib proofs
-  will live under [formal/lean/](formal/lean/); they are not yet implemented.
-
-Run `make -C books all` to compile both PDFs. Existing
-`make -C latex all` commands still work as compatibility aliases.
-[Shared theorem IDs](mathematics/theorems.yml) connect future mathematical
-proofs and computation. The existing MATLAB scripts and their relative
-paths are unchanged.
+The books have moved to [neuronal](https://github.com/ze-gois/neuronal/tree/main/books),
+along with their examples, Lean proofs, theorem registries and publishing CI.
+See the [migration notice](books/README.md). Run `make -C books all` inside
+the neuronal checkout. The questionnaire analyses and MATLAB arsenal remain here.
