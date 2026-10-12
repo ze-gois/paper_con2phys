@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "scope": "BRIDGE-001–006 verified; 007–008 pending",
+  "scope": "Bridges 1–8 kernel-verified; BRIDGE-008 countability certified, manuscript's particular diagonal enumeration not formalized",
   "entries": [
     {
       "id": "BRIDGE-001",
@@ -247,10 +247,9 @@
       "english_source": "books/formal_foundations/bridges/01_language_relations.tex",
       "english_label": "bridge:inverse-functions",
       "original_statement_summary": "(∃ g : B → A, Function.LeftInverse g f ∧ Function.RightInverse g f) ↔ Function.Bijective f",
-      "lean_declaration": null,
-      "lean_source": null,
-      "status": "pending_mathlib_lookup",
-      "reason": "Candidate Mathlib names are search hints only; no version-pinned declaration/type equivalence check has been executed",
+      "lean_declaration": "Con2physFormal.Bridges.inverse_iff_bijective",
+      "lean_source": "formal/lean/Con2physFormal/Bridges.lean",
+      "status": "verified",
       "mathlib_candidates_unverified": [
         "Function.bijective_iff_has_inverse",
         "Equiv.ofBijective"
@@ -268,7 +267,16 @@
       ],
       "source_license": "CON2PHYS original exposition",
       "mathlib_license": "Apache-2.0 (reuse must cite actual Mathlib file)",
-      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+      "lean_declarations": [
+        "Con2physFormal.Bridges.inverse_iff_bijective"
+      ],
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38299195953",
+        "checked_repository_commit": "60d01cf05130e054d23aa66e9e46b27e75f381f5",
+        "verified_target": "lake build and lake env lean Con2physFormal/Bridges.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      }
     },
     {
       "id": "BRIDGE-008",
@@ -278,10 +286,9 @@
       "english_source": "books/formal_foundations/bridges/01_language_relations.tex",
       "english_label": "bridge:countable-pairs",
       "original_statement_summary": "Countable (ℕ × ℕ)",
-      "lean_declaration": null,
-      "lean_source": null,
-      "status": "pending_mathlib_lookup",
-      "reason": "Candidate Mathlib names are search hints only; no version-pinned declaration/type equivalence check has been executed",
+      "lean_declaration": "Con2physFormal.Bridges.natural_pairs_countable",
+      "lean_source": "formal/lean/Con2physFormal/Bridges.lean",
+      "status": "verified",
       "mathlib_candidates_unverified": [
         "instCountableProd",
         "Countable.prod"
@@ -298,7 +305,16 @@
       ],
       "source_license": "CON2PHYS original exposition",
       "mathlib_license": "Apache-2.0 (reuse must cite actual Mathlib file)",
-      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+      "lean_declarations": [
+        "Con2physFormal.Bridges.natural_pairs_countable"
+      ],
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38299195953",
+        "checked_repository_commit": "60d01cf05130e054d23aa66e9e46b27e75f381f5",
+        "verified_target": "lake build and lake env lean Con2physFormal/Bridges.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      }
     }
   ]
 }
