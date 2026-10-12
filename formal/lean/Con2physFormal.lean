@@ -1,2 +1,3 @@
 import Con2physFormal.Logic
 import Con2physFormal.Bridges
+import Con2physFormal.BridgesNumbers

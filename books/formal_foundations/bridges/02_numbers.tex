@@ -6,6 +6,8 @@
 \begin{proof}Induct on $c$. For $c=0$ both sides equal $a+b$. Assume the identity for $c$. Then $(a+b)+S(c)=S((a+b)+c)=S(a+(b+c))=a+S(b+c)=a+(b+S(c))$.\end{proof}
 \paragraph{Example.} Accumulating three disjoint spike-count windows is independent of how we group the additions. It is not independent of whether the windows overlap.
 
+\input{formal/bridge_09_side_by_side}
+
 \bridgeentry{integer-pairs}{Constructing integers from pairs of naturals}
 \begin{proposition}For $(a,b),(c,d)\in\mathbb N_0^2$, define $(a,b)\sim(c,d)$ when $a+d=b+c$. This is an equivalence relation. Addition $[(a,b)]+[(c,d)]=[(a+c,b+d)]$ is independent of representatives.\end{proposition}
 \begin{proof}Reflexivity and symmetry follow from equality. If $a+d=b+c$ and $c+f=d+e$, adding equations and canceling $c+d$ yields $a+f=b+e$, so transitivity holds. If $a+b'=b+a'$ and $c+d'=d+c'$, adding gives $(a+c)+(b'+d')=(b+d)+(a'+c')$, proving representative-independent addition.\end{proof}

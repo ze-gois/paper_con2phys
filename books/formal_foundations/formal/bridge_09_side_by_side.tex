@@ -1,0 +1,13 @@
+\section{Lean 4: addition associativity by induction}
+\label{sec:lean-bridge-09}
+The recursive equations $a+0=a$ and $a+S(c)=S(a+c)$ lead to
+associativity by induction on the third argument. The base case
+simplifies by addition with zero. The successor step rewrites
+addition at a successor, then invokes the induction hypothesis.
+The formal proof mirrors the English argument in
+Bridge~\ref{bridge:addition-induction} rather than merely citing
+a library theorem of associativity.
+
+\lstinputlisting[language=LeanFour,basicstyle=\ttfamily\footnotesize,
+breaklines=true,columns=fullflexible,keepspaces=true,frame=single]
+{../../formal/lean/Con2physFormal/BridgesNumbers.lean}

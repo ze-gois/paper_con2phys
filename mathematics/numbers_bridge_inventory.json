@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "scope": "Natural-number bridges 9–16, initially only bridge 9 inventoried",
+  "entries": [
+    {
+      "id": "BRIDGE-009",
+      "bridge_number": 9,
+      "latex_key": "addition-induction",
+      "title": "Associativity of addition from recursion",
+      "english_source": "books/formal_foundations/bridges/02_numbers.tex",
+      "english_label": "bridge:addition-induction",
+      "original_statement_summary": "∀ a b c : ℕ, (a+b)+c=a+(b+c), by induction on c",
+      "lean_source": null,
+      "lean_declaration": null,
+      "status": "pending_kernel_verification",
+      "lean_candidates": [
+        "Con2physFormal.BridgesNumbers.add_assoc_induction"
+      ],
+      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+      "math_prerequisites": [
+        "natural.recursion",
+        "natural.induction",
+        "natural.addition"
+      ],
+      "pedagogical_prerequisites": [
+        "natural.successor",
+        "natural.induction",
+        "natural.addition"
+      ]
+    }
+  ]
+}
