@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "scope": "bridges 1–8 exact source, human-reviewed summary; names unverified",
+  "scope": "Bridges 1–2 kernel-verified; bridges 3–8 inventoried and pending",
   "entries": [
     {
       "id": "BRIDGE-001",
@@ -10,10 +10,9 @@
       "english_source": "books/formal_foundations/bridges/01_language_relations.tex",
       "english_label": "bridge:extensionality",
       "original_statement_summary": "∀ A B : Set α, A = B ↔ A ⊆ B ∧ B ⊆ A",
-      "lean_declaration": null,
-      "lean_source": null,
-      "status": "pending_mathlib_lookup",
-      "reason": "Candidate Mathlib names are search hints only; no version-pinned declaration/type equivalence check has been executed",
+      "lean_declaration": "Con2physFormal.Bridges.subset_antisymm_iff",
+      "lean_source": "formal/lean/Con2physFormal/Bridges.lean",
+      "status": "verified",
       "mathlib_candidates_unverified": [
         "Set.Subset.antisymm",
         "Set.Subset.antisymm_iff"
@@ -30,7 +29,16 @@
       ],
       "source_license": "CON2PHYS original exposition",
       "mathlib_license": "Apache-2.0 (reuse must cite actual Mathlib file)",
-      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+      "lean_declarations": [
+        "Con2physFormal.Bridges.subset_antisymm_iff"
+      ],
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38196579118",
+        "checked_repository_commit": "20d1e9b439ec279353e0842e8cf445eb282aa560",
+        "verified_target": "lake build; lake env lean Con2physFormal/Bridges.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      }
     },
     {
       "id": "BRIDGE-002",
@@ -40,10 +48,9 @@
       "english_source": "books/formal_foundations/bridges/01_language_relations.tex",
       "english_label": "bridge:subset-order",
       "original_statement_summary": "⊆ is reflexive, transitive, antisymmetric on Set α",
-      "lean_declaration": null,
-      "lean_source": null,
-      "status": "pending_mathlib_lookup",
-      "reason": "Candidate Mathlib names are search hints only; no version-pinned declaration/type equivalence check has been executed",
+      "lean_declaration": "Con2physFormal.Bridges.subset_reflexive",
+      "lean_source": "formal/lean/Con2physFormal/Bridges.lean",
+      "status": "verified",
       "mathlib_candidates_unverified": [
         "Set.instPartialOrder"
       ],
@@ -60,7 +67,18 @@
       ],
       "source_license": "CON2PHYS original exposition",
       "mathlib_license": "Apache-2.0 (reuse must cite actual Mathlib file)",
-      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      "pinned_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435",
+      "lean_declarations": [
+        "Con2physFormal.Bridges.subset_reflexive",
+        "Con2physFormal.Bridges.subset_transitive",
+        "Con2physFormal.Bridges.subset_antisymmetric"
+      ],
+      "verification_evidence": {
+        "run_url": "https://github.com/ze-gois/paper_con2phys/actions/runs/38196579118",
+        "checked_repository_commit": "20d1e9b439ec279353e0842e8cf445eb282aa560",
+        "verified_target": "lake build; lake env lean Con2physFormal/Bridges.lean",
+        "checked_mathlib_commit": "5ed2965256430c3649e86755f9576b54eca72435"
+      }
     },
     {
       "id": "BRIDGE-003",
