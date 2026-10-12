@@ -1,0 +1,17 @@
+\section{Lean 4: two-sided inverses and bijections}
+\label{sec:lean-bridge-07}
+A function $f:A\to B$ admits an inverse $g:B\to A$ satisfying
+$g\circ f=\mathrm{id}_A$ and $f\circ g=\mathrm{id}_B$
+if and only if $f$ is both injective and surjective.
+
+The forward direction uses the left inverse to show injectivity
+and the right inverse to exhibit a preimage for each $b\in B$.
+Conversely, surjectivity selects a preimage for every output;
+injectivity makes that choice a left inverse as well.
+This construction uses classical choice, a dependency recorded
+by Lean's axiom audit.
+
+\lstinputlisting[language=LeanFour,basicstyle=\ttfamily\footnotesize,
+breaklines=true,columns=fullflexible,keepspaces=true,frame=single,
+firstline=112,lastline=136]
+{../../formal/lean/Con2physFormal/Bridges.lean}
