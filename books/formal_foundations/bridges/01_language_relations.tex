@@ -14,6 +14,8 @@
 \begin{proof}Every element of $A$ belongs to $A$, so $A\subseteq A$. If $A\subseteq B$ and $B\subseteq C$, then any $x\in A$ belongs to $B$ and then $C$, proving transitivity. If $A\subseteq B$ and $B\subseteq A$, Bridge~\ref{bridge:extensionality} gives $A=B$.\end{proof}
 \paragraph{Example.} Increasing a permissive spike detection threshold does not necessarily produce nested candidate sets unless the acceptance rule is itself monotone in that threshold; one should first prove monotonicity of the actual rule.
 
+\input{formal/bridges_01_02_side_by_side}
+
 \bridgeentry{cartesian}{Cartesian products define possible pairs}
 \begin{proposition}For sets $A,B$, the Cartesian product $A\times B$ consists exactly of the ordered pairs $(a,b)$ with $a\in A$ and $b\in B$. If either factor is empty, the product is empty.\end{proposition}
 \begin{proof}By definition a pair is in $A\times B$ only when both coordinate conditions hold. When $A=\varnothing$, no first coordinate can satisfy the requirement, and similarly for $B=\varnothing$.\end{proof}
