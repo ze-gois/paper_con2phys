@@ -35,6 +35,8 @@
 \begin{proof}Reflexivity places each $a$ in $[a]$, so the classes cover $A$. If $x\in[a]\cap[b]$, symmetry and transitivity give $a\sim b$. For any $y\sim a$, transitivity gives $y\sim b$, and conversely, hence $[a]=[b]$.\end{proof}
 \paragraph{Example.} Grouping timestamps by identical half-open time-bin index defines equivalence classes. Grouping by ``is within 2 ms'' generally fails transitivity and is not an equivalence relation.
 
+\input{formal/bridge_05_side_by_side}
+
 \bridgeentry{image-preimage}{Images preserve unions; preimages preserve unions and intersections}
 \begin{proposition}For $f:A\to B$ and subsets $E,F\subseteq A$, $f(E\cup F)=f(E)\cup f(F)$. For $C,D\subseteq B$, $f^{-1}(C\cap D)=f^{-1}(C)\cap f^{-1}(D)$ and $f^{-1}(C\cup D)=f^{-1}(C)\cup f^{-1}(D)$.\end{proposition}
 \begin{proof}A value $y$ belongs to $f(E\cup F)$ exactly when some input in $E$ or $F$ maps to $y$. This is the union of the images. An input $x$ belongs to $f^{-1}(C\cap D)$ exactly when $f(x)$ belongs to both $C$ and $D$. The union case follows by replacing ``both'' with ``at least one''.\end{proof}
